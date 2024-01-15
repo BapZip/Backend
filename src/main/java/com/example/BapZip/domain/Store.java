@@ -19,6 +19,7 @@ public class Store extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+
     @Column(length = 50)
     String name;
 
@@ -37,6 +38,5 @@ public class Store extends BaseEntity {
 
     @Column(length = 50)
     String waitingAverage;
-
 
 }
