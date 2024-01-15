@@ -2,6 +2,7 @@ package com.example.BapZip.domain.mapping;
 
 import com.example.BapZip.domain.Store;
 import com.example.BapZip.domain.User;
+import com.example.BapZip.domain.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +13,7 @@ import lombok.*;
 @AllArgsConstructor
 
 // Bookmark
-public class UserStore {
+public class UserStore extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
