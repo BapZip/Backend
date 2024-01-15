@@ -1,9 +1,8 @@
 package com.example.BapZip.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.BapZip.domain.enums.AdminStatus;
+import com.example.BapZip.domain.enums.Term;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -18,5 +17,52 @@ import org.hibernate.annotations.DynamicUpdate;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
+
+
+    @Column(nullable = false, length = 20)
+    private String userId;
+
+    @Column(nullable = false, length = 20)
+    private String password;
+
+    @Column(nullable = false, length = 20)
+    private String nickname;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "school_id")
+    private School school;
+
+
+    @Column(nullable = true, length = 20)
+    private String major;
+
+    @Column(nullable = true, length = 20)
+    private String email;
+
+    @Column(nullable = true, length = 20)
+    private String status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(15) DEFAULT 'CHECKED'")
+    private AdminStatus admin;
+
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(15) DEFAULT 'CHECKED'")
+    private Term term1;
+
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(15) DEFAULT 'CHECKED'")
+    private Term term2;
+
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(15) DEFAULT 'CHECKED'")
+    private Term term3;
+
+
+
+
+
+
+
 }
