@@ -20,4 +20,5 @@ public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
 }
