@@ -8,6 +8,3 @@
 코드 리뷰 시에 주요 확인 사항을 작성해주세요.
 
 ## 📸 ScreenShot
-
-## 연결된 이슈 Close
-close #Issue Num
