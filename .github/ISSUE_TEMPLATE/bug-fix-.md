@@ -1,7 +1,7 @@
 ---
 name: 'Bug Fix '
 about: 해당 탬플릿을 사용해 Bug Fix 이슈를 생성해주세요.
-title: "[FIX][BUG] 여기에 제목을 입력하세요"
+title: "[FIX] 여기에 제목을 입력하세요"
 labels: ''
 assignees: ''
 
