@@ -17,3 +17,16 @@ spring:
         hbm2ddl:
           auto: update
         default_batch_fetch_size: 1000
+
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: babzip-bucket
+    stack:
+      auto:false
+    credentials:
+      secret-key:
+      access-key:
+
