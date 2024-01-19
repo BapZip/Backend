@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: ${AWS_DB_URL}
+    url: jdbc:mysql://${AWS_DB_URL}:3306/babzip?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: ${AWS_DB_USERNAME}
     password: ${AWS_DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
