@@ -2,7 +2,7 @@ package com.example.BapZip.domain;
 
 import com.example.BapZip.domain.enums.CongestionLevel;
 import com.example.BapZip.domain.enums.VisitStatus;
-import io.swagger.models.auth.In;
+
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
