@@ -1,7 +1,7 @@
 ---
 name: Feature request
 about: 해당 템플릿을 사용해 기능 개발 이슈를 생성해주세요.
-title: "[FEAT][REFACTOR][CHROE]"
+title: 'Feat: Refactor: Chore: '
 labels: ''
 assignees: ''
 
