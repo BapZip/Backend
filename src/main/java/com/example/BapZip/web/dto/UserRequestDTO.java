@@ -30,4 +30,17 @@ public class UserRequestDTO {
         private String email;
 
     }
+
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class LoginDTO {
+        private String userId;
+
+        private String password;
+    }
+
+
 }
