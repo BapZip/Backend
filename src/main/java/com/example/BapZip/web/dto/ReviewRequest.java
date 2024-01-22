@@ -1,4 +1,4 @@
-package com.example.BapZip.web.DTO;
+package com.example.BapZip.web.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
