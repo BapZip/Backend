@@ -14,6 +14,15 @@ public class UserResonseDTO {
     }
 
 
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class loginDTO{
+        String token;
+    }
+
 
 
 
