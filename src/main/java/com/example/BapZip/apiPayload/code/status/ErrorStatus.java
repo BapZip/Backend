@@ -18,7 +18,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // user 관련 응답
     USER_JOIN_ERROR(HttpStatus.resolve(400),"USER400","회원가입에 실패하였습니다."),
-    USER_LOGIN_ERROR(HttpStatus.resolve(400),"USER400","학교 정보가 올바르지 않습니다.");
+    USER_LOGIN_ERROR(HttpStatus.resolve(400),"USER400","로그인에 실패하였습니다.");
 
 
     private final HttpStatus httpStatus;

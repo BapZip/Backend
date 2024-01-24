@@ -1,4 +1,4 @@
-package com.example.BapZip.service;
+package com.example.BapZip.service.S3Service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
