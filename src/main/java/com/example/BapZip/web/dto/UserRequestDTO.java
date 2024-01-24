@@ -23,7 +23,7 @@ public class UserRequestDTO {
 
         private String nickname;
 
-        private School school;
+        private Long school;
 
         private String major;
 
