@@ -1,5 +1,6 @@
 package com.example.BapZip.domain;
 
+import com.example.BapZip.domain.common.BaseEntity;
 import com.example.BapZip.domain.enums.CongestionLevel;
 import com.example.BapZip.domain.enums.VisitStatus;
 
@@ -14,7 +15,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Congestion {
+public class Congestion extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -1,5 +1,6 @@
 package com.example.BapZip.domain;
 
+import com.example.BapZip.domain.common.BaseEntity;
 import com.example.BapZip.domain.enums.CouponStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,7 +18,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Coupon {
+public class Coupon extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
