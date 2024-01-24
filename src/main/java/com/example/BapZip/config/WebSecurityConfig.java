@@ -1,5 +1,9 @@
 package com.example.BapZip.config;
 
+import com.example.BapZip.apiPayload.ApiResponse;
+import com.example.BapZip.apiPayload.code.ErrorReasonDTO;
+import com.example.BapZip.apiPayload.code.status.ErrorStatus;
+import com.example.BapZip.apiPayload.exception.GeneralException;
 import com.example.BapZip.security.JwtAuthenticationFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
@@ -43,18 +47,15 @@ public class WebSecurityConfig
                     )
 
                     .authorizeHttpRequests((authorizeRequests) ->
-                            authorizeRequests.requestMatchers("/health").permitAll()
+                            authorizeRequests.requestMatchers("/health","/auth/**",
+                                            "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
                                     .anyRequest().authenticated()
                     )
                     .exceptionHandling((exceptionConfig) ->
                                     exceptionConfig
                                             .authenticationEntryPoint(unauthorizedEntryPoint)
                     ); // 401 403 관련 예외처리
-
-
-
             ;
-
             http.addFilterAfter(
                     jwtAuthenticationFilter,
                     CorsFilter.class
@@ -70,17 +71,14 @@ public class WebSecurityConfig
     private final AuthenticationEntryPoint unauthorizedEntryPoint =
             (request, response, authException) -> {
 
+                ApiResponse<?> apiResponse = new ApiResponse(false,"401","인증이 필요합니다.",null);
+                response.setCharacterEncoding("UTF-8");
+                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-//                ReasonDTO dto = new ReasonDTO(HttpStatus.UNAUTHORIZED, false, "402", "사용자 인증 실패1");
-//                response.setStatus(HttpStatus.FORBIDDEN.value());
-//
-//                // 한글이 깨지지 않도록 인코딩 설정 추가
-//                response.setCharacterEncoding("UTF-8");
-//                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-//
-//                PrintWriter writer = response.getWriter();
-//                writer.write(new ObjectMapper().writeValueAsString(dto));
-//                writer.flush();
+                PrintWriter writer = response.getWriter();
+                writer.write(new ObjectMapper().writeValueAsString(apiResponse));
+                writer.flush();
 
             };
 
