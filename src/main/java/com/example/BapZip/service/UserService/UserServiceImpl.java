@@ -60,4 +60,18 @@ public class UserServiceImpl implements  UserService{
             throw new GeneralException(ErrorStatus.USER_LOGIN_ERROR);
         }
     }
+
+    @Override
+    public UserResonseDTO.checkNicknameAndIdDTO checkNickname(String nickname){
+        final Optional<User> user=userRepository.findByNickname(nickname);
+        if(user.isEmpty()){ return UserResonseDTO.checkNicknameAndIdDTO.builder().available(true).build();}
+        else { return UserResonseDTO.checkNicknameAndIdDTO.builder().available(false).build();}
+    }
+
+    @Override
+    public UserResonseDTO.checkNicknameAndIdDTO checkUserid(String nickname){
+        final Optional<User> user=userRepository.findByUserId(nickname);
+        if(user.isEmpty()){  return UserResonseDTO.checkNicknameAndIdDTO.builder().available(true).build();}
+        else {  return UserResonseDTO.checkNicknameAndIdDTO.builder().available(false).build();}
+    }
 }

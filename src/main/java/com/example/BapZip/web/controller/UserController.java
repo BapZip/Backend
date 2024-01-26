@@ -8,10 +8,7 @@ import com.example.BapZip.web.dto.UserResonseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,4 +33,22 @@ public class UserController {
             UserResonseDTO.loginDTO result = userService.login(loginDTO);
             return ApiResponse.onSuccess(result);
     }
+
+    @Operation(summary = "닉네임 중복 체크 API", description = "닉네임 중복 체크 API입니다.")
+    @GetMapping("/checkNickname")
+    public ApiResponse<UserResonseDTO.checkNicknameAndIdDTO> checkNickname(@RequestParam(name = "nickname") String nickname)
+    {
+        UserResonseDTO.checkNicknameAndIdDTO result = userService.checkNickname(nickname);
+        return ApiResponse.onSuccess(result);
+    }
+
+    @Operation(summary = "아이디 중복 체크 API", description = "아이디 중복 체크 API입니다.")
+    @GetMapping("/checkUserid")
+    public ApiResponse<UserResonseDTO.checkNicknameAndIdDTO> checkUserid(@RequestParam(name = "userid") String userid)
+    {
+        UserResonseDTO.checkNicknameAndIdDTO result = userService.checkUserid(userid);
+        return ApiResponse.onSuccess(result);
+    }
+
+
 }
