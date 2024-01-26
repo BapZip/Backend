@@ -9,6 +9,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
+@Setter
 @DynamicUpdate
 @DynamicInsert
 @Builder
@@ -59,6 +60,9 @@ public class User {
     @Column(columnDefinition = "VARCHAR(15) DEFAULT 'CHECKED'")
     private Term term3;
 
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(15) DEFAULT 'CHECKED'")
+    private Term term4;
 
 
 

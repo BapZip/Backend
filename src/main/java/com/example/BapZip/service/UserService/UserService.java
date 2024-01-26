@@ -10,4 +10,5 @@ public interface UserService {
     public UserResonseDTO.checkNicknameAndIdDTO checkNickname(String nickname);
     public UserResonseDTO.checkNicknameAndIdDTO checkUserid(String nickname);
 
+    void agreementToTerm(UserRequestDTO.TermDTO agreement);
 }

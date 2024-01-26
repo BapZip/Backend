@@ -17,9 +17,10 @@ public enum ErrorStatus implements BaseErrorCode {
     _FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "금지된 요청입니다."),
 
     // user 관련 응답
+    USER_NOT_FOUND(HttpStatus.resolve(400),"USER400","사용자 정보 오류"),
     USER_JOIN_ERROR(HttpStatus.resolve(400),"USER400","회원가입에 실패하였습니다."),
-    USER_LOGIN_ERROR(HttpStatus.resolve(400),"USER400","로그인에 실패하였습니다.");
-
+    USER_LOGIN_ERROR(HttpStatus.resolve(400),"USER400","로그인에 실패하였습니다."),
+    USER_TERM_ERROR(HttpStatus.resolve(400),"USER400","필수 이용 약관을 확인해주세요.");
 
     private final HttpStatus httpStatus;
     private final String code;

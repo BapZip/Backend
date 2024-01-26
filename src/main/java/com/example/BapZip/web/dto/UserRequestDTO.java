@@ -42,5 +42,19 @@ public class UserRequestDTO {
         private String password;
     }
 
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TermDTO {
+        private Long userId;
+        private String term1;
+        private String term2;
+        private String term3;
+        private String term4;
+
+    }
+
 
 }
