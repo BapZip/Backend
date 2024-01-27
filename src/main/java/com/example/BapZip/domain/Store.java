@@ -19,13 +19,12 @@ public class Store extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-
     @Column(length = 50)
     String name;
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(10) DEFAULT 'IN'")
-    InOrOut inOrOut;
+    InOrOut outin;
 
     @Column(length = 50)
     String businessHours;
@@ -38,5 +37,9 @@ public class Store extends BaseEntity {
 
     @Column(length = 50)
     String waitingAverage;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "schoolId")
+    private School school;
 
 }
