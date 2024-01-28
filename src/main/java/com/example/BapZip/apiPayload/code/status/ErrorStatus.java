@@ -18,7 +18,10 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // user 관련 응답
     USER_JOIN_ERROR(HttpStatus.resolve(400),"USER400","회원가입에 실패하였습니다."),
-    USER_LOGIN_ERROR(HttpStatus.resolve(400),"USER400","로그인에 실패하였습니다.");
+    USER_LOGIN_ERROR(HttpStatus.resolve(400),"USER400","로그인에 실패하였습니다."),
+
+    //store 관련 응답
+    STORE_NOT_EXIST_ERROR(HttpStatus.resolve(400),"STORE400","존재하지 않는 가게입니다.");
 
 
     private final HttpStatus httpStatus;

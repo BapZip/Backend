@@ -30,26 +30,29 @@ public class StoreResponseDTO {
 
         List<String> mostHashtag;
 
-
-
-
     }
-
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class StoreInfoDTO {
 
         String waitingAverage;
 
-        String getBusinessHours;
+        String BusinessHours;
 
-        String closeDay;
+        String closedDay;
 
         String position;
 
-
-
     }
 
-
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class StoreNoticeDTO {
 
         String content;
