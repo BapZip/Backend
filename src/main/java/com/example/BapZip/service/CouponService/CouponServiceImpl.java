@@ -36,7 +36,9 @@ public class CouponServiceImpl implements CouponService{
     }
 
     private CouponResponseDTO.CouponDTO mapToCouponDTO(Coupon coupon) {
+        // 객체에서 뽑아서 빌더로 reponse DTO 생성
         return CouponResponseDTO.CouponDTO.builder()
+                .couponId(coupon.getId())
                 .amount(coupon.getAmount())
                 .startDate(coupon.getStartDate())
                 .finalDate(coupon.getFinalDate())

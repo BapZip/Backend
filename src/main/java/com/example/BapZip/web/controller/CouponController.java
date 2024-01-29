@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/coupon")
@@ -20,15 +22,15 @@ public class CouponController {
 
     @Operation(summary = "사용가능 쿠폰 API", description = "사용가능 쿠폰 조회 API입니다.")
     @GetMapping("/available")
-    public CouponResponseDTO.CouponDTO ValidCoupon(@AuthenticationPrincipal String userId){
+    public List<CouponResponseDTO.CouponDTO> ValidCoupon(@AuthenticationPrincipal String userId){
 
-        return null;
+        return couponService.getValidCoupons(Long.valueOf(userId));
     }
 
     @Operation(summary = "만료된 쿠폰 API", description = "만료된 쿠폰 조회 API입니다.")
     @GetMapping("/expiration")
-    public CouponResponseDTO.CouponDTO InValidCoupon(@AuthenticationPrincipal String userId){
+    public List<CouponResponseDTO.CouponDTO> InValidCoupon(@AuthenticationPrincipal String userId){
 
-        return null;
+        return couponService.getInvalidCoupons(Long.valueOf(userId));
     }
 }

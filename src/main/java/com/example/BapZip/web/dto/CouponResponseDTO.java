@@ -12,6 +12,7 @@ public class CouponResponseDTO {
     @Getter
     @Setter
     public static class CouponDTO{
+        private Long couponId;
         private Long amount;
         private LocalDate startDate;
         private LocalDate finalDate;
