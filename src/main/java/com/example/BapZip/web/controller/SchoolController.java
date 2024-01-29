@@ -6,6 +6,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/stores")
-public class StoreController {
+@RequestMapping("/school")
+public class SchoolController {
 }

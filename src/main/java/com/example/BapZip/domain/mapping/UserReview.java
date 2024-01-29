@@ -2,6 +2,7 @@ package com.example.BapZip.domain.mapping;
 
 import com.example.BapZip.domain.Review;
 import com.example.BapZip.domain.User;
+import com.example.BapZip.domain.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -13,7 +14,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class UserReview {
+public class UserReview extends BaseEntity {
     /**
      * ReviewLike - 좋아요 mapping Table
      */
