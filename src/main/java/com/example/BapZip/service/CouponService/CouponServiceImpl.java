@@ -16,8 +16,9 @@ public class CouponServiceImpl implements CouponService{
     private final CouponRepository couponRepository;
 
     @Override
-    public List<CouponResponseDTO.CouponDTO> getInvalidCoupons(Long userId) {
+    public List<CouponResponseDTO.CouponDTO> getValidCoupons(Long userId) {
         LocalDate currentDate = LocalDate.now();
+        //findByUserIdAndFinalDateAfterAndFinalDateEqual
         List<Coupon> validCoupons = couponRepository.findByUserIdAndFinalDateAfter(userId, currentDate);
 
         return validCoupons.stream()
@@ -26,7 +27,7 @@ public class CouponServiceImpl implements CouponService{
     }
 
     @Override
-    public List<CouponResponseDTO.CouponDTO> getValidCoupons(Long userId) {
+    public List<CouponResponseDTO.CouponDTO> getInvalidCoupons(Long userId) {
         LocalDate currentDate = LocalDate.now();
         List<Coupon> invalidCoupons = couponRepository.findByUserIdAndFinalDateBefore(userId, currentDate);
 
