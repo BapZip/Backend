@@ -1,5 +1,7 @@
 package com.example.BapZip.service.MypageService;
 
+import com.example.BapZip.apiPayload.code.status.ErrorStatus;
+import com.example.BapZip.apiPayload.exception.GeneralException;
 import com.example.BapZip.domain.User;
 import com.example.BapZip.repository.SchoolRepository;
 import com.example.BapZip.repository.UserRepository;
@@ -17,12 +19,22 @@ public class MypageServiceImpl implements MypageService{
     private final UserRepository userRepository;
 
     @Override
-    public MypageResponseDTO.MypageInfoDTO getMypageInfo(Long userId){
-        Optional<User> tempUser =userRepository.findById(userId);
-        String nickname=tempUser.get().getNickname();
-        String major=tempUser.get().getMajor();
-        String schoolName=tempUser.get().getSchool().getName();
-        return MypageResponseDTO.MypageInfoDTO.builder().nickname(nickname).major(major).schoolName(schoolName).build();
+    public MypageResponseDTO.MypageInfoDTO getMypageInfo(Long userId) {
+        Optional<User> tempUser = userRepository.findById(userId);
+        if (tempUser.isPresent()) {
+            String nickname = tempUser.get().getNickname();
+            String major = tempUser.get().getMajor();
+            String schoolName = tempUser.get().getSchool().getName();
+            String imageUrl=tempUser.get().getImageUrl();
+            return MypageResponseDTO.MypageInfoDTO.builder()
+                    .nickname(nickname)
+                    .major(major)
+                    .schoolName(schoolName)
+                    .imageUrl(imageUrl)
+                    .build();
+        } else {
+            throw new GeneralException(ErrorStatus._BAD_REQUEST);//추후 존재하지 않는 유저라고 수정필요
+        }
     }
 
 

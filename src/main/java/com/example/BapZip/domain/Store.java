@@ -7,6 +7,9 @@ import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @DynamicUpdate
@@ -41,5 +44,8 @@ public class Store extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schoolId")
     private School school;
+
+    @OneToMany(mappedBy = "store")
+    private List<StoreImage> images=new ArrayList<>();
 
 }

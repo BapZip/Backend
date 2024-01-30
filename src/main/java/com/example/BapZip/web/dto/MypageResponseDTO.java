@@ -17,5 +17,6 @@ public class MypageResponseDTO {
         private String nickname;
         private String schoolName;
         private String major;
+        private String imageUrl;
     }
 }

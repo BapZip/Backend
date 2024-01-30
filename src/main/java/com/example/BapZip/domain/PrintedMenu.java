@@ -22,6 +22,4 @@ public class PrintedMenu extends BaseEntity {
     @JoinColumn(name = "storeId")
     private Store store;
 
-
-
 }

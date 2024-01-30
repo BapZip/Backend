@@ -30,26 +30,29 @@ public class StoreResponseDTO {
 
         List<String> mostHashtag;
 
-
-
-
     }
-
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class StoreInfoDTO {
 
         String waitingAverage;
 
-        String getBusinessHours;
+        String BusinessHours;
 
-        String closeDay;
+        String closedDay;
 
         String position;
 
-
-
     }
 
-
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class StoreNoticeDTO {
 
         String content;
@@ -58,6 +61,32 @@ public class StoreResponseDTO {
 
 
 
+
+    }
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PrintedMenuDTO {
+
+        Long id;
+
+        String imageUrl;
+
+    }
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MyZipDTO {
+
+        Long id;
+
+        String name;
+
+        String imageUrl;
 
     }
 }
