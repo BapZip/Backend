@@ -5,6 +5,7 @@ import com.example.BapZip.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -12,4 +13,6 @@ import java.util.Optional;
 public interface StoreRepository extends JpaRepository<Store, Long> {
 
     Optional<Store> findById(Long storeId);
+
+    List<Store> findAll();
 }

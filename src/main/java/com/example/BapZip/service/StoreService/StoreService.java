@@ -14,4 +14,6 @@ public interface StoreService {
 
     List<StoreResponseDTO.MyZipDTO> getStoreMyZip(Long userId);
 
+    List<StoreResponseDTO.HotPlaceDTO> getHotPlace();
+
 }
