@@ -48,4 +48,10 @@ public class Store extends BaseEntity {
     @OneToMany(mappedBy = "store")
     private List<StoreImage> images=new ArrayList<>();
 
+    @OneToMany(mappedBy = "store")
+    private List<Review> reviewList=new ArrayList<>();
+
+    @OneToOne(mappedBy = "store")
+    private Category category;
+
 }

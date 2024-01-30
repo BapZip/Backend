@@ -40,5 +40,12 @@ public class StoreController {
         return ApiResponse.onSuccess(storeService.getStoreMyZip(Long.parseLong(principal.getName())));
     }
 
+    @Operation(summary = "핫플레이스 조회", description = "토큰만 필요함")
+    @PostMapping("/hotPlace")
+    public ApiResponse<List<StoreResponseDTO.HotPlaceDTO>> getHotPlace() {
+        return ApiResponse.onSuccess(storeService.getHotPlace());
+    }
+
+
 
 }

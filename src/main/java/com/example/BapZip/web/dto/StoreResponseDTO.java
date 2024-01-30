@@ -89,4 +89,27 @@ public class StoreResponseDTO {
         String imageUrl;
 
     }
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class HotPlaceDTO {
+
+        Long Ranking;
+
+        Long storeId;
+
+        String name;
+
+        String category;
+
+        InOrOut inOut;
+
+        Double score;
+
+        String imageUrl;
+
+    }
 }
+
