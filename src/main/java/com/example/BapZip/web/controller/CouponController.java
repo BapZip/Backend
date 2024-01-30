@@ -1,6 +1,7 @@
 package com.example.BapZip.web.controller;
 
 
+import com.example.BapZip.apiPayload.ApiResponse;
 import com.example.BapZip.repository.CouponRepository;
 import com.example.BapZip.service.CouponService.CouponService;
 import com.example.BapZip.web.dto.CouponResponseDTO;
@@ -22,15 +23,19 @@ public class CouponController {
 
     @Operation(summary = "사용가능 쿠폰 API", description = "사용가능 쿠폰 조회 API입니다.")
     @GetMapping("/available")
-    public List<CouponResponseDTO.CouponDTO> ValidCoupon(@AuthenticationPrincipal String userId){
+    public ApiResponse<List<CouponResponseDTO.CouponDTO>> ValidCoupon(@AuthenticationPrincipal String userId){
 
-        return couponService.getValidCoupons(Long.valueOf(userId));
+        List<CouponResponseDTO.CouponDTO> result = couponService.getValidCoupons(Long.valueOf(userId));
+
+        return ApiResponse.onSuccess(result);
     }
 
     @Operation(summary = "만료된 쿠폰 API", description = "만료된 쿠폰 조회 API입니다.")
     @GetMapping("/expiration")
-    public List<CouponResponseDTO.CouponDTO> InValidCoupon(@AuthenticationPrincipal String userId){
+    public ApiResponse<List<CouponResponseDTO.CouponDTO>> InValidCoupon(@AuthenticationPrincipal String userId){
 
-        return couponService.getInvalidCoupons(Long.valueOf(userId));
+        List<CouponResponseDTO.CouponDTO> result = couponService.getInvalidCoupons(Long.valueOf(userId));
+
+        return ApiResponse.onSuccess(result);
     }
 }

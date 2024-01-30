@@ -17,4 +17,16 @@ public class PointResponseDTO {
         private String classification;
         private String note;
     }
+
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Setter
+    @Getter
+    public static class AllPointsDTO{
+        private Long point;
+    }
+
+
 }
