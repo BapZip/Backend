@@ -88,7 +88,7 @@ public class StoreServiceImpl implements StoreService {
                 .map(store -> new StoreResponseDTO.MyZipDTO(store.getId(), store.getName(), store.getImages().get(0).getImageURL()))
                 .collect(Collectors.toList());
     }
-
+    //가게별 주간 평균 평점 계산
     public Double calculateWeeklyHotPlaceScore(Long storeId){
         LocalDate endDate=LocalDate.now();
         LocalDate startDate=endDate.minus(Period.ofDays(7));
@@ -100,6 +100,7 @@ public class StoreServiceImpl implements StoreService {
         return totalScore/reviewList.size();
     }
 
+    //핫플레이스 API
     @Override
     public List<StoreResponseDTO.HotPlaceDTO> getHotPlace() {
         List<Store> storeList = storeRepository.findAll();
