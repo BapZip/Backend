@@ -63,4 +63,16 @@ public class StoreResponseDTO {
 
 
     }
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PrintedMenuDTO {
+
+        Long id;
+
+        String imageUrl;
+
+    }
 }
