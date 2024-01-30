@@ -5,9 +5,12 @@ import com.example.BapZip.apiPayload.exception.GeneralException;
 import com.example.BapZip.domain.PrintedMenu;
 import com.example.BapZip.domain.Store;
 import com.example.BapZip.domain.User;
+import com.example.BapZip.domain.mapping.UserStore;
 import com.example.BapZip.repository.PrintedMenuRepository;
 import com.example.BapZip.repository.StoreRepository;
 import com.example.BapZip.repository.UserRepository;
+import com.example.BapZip.repository.UserStoreRepository;
+import com.example.BapZip.security.TokenProvider;
 import com.example.BapZip.web.dto.MypageResponseDTO;
 import com.example.BapZip.web.dto.StoreResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +26,10 @@ public class StoreServiceImpl implements StoreService {
 
     private final StoreRepository storeRepository;
     private final PrintedMenuRepository printedMenuRepository;
+    private final TokenProvider tokenProvider;
+    private final UserRepository userRepository;
+    private final UserStoreRepository userStoreRepository;
+
 
     @Override
     public StoreResponseDTO.StoreInfoDTO getStoreDetailInfo(Long storeId) {
@@ -47,8 +54,45 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public List<StoreResponseDTO.PrintedMenuDTO> getStorePrintedMenu(Long storeId) {
+        storeRepository.findById(storeId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.STORE_NOT_EXIST_ERROR));
 
-        return printedMenuRepository.findByStore_Id(storeId).stream().map(printedMenu -> new StoreResponseDTO.PrintedMenuDTO(printedMenu.getId(),printedMenu.getImageURL()))
+        List<PrintedMenu> printedMenus = printedMenuRepository.findByStore_Id(storeId);
+
+        // 인쇄된 메뉴가 없는 경우 예외 처리
+        if (printedMenus.isEmpty()) {
+            throw new GeneralException(ErrorStatus.PRINTED_MENU_NOT_FOUND_ERROR);
+        }
+
+        // 인쇄된 메뉴가 있는 경우, DTO로 변환하여 반환
+        return printedMenus.stream()
+                .map(printedMenu -> new StoreResponseDTO.PrintedMenuDTO(printedMenu.getId(), printedMenu.getImageURL()))
                 .collect(Collectors.toList());
     }
+
+
+    @Override
+    public List<StoreResponseDTO.MyZipDTO> getStoreMyZip(Long userId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND_ERROR));
+
+        List<UserStore> userStoreList = userStoreRepository.findByUser_Id(userId);
+        if (userStoreList.isEmpty()) {
+            throw new GeneralException(ErrorStatus.STORE_NOT_FOUND_FOR_USER_ERROR);
+        }
+
+        List<Store> storeList = userStoreList.stream()
+                .map(UserStore::getStore)
+                .filter(store -> !(store.getImages() == null || store.getImages().isEmpty()))
+                .toList();
+
+        if (storeList.isEmpty()) {
+            throw new GeneralException(ErrorStatus.STORE_IMAGE_NOT_EXIST_ERROR);
+        }
+
+        return storeList.stream().limit(3)
+                .map(store -> new StoreResponseDTO.MyZipDTO(store.getId(), store.getName(), store.getImages().get(0).getImageURL()))
+                .collect(Collectors.toList());
+    }
+
 }

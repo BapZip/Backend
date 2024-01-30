@@ -19,9 +19,14 @@ public enum ErrorStatus implements BaseErrorCode {
     // user 관련 응답
     USER_JOIN_ERROR(HttpStatus.resolve(400),"USER400","회원가입에 실패하였습니다."),
     USER_LOGIN_ERROR(HttpStatus.resolve(400),"USER400","로그인에 실패하였습니다."),
+    USER_NOT_FOUND_ERROR(HttpStatus.resolve(404), "USER404", "해당 사용자를 찾을 수 없습니다."),
 
     //store 관련 응답
-    STORE_NOT_EXIST_ERROR(HttpStatus.resolve(400),"STORE400","존재하지 않는 가게입니다.");
+    STORE_NOT_EXIST_ERROR(HttpStatus.resolve(400),"STORE400","존재하지 않는 가게입니다."),
+    STORE_IMAGE_NOT_EXIST_ERROR(HttpStatus.resolve(401), "STORE401", "해당 가게의 이미지가 존재하지 않습니다."),
+    PRINTED_MENU_NOT_FOUND_ERROR(HttpStatus.resolve(402), "STORE402", "해당 가게의 인쇄된 메뉴가 존재하지 않습니다."),
+    STORE_NOT_FOUND_FOR_USER_ERROR(HttpStatus.resolve(404), "STORE404", "해당 사용자에게 연결된 가게가 없습니다.");
+
 
 
     private final HttpStatus httpStatus;

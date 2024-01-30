@@ -75,4 +75,18 @@ public class StoreResponseDTO {
         String imageUrl;
 
     }
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MyZipDTO {
+
+        Long id;
+
+        String name;
+
+        String imageUrl;
+
+    }
 }

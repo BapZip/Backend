@@ -12,4 +12,6 @@ public interface StoreService {
 
     List<StoreResponseDTO.PrintedMenuDTO> getStorePrintedMenu(Long storeId);
 
+    List<StoreResponseDTO.MyZipDTO> getStoreMyZip(Long userId);
+
 }
