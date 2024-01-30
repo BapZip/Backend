@@ -59,10 +59,7 @@ public class User {
     @Column(columnDefinition = "VARCHAR(15) DEFAULT 'CHECKED'")
     private Term term3;
 
-
-
-
-
-
+    @Column(nullable = false)
+    private String imageUrl;
 
 }

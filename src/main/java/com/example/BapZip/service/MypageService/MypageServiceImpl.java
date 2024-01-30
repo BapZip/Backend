@@ -25,10 +25,12 @@ public class MypageServiceImpl implements MypageService{
             String nickname = tempUser.get().getNickname();
             String major = tempUser.get().getMajor();
             String schoolName = tempUser.get().getSchool().getName();
+            String imageUrl=tempUser.get().getImageUrl();
             return MypageResponseDTO.MypageInfoDTO.builder()
                     .nickname(nickname)
                     .major(major)
                     .schoolName(schoolName)
+                    .imageUrl(imageUrl)
                     .build();
         } else {
             throw new GeneralException(ErrorStatus._BAD_REQUEST);//추후 존재하지 않는 유저라고 수정필요
