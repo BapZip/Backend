@@ -26,11 +26,10 @@ public class StoreServiceImpl implements StoreService {
 
     private final StoreRepository storeRepository;
     private final PrintedMenuRepository printedMenuRepository;
-    private final TokenProvider tokenProvider;
     private final UserRepository userRepository;
     private final UserStoreRepository userStoreRepository;
 
-
+    //가게 상세 정보 조회
     @Override
     public StoreResponseDTO.StoreInfoDTO getStoreDetailInfo(Long storeId) {
         Optional<Store> store = storeRepository.findById(storeId);
@@ -51,7 +50,7 @@ public class StoreServiceImpl implements StoreService {
         }
     }
 
-
+    //가게 정보 내 메뉴판 조회
     @Override
     public List<StoreResponseDTO.PrintedMenuDTO> getStorePrintedMenu(Long storeId) {
         storeRepository.findById(storeId)
@@ -70,7 +69,7 @@ public class StoreServiceImpl implements StoreService {
                 .collect(Collectors.toList());
     }
 
-
+    //내가 좋아하는 가게 조회
     @Override
     public List<StoreResponseDTO.MyZipDTO> getStoreMyZip(Long userId) {
         userRepository.findById(userId)
