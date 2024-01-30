@@ -12,4 +12,5 @@ import java.util.Optional;
 
 public interface StoreImageRepository extends JpaRepository<StoreImage, Long> {
     Optional<StoreImage> findByStore(Store store);
+    List<StoreImage> findAllByStore(Store store);
 }
