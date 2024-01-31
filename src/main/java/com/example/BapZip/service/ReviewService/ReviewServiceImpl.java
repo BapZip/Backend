@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.ZoneId;
 import java.util.List;
 
 @Service
@@ -42,7 +43,7 @@ public class ReviewServiceImpl implements ReviewService{
                 .price(registerReviewDTO.getPrice())
                 .score(registerReviewDTO.getRating())
                 .content(registerReviewDTO.getReviewText())
-                .paymentTime(registerReviewDTO.getVisitDate())
+                .paymentTime(registerReviewDTO.getVisitDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate())
                 .menuName(registerReviewDTO.getMenuName())
                 .build();
 
