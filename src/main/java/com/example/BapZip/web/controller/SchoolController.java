@@ -34,7 +34,7 @@ public class SchoolController {
 
     // 학교 리스트 선택 -> 시.도 선택하면 : 학교명 , id 리턴
     @Operation(summary = "학교 리스트 api", description = "메인페이지에서 사용하는 학교 리스트 api 입니다. 지역 id 값을 파라미터로 넣어주세요.")
-    @GetMapping("/")
+    @GetMapping
     public ApiResponse<List<SchoolResponseDTO.SearchSchool>> getSchoolList(@RequestParam(name = "regionId") Long regionId)
     {
         List<SchoolResponseDTO.SearchSchool> result = schoolService.getSchoolList(regionId);
