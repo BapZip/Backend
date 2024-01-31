@@ -1,5 +1,7 @@
 package com.example.BapZip.service.StoreService;
 
+import com.example.BapZip.domain.Store;
+import com.example.BapZip.repository.StoreRepository;
 import com.example.BapZip.web.dto.StoreResponseDTO;
 import com.example.BapZip.web.dto.UserRequestDTO;
 import com.example.BapZip.web.dto.UserResonseDTO;

@@ -42,4 +42,5 @@ public class ApiResponse<T> {
     public static <T> ApiResponse<T> onFailure_BaseCode(BaseErrorCode code){
         return new ApiResponse<>(false, code.getReasonHttpStatus().getCode(),code.getReasonHttpStatus().getMessage(),null);
     }
+
 }

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 import java.util.List;
 
-public class ReviewRequest {
+public class ReviewRequestDTO {
     @Builder
     @Getter
     @NoArgsConstructor
@@ -19,7 +19,7 @@ public class ReviewRequest {
         private Integer price;
         private String menuName;
         private Integer rating;
-        private List<Integer> hashtags;
+        private List<String> hashtags;
         private String reviewText;
     }
     @Builder

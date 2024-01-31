@@ -3,6 +3,8 @@ package com.example.BapZip.domain;
 import com.example.BapZip.domain.common.BaseEntity;
 import com.example.BapZip.domain.enums.AdminStatus;
 import com.example.BapZip.domain.enums.Term;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -32,6 +34,7 @@ public class User extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id")
+    @JsonIgnore
     private School school;
 
 
