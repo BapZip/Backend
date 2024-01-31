@@ -21,7 +21,7 @@ public class CongestionController {
     private  final CongestionService congestionService;
 
     @Operation(summary = "혼잡도 등록 api", description = "혼잡도 등록 api 입니다.")
-    @PostMapping("/congestion/{storeId}")
+    @PostMapping("/{storeId}")
     public ApiResponse<CongestionResponseDTO.registerCongestion> registerCongestion
             (@AuthenticationPrincipal String userId,
              @RequestBody CongestionRequestDTO.registerCongestion congestion, @PathVariable(name = "storeId") Long storeId)
@@ -31,12 +31,21 @@ public class CongestionController {
     }
 
     @Operation(summary = "혼잡도 랭킹 api", description = "혼잡도 랭킹 api 입니다.")
-    @GetMapping("/congestion/ranking")
+    @GetMapping("/ranking")
     // 학교 id , in out 전체 , 사용자
     public ApiResponse<List<CongestionResponseDTO.getCongestionRanking>> getCongestionRanking
             (@AuthenticationPrincipal String userId,@RequestParam String classification,@RequestParam Long schoolId)
     {
         List<CongestionResponseDTO.getCongestionRanking> result = congestionService.getRanking(userId,classification,schoolId);
+        return ApiResponse.onSuccess(result);
+    }
+
+    @Operation(summary = "혼잡도 랭킹 top5 api", description = "혼잡도 랭킹 api 입니다.")
+    @GetMapping("/ranking/top5")
+    public ApiResponse<List<CongestionResponseDTO.getCongestionRankingTop5>> getCongestionRankingTop5
+            (@AuthenticationPrincipal String userId,@RequestParam Long schoolId)
+    {
+        List<CongestionResponseDTO.getCongestionRankingTop5> result = congestionService.getRankingTop5(userId,schoolId);
         return ApiResponse.onSuccess(result);
     }
 

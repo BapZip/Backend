@@ -1,6 +1,5 @@
 package com.example.BapZip.web.dto;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.*;
 
 public class CongestionResponseDTO {
@@ -24,10 +23,22 @@ public class CongestionResponseDTO {
         Long storeId;
         String storeName;
         String storeImageURL;
-        Integer waitingCount;
+        Integer occupancyCount;
         Integer waitingTime;
+        Integer congestionAV; // 혼잡도 평균 81점 만점
         boolean bookmark;
 
 
+    }
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    static public class getCongestionRankingTop5{
+        Long storeId;
+        String storeName;
+        Integer waitingTime;
+        Integer congestionAV; // 혼잡도 평균 81점 만점
     }
 }

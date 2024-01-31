@@ -9,4 +9,6 @@ public interface CongestionService {
     CongestionResponseDTO.registerCongestion registerCongestion(CongestionRequestDTO.registerCongestion congestion, Long storeId, String userId);
 
     List<CongestionResponseDTO.getCongestionRanking> getRanking(String userId, String classification, Long schoolId);
+
+    List<CongestionResponseDTO.getCongestionRankingTop5> getRankingTop5(String userId, Long schoolId);
 }
