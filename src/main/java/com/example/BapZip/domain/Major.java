@@ -13,7 +13,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Major{
+public class Major extends BaseEntity{
 
 
     @Id
