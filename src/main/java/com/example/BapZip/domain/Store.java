@@ -7,6 +7,9 @@ import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @DynamicUpdate
@@ -19,13 +22,12 @@ public class Store extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-
     @Column(length = 50)
     String name;
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(10) DEFAULT 'IN'")
-    InOrOut inOrOut;
+    InOrOut outin;
 
     @Column(length = 50)
     String businessHours;
@@ -38,5 +40,18 @@ public class Store extends BaseEntity {
 
     @Column(length = 50)
     String waitingAverage;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "schoolId")
+    private School school;
+
+    @OneToMany(mappedBy = "store")
+    private List<StoreImage> images=new ArrayList<>();
+
+    @OneToMany(mappedBy = "store")
+    private List<Review> reviewList=new ArrayList<>();
+
+    @OneToOne(mappedBy = "store")
+    private Category category;
 
 }

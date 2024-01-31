@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/point")
 public class PointController {
+
     private final PointService pointService;
 
     @Operation(summary = "포인트 내역 조회 API", description = "포인트 내역 조회 API입니다.")
@@ -36,5 +38,3 @@ public class PointController {
 
 
 }
-
-
