@@ -1,7 +1,10 @@
 package com.example.BapZip.domain;
 
+import com.example.BapZip.domain.common.BaseEntity;
 import com.example.BapZip.domain.enums.AdminStatus;
 import com.example.BapZip.domain.enums.Term;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -15,7 +18,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class User {
+public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,6 +35,7 @@ public class User {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id")
+    @JsonIgnore
     private School school;
 
 
@@ -64,9 +68,7 @@ public class User {
     @Column(columnDefinition = "VARCHAR(15) DEFAULT 'CHECKED'")
     private Term term4;
 
-
-
-
-
+    @Column(nullable = false)
+    private String imageUrl;
 
 }

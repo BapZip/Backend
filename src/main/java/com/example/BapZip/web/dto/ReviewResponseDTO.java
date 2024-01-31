@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ReviewResponse {
+public class ReviewResponseDTO {
     @Builder
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class ReviewResponseDTO{
+    public static class ReviewResponseDTO2 {
         private Integer point;
     }
 

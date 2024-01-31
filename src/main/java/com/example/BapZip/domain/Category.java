@@ -1,6 +1,5 @@
 package com.example.BapZip.domain;
 
-import com.example.BapZip.domain.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,17 +8,14 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class PrintedMenu extends BaseEntity {
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    String name;
 
-    @Column(nullable = false, length = 300)
-    private String imageURL;
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "storeId")
     private Store store;
-
 }

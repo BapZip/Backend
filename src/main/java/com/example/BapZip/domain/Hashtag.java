@@ -47,6 +47,12 @@ public class Hashtag extends BaseEntity {
     @ColumnDefault("0")
     Integer h8;
 
+    @ColumnDefault("0")
+    Integer h9;
+
+    @ColumnDefault("0")
+    Integer h10;
+
 
 
 

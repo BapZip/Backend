@@ -25,7 +25,7 @@ public class UserRequestDTO {
 
         private Long school;
 
-        private String major;
+        private Long major;
 
         private String email;
 
