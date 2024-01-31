@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface StoreService {
 
-    public StoreResponseDTO.StoreInfoDTO getStoreDetailInfo(Long storeId);
+    StoreResponseDTO.StoreDetailInfoDTO getStoreDetailInfo(Long storeId);
 
     List<StoreResponseDTO.PrintedMenuDTO> getStorePrintedMenu(Long storeId);
 
