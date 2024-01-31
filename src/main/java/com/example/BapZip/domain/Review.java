@@ -47,7 +47,7 @@ public class Review extends BaseEntity {
     @Column(nullable = false, length = 700)
     private String content;
 
-    private Date paymentTime;
+    private LocalDate paymentTime;
 
     private String menuName;
 
