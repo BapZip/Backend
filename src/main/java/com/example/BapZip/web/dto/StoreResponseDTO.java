@@ -14,12 +14,19 @@ public class StoreResponseDTO {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class StoreThumbnailDTO {
+    public static class StoreInfoDTO {
 
         List<String> images;
         String name;
-
         Boolean bookmark;
+        String inOrOut;
+        Integer waitTime;
+        Double score;
+        List<String> hashtag;
+
+    }
+
+    public static class StoreDetailInfoDTO_1 {
         InOrOut inOrOut;
 
         // 도메인에 없지만 내가 새로 만든 속성
@@ -36,7 +43,7 @@ public class StoreResponseDTO {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class StoreInfoDTO {
+    public static class StoreDetailInfoDTO {
 
         String waitingAverage;
 
@@ -58,8 +65,6 @@ public class StoreResponseDTO {
         String content;
 
         Store store;
-
-
 
 
     }

@@ -1,5 +1,7 @@
 package com.example.BapZip.service.StoreService;
 
+import com.example.BapZip.web.dto.StoreResponseDTO;
+
 import com.example.BapZip.domain.Store;
 import com.example.BapZip.repository.StoreRepository;
 import com.example.BapZip.web.dto.StoreResponseDTO;
@@ -17,5 +19,7 @@ public interface StoreService {
     List<StoreResponseDTO.MyZipDTO> getStoreMyZip(Long userId);
 
     List<StoreResponseDTO.HotPlaceDTO> getHotPlace();
+    StoreResponseDTO.StoreInfoDTO getStoreInfo(String userId, Long storeId);
+
 
 }
