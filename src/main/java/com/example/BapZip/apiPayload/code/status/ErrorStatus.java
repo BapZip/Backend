@@ -21,7 +21,7 @@ public enum ErrorStatus implements BaseErrorCode {
     USER_LOGIN_ERROR(HttpStatus.resolve(400),"USER400","로그인에 실패하였습니다."),
 
     // coupon 관련 응답
-    INSUFFICIENT_BALANCE_ERROR(HttpStatus.resolve(400), "COUPON400", "잔액이 부족하여 쿠폰발행에 실패했습니다.");
+    INSUFFICIENT_BALANCE_ERROR(HttpStatus.resolve(400), "COUPON400", "잔액이 부족하여 쿠폰발행에 실패했습니다."),
     USER_NOT_FOUND_ERROR(HttpStatus.resolve(404), "USER404", "해당 사용자를 찾을 수 없습니다."),
 
     //store 관련 응답
