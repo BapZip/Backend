@@ -12,11 +12,9 @@ import java.util.List;
 
 @Repository
 public interface CouponRepository extends JpaRepository<Coupon, Long> {
-    //findByUserIdAndFinalDateAfterAndFinalDateEqual
     List<Coupon> findByUserIdAndFinalDateAfterAndStatus(Long user_id, LocalDate finalDate, CouponStatus status);
 
-    List<Coupon> findByUserIdAndFinalDateBefore(Long user_id, LocalDate finalDate);
-
+    // And보다 Or 조건이 우선적으로 적용되어야하기에 쿼리 사용.
     @Query("SELECT c FROM Coupon c WHERE (c.user.id = :userId AND c.finalDate < :finalDate) OR (c.user.id = :userId AND c.status = 'INVALID')")
     List<Coupon> findExpiredOrInvalidCouponsByUserId(
             @Param("userId") Long userId,

@@ -4,13 +4,12 @@ package com.example.BapZip.web.controller;
 import com.example.BapZip.apiPayload.ApiResponse;
 import com.example.BapZip.repository.CouponRepository;
 import com.example.BapZip.service.CouponService.CouponService;
+import com.example.BapZip.web.dto.CouponRequestDTO;
 import com.example.BapZip.web.dto.CouponResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,4 +37,13 @@ public class CouponController {
 
         return ApiResponse.onSuccess(result);
     }
+
+    @Operation(summary = "쿠폰 발행 API", description = "포인트를 사용해 쿠폰을 발행하는 API입니다.")
+    @PostMapping ("/convertPoint")
+    public ApiResponse<CouponResponseDTO.CouponDTO> IssuedCoupon(@AuthenticationPrincipal String userId, @RequestBody CouponRequestDTO.CouponIssueDTO couponIssueDTO){
+        CouponResponseDTO.CouponDTO result = couponService.issuedCoupon(Long.valueOf(userId), couponIssueDTO);
+
+        return ApiResponse.onSuccess(result);
+    }
+
 }
