@@ -97,7 +97,7 @@ public class StoreServiceImpl implements StoreService{
     }
      //가게 상세 정보 조회
     @Override
-    public StoreResponseDTO.StoreInfoDTO getStoreDetailInfo(Long storeId) {
+    public StoreResponseDTO.StoreDetailInfoDTO getStoreDetailInfo(Long storeId) {
         Optional<Store> store = storeRepository.findById(storeId);
         if (store.isPresent()) {
             String waitingAverage = store.get().getWaitingAverage();
@@ -105,7 +105,7 @@ public class StoreServiceImpl implements StoreService{
             String closedDay = store.get().getClosedDay();
             String position = store.get().getPosition();
 
-            return StoreResponseDTO.StoreInfoDTO.builder()
+            return StoreResponseDTO.StoreDetailInfoDTO.builder()
                     .waitingAverage(waitingAverage)
                     .BusinessHours(businessHours)
                     .closedDay(closedDay)

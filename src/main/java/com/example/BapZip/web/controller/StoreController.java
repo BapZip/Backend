@@ -34,7 +34,6 @@ import java.util.List;
 public class StoreController {
 
     private final StoreService storeService;
-    private final StoreRepository storeRepository;
 
     @Operation(summary = "가게 기본 정보 API ", description = "가게 기본 정보 API 입니다. 가게 id를 pathvariable로 전달해주세요.")
     @GetMapping("/{storeId}/info")
@@ -45,72 +44,9 @@ public class StoreController {
         return ApiResponse.onSuccess(result);
     }
 
-    @GetMapping
-    public List<Store> getAllStores() {
-        List<Store> stores = storeRepository.findAll();
-        stores.forEach(System.out::println);
-        return stores;
-    }
-
-    @Operation(summary = "가게 상toreResponseDTO.StoreInfoDTO> getCongestionRanking
-
-42
-
-            (@AuthenticationPrincipal String userId,@PathVariable(name = "storeId") Long storeId)
-
-43
-
-    {
-
-44
-
-        StoreResponseDTO.StoreInfoDTO result = storeService.getStoreInfo(userId,storeId);
-
-45
-
-        return ApiResponse.onSuccess(result);
-
-46
-
-    }
-
-47
-
-
-
-48
-
-    @GetMapping
-
-49
-
-    public List<Store> getAllStores() {
-
-50
-
-        List<Store> stores = storeRepository.findAll();
-
-51
-
-        stores.forEach(System.out::println);
-
-52
-
-        return stores;
-
-53
-
-    }
-
-54
-
-
-
-55
-
-    @Operation(summary = "가게  정보 조회 API", description = "가게 정보 조회 API입니다,PathVariable 스토어 ID.")
+    @Operation(summary = "가게 상세 정보 조회 API", description = "가게 정보 조회 API입니다,PathVariable 스토어 ID.")
     @GetMapping("/{storeId}/detailinfo/")
-    public ApiResponse<StoreResponseDTO.StoreInfoDTO> getStoreDetailInfo(@PathVariable("storeId") Long storeId) {
+    public ApiResponse<StoreResponseDTO.StoreDetailInfoDTO> getStoreDetailInfo(@PathVariable("storeId") Long storeId) {
         return ApiResponse.onSuccess(storeService.getStoreDetailInfo(storeId));
     }
 

@@ -26,18 +26,6 @@ public class StoreResponseDTO {
 
     }
 
-    public static class StoreDetailInfoDTO_1 {
-        InOrOut inOrOut;
-
-        // 도메인에 없지만 내가 새로 만든 속성
-        Integer waitingExpected;
-
-        // 도메인에 없지만 내가 새로 만든 속성
-        Float ratingStars;
-
-        List<String> mostHashtag;
-
-    }
     @Builder
     @Getter
     @Setter
