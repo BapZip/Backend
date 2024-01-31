@@ -3,9 +3,11 @@ package com.example.BapZip.service.UserService;
 
 import com.example.BapZip.apiPayload.code.status.ErrorStatus;
 import com.example.BapZip.apiPayload.exception.GeneralException;
+import com.example.BapZip.domain.Major;
 import com.example.BapZip.domain.School;
 import com.example.BapZip.domain.User;
 import com.example.BapZip.domain.enums.AdminStatus;
+import com.example.BapZip.repository.MajorRepository;
 import com.example.BapZip.repository.SchoolRepository;
 import com.example.BapZip.repository.UserRepository;
 import com.example.BapZip.security.TokenProvider;
@@ -25,6 +27,8 @@ public class UserServiceImpl implements  UserService{
     private final UserRepository userRepository;
 
     private final SchoolRepository schoolRepository;
+    private final MajorRepository majorRepository;
+
 
     private final TokenProvider tokenProvider;
 
@@ -34,6 +38,7 @@ public class UserServiceImpl implements  UserService{
     @Override
     public UserResonseDTO.JoinDTO create(final UserRequestDTO.JoinDTO dto)  {
             Optional<School> school = schoolRepository.findById(dto.getSchool());
+            Optional<Major> major = majorRepository.findById(dto.getMajor());
             if(school.isEmpty()) throw new GeneralException(ErrorStatus.USER_JOIN_ERROR);
             User user= User.builder()
                     .userId(dto.getUserId())
@@ -42,7 +47,8 @@ public class UserServiceImpl implements  UserService{
                     .email(dto.getEmail())
                     .admin(AdminStatus.USER)
                     .school(school.get())
-                    .major(dto.getMajor())
+                    .major(major.get().getName())
+                    // 이미지 url 처리
                     .build();
             User result = userRepository.save(user);
 

@@ -25,6 +25,12 @@ public class School extends BaseEntity {
     @Column(nullable = false, length = 20)
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<User> user=new ArrayList<>();
+//    @OneToMany(fetch = FetchType.LAZY)
+//    private List<User> user=new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "region_id")
+    private Region region;
+
+
 }
