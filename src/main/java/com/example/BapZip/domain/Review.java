@@ -1,7 +1,11 @@
 package com.example.BapZip.domain;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import com.example.BapZip.domain.common.BaseEntity;
+
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
@@ -12,7 +16,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Review {
+public class Review extends BaseEntity {
     /**
      * id
      * store_id

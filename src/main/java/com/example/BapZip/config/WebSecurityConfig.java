@@ -48,7 +48,7 @@ public class WebSecurityConfig
 
                     .authorizeHttpRequests((authorizeRequests) ->
                             authorizeRequests.requestMatchers("/health","/auth/**",
-                                            "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
+                                            "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**","/school/**").permitAll()
                                     .anyRequest().authenticated()
                     )
                     .exceptionHandling((exceptionConfig) ->

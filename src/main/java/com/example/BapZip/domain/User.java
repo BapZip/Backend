@@ -1,5 +1,6 @@
 package com.example.BapZip.domain;
 
+import com.example.BapZip.domain.common.BaseEntity;
 import com.example.BapZip.domain.enums.AdminStatus;
 import com.example.BapZip.domain.enums.Term;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -16,7 +17,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class User {
+public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -61,5 +62,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(15) DEFAULT 'CHECKED'")
     private Term term3;
+
+    @Column(nullable = false)
+    private String imageUrl;
 
 }

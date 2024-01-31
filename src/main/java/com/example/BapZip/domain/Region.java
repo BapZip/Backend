@@ -1,6 +1,9 @@
 package com.example.BapZip.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
 
 @Entity
@@ -8,14 +11,10 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Category {
+public class Region {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    String name;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "storeId")
-    private Store store;
+    private String name;
 }
