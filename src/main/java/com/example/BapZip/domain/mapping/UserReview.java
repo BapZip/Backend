@@ -14,6 +14,10 @@ import org.hibernate.annotations.DynamicUpdate;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Table(
+        name = "user_review",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "review_id"})
+)
 public class UserReview extends BaseEntity {
     /**
      * ReviewLike - 좋아요 mapping Table
