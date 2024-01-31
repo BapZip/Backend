@@ -7,6 +7,7 @@ import com.example.BapZip.domain.Major;
 import com.example.BapZip.domain.School;
 import com.example.BapZip.domain.User;
 import com.example.BapZip.domain.enums.AdminStatus;
+import com.example.BapZip.domain.enums.Term;
 import com.example.BapZip.repository.MajorRepository;
 import com.example.BapZip.repository.SchoolRepository;
 import com.example.BapZip.repository.UserRepository;
@@ -65,5 +66,32 @@ public class UserServiceImpl implements  UserService{
         else{
             throw new GeneralException(ErrorStatus.USER_LOGIN_ERROR);
         }
+    }
+
+    @Override
+    public UserResonseDTO.checkNicknameAndIdDTO checkNickname(String nickname){
+        final Optional<User> user=userRepository.findByNickname(nickname);
+        if(user.isEmpty()){ return UserResonseDTO.checkNicknameAndIdDTO.builder().available(true).build();}
+        else { return UserResonseDTO.checkNicknameAndIdDTO.builder().available(false).build();}
+    }
+
+    @Override
+    public UserResonseDTO.checkNicknameAndIdDTO checkUserid(String nickname){
+        final Optional<User> user=userRepository.findByUserId(nickname);
+        if(user.isEmpty()){  return UserResonseDTO.checkNicknameAndIdDTO.builder().available(true).build();}
+        else {  return UserResonseDTO.checkNicknameAndIdDTO.builder().available(false).build();}
+    }
+
+    @Override
+    public void agreementToTerm(UserRequestDTO.TermDTO agreement) {
+        User user = userRepository.findById(agreement.getUserId())
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
+        if(!agreement.getTerm1().equals(Term.CHECKED.toString()) || !agreement.getTerm2().equals(Term.CHECKED.toString()))
+            throw new GeneralException(ErrorStatus.USER_TERM_ERROR);
+        user.setTerm1(Term.valueOf(agreement.getTerm1())); // 약관1
+        user.setTerm2(Term.valueOf(agreement.getTerm2())); // 약관2
+        user.setTerm3(Term.valueOf(agreement.getTerm3())); // 약관3
+        user.setTerm4(Term.valueOf(agreement.getTerm4())); // 약관3
+        userRepository.save(user);
     }
 }

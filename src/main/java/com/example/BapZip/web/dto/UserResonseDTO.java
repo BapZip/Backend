@@ -23,6 +23,15 @@ public class UserResonseDTO {
         String token;
     }
 
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class checkNicknameAndIdDTO{
+        boolean available;
+    }
+
 
 
 
