@@ -3,6 +3,7 @@ package com.example.BapZip.domain;
 import com.example.BapZip.domain.common.BaseEntity;
 import com.example.BapZip.domain.enums.CouponStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
