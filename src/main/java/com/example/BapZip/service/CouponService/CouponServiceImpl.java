@@ -1,6 +1,7 @@
 package com.example.BapZip.service.CouponService;
 
 import com.example.BapZip.domain.Coupon;
+import com.example.BapZip.domain.enums.CouponStatus;
 import com.example.BapZip.repository.CouponRepository;
 import com.example.BapZip.web.dto.CouponResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +19,7 @@ public class CouponServiceImpl implements CouponService{
     @Override
     public List<CouponResponseDTO.CouponDTO> getValidCoupons(Long userId) {
         LocalDate currentDate = LocalDate.now();
-        //findByUserIdAndFinalDateAfterAndFinalDateEqual
-        List<Coupon> validCoupons = couponRepository.findByUserIdAndFinalDateAfter(userId, currentDate);
+        List<Coupon> validCoupons = couponRepository.findByUserIdAndFinalDateAfterAndStatus(userId, currentDate, CouponStatus.VALID);
 
         return validCoupons.stream()
                 .map(this::mapToCouponDTO)
@@ -29,8 +29,8 @@ public class CouponServiceImpl implements CouponService{
     @Override
     public List<CouponResponseDTO.CouponDTO> getInvalidCoupons(Long userId) {
         LocalDate currentDate = LocalDate.now();
-        List<Coupon> invalidCoupons = couponRepository.findByUserIdAndFinalDateBefore(userId, currentDate);
-
+        //List<Coupon> invalidCoupons = couponRepository.findByUserIdAndFinalDateBefore(userId, currentDate);
+        List<Coupon> invalidCoupons = couponRepository.findExpiredOrInvalidCouponsByUserId(userId, currentDate);
         return invalidCoupons.stream()
                 .map(this::mapToCouponDTO)
                 .collect(Collectors.toList());
