@@ -44,17 +44,18 @@ public class MypageServiceImpl implements MypageService{
 
     @Override
     public MypageResponseDTO.MypageInfoDTO fetchMypageProfile(Long userId, MultipartFile image) {
-        Optional<User> tempUser = userRepository.findById(userId);
+        User tempUser = userRepository.findById(userId).get();
         List<MultipartFile> imageList=new ArrayList<>();
         imageList.add(image);
-        List<String> urls = s3Service.uploadFiles("/test",imageList);
-        tempUser.get().setImageUrl(urls.get(0));
+        List<String> urls = s3Service.uploadFiles("test",imageList);
+        tempUser.setImageUrl(urls.get(0));
+        userRepository.save(tempUser);
 
         return MypageResponseDTO.MypageInfoDTO.builder()
                 .imageUrl(urls.get(0))
-                .nickname(tempUser.get().getNickname())
-                .schoolName(tempUser.get().getSchool().getName())
-                .major(tempUser.get().getMajor())
+                .nickname(tempUser.getNickname())
+                .schoolName(tempUser.getSchool().getName())
+                .major(tempUser.getMajor())
                 .build();
 
     }
