@@ -1,13 +1,8 @@
 package com.example.BapZip.config;
 
 import com.example.BapZip.apiPayload.ApiResponse;
-import com.example.BapZip.apiPayload.code.ErrorReasonDTO;
-import com.example.BapZip.apiPayload.code.status.ErrorStatus;
-import com.example.BapZip.apiPayload.exception.GeneralException;
 import com.example.BapZip.security.JwtAuthenticationFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,12 +12,11 @@ import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.web.filter.CorsFilter;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 
 import java.io.PrintWriter;
 
@@ -48,7 +42,7 @@ public class WebSecurityConfig
 
                     .authorizeHttpRequests((authorizeRequests) ->
                             authorizeRequests.requestMatchers("/health","/users/auth/**","/school/**",
-                                            "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
+                                            "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**","/chat/**").permitAll()
 
                                     .anyRequest().authenticated()
                     )
