@@ -31,4 +31,7 @@ public class Menu extends BaseEntity {
     @Column(length = 300)
     String imageURL;
 
+    @Column
+    String menuName;
+
 }

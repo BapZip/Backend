@@ -52,6 +52,8 @@ public class StoreServiceImpl implements StoreService{
     private final NoticeRepository noticeRepository;
     private final CategoryRepository categoryRepository;
     private final UserReviewRepository userReviewRepository;
+    private final MenuGroupRepository menuGroupRepository;
+    private final MenuRepository menuRepository;
 
     @Override
     public StoreResponseDTO.StoreInfoDTO getStoreInfo(String userId, Long storeId) {
@@ -396,4 +398,28 @@ public class StoreServiceImpl implements StoreService{
 
     }
 
+    @Override
+    public List<List<StoreResponseDTO.menuDTO>> getMenuList(Long storeId) {
+        storeRepository.findById(storeId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.STORE_NOT_EXIST_ERROR));
+
+        List<Menu_Group> menuGroups = menuGroupRepository.findByStoreId(storeId);
+
+        List<List<StoreResponseDTO.menuDTO>> menuList = new ArrayList<>();
+        for (Menu_Group menuGroup : menuGroups) {
+            List<Menu> menus = menuRepository.findByMenuGroupId(menuGroup.getId());
+            List<StoreResponseDTO.menuDTO> menuDTOs = menus.stream()
+                    .map(menu -> StoreResponseDTO.menuDTO.builder()
+                            .groupName(menuGroup.getName())
+                            .menuName(menu.getMenuName())
+                            .price(menu.getPrice())
+                            .explanation(menu.getExplanation())
+                            .imageURL(menu.getImageURL())
+                            .build())
+                    .collect(Collectors.toList());
+            menuList.add(menuDTOs);
+        }
+
+        return menuList;
+    }
 }

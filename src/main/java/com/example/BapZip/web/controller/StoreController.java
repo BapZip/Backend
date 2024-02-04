@@ -106,4 +106,8 @@ public class StoreController {
         return ApiResponse.onSuccess(storeService.getRecommendStoresByLikes(categoryId));
     }
 
+    @GetMapping("/stores/{storeId}/menu")
+    public ApiResponse<List<List<StoreResponseDTO.menuDTO>>> menuList(@PathVariable("storeId") Long storeId){
+        return ApiResponse.onSuccess(storeService.getMenuList(storeId));
+    }
 }

@@ -215,5 +215,22 @@ public class StoreResponseDTO {
         boolean bookmark;
 
     }
+
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class menuDTO{
+        String groupName;
+
+        String menuName;
+
+        Integer price;
+
+        String explanation;
+
+        String imageURL;
+    }
 }
 
