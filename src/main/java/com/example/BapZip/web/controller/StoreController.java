@@ -76,14 +76,14 @@ public class StoreController {
     }
 
     @Operation(summary = "가게 zip 하기", description = "스토어 id 넣어주세요. PathVariable storeId")
-    @GetMapping("/zip")
+    @PostMapping("/zip")
     public ApiResponse zipStore(@AuthenticationPrincipal String userId,@RequestParam("storeId") Long storeId) {
         storeService.zipStore(userId,storeId);
         return ApiResponse.of(SuccessStatus.STORE_ZIP_SUCCESS,null);
     }
 
     @Operation(summary = "가게 zip 해제 하기", description = "스토어 id 넣어주세요. PathVariable storeId")
-    @GetMapping("/deleteZip")
+    @DeleteMapping("/deleteZip")
     public ApiResponse unzipStore(@AuthenticationPrincipal String userId,@RequestParam("storeId") Long storeId) {
         storeService.unzipStore(userId,storeId);
         return ApiResponse.of(SuccessStatus.STORE_UNZIP_SUCCESS,null);
