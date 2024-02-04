@@ -196,5 +196,24 @@ public class StoreResponseDTO {
         StoreListStaus storeListStaus;
 
     }
+
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class RecommandDTO {
+
+        Long storeId;
+
+        String storeName;
+
+        String content;
+
+        String userName;
+
+        boolean bookmark;
+
+    }
 }
 
