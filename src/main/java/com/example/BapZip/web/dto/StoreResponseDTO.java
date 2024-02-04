@@ -207,5 +207,41 @@ public class StoreResponseDTO {
         String storeName;
         String position;
     }
+
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class RecommandDTO {
+
+        Long storeId;
+
+        String storeName;
+
+        String content;
+
+        String userName;
+
+        boolean bookmark;
+
+    }
+
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class menuDTO{
+        String groupName;
+
+        String menuName;
+
+        Integer price;
+
+        String explanation;
+
+        String imageURL;
+    }
 }
 
