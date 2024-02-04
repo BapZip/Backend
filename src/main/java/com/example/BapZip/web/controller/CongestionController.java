@@ -20,7 +20,10 @@ import java.util.List;
 public class CongestionController {
     private  final CongestionService congestionService;
 
-    @Operation(summary = "혼잡도 등록 api", description = "혼잡도 등록 api 입니다.")
+    @Operation(summary = "혼잡도 등록 api", description = "혼잡도 등록 api 입니다.</br>혼잡 정도 :SPARSE , MODERATE , CROWDED\n" +
+            "</br>방문객 : VISIT / 비방문객 : NONVISIT\n" +
+            "</br>인원 : 10 , 15, 20 ,25 정수값\n" +
+            ".</br>대기 시간 : 10 , 20 , 40 , 41  정수값")
     @PostMapping("/{storeId}")
     public ApiResponse<CongestionResponseDTO.registerCongestion> registerCongestion
             (@AuthenticationPrincipal String userId,

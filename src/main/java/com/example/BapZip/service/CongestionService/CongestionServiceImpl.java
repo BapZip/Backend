@@ -195,6 +195,7 @@ public class CongestionServiceImpl implements CongestionService{
                 else return 0;
             }
         });
+        for(int i =1;i<=dtos.size();i++){dtos.get(i-1).setRanking(i);}
         return dtos;
     }
     // top5 게산
@@ -212,6 +213,7 @@ public class CongestionServiceImpl implements CongestionService{
                 else return 0;
             }
         });
+        for(int i =1;i<=dtos.size();i++){dtos.get(i-1).setRanking(i);}
         return dtos;
     }
 

@@ -197,6 +197,17 @@ public class StoreResponseDTO {
 
     }
 
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class searchStore {
+        Long id;
+        String storeName;
+        String position;
+    }
+
     @Builder
     @Getter
     @Setter

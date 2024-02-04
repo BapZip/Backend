@@ -35,4 +35,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     List<Store> findAll();
 
+    List<Store> findByNameContains(String storeName);
+
+
 }
