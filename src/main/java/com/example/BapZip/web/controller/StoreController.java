@@ -105,4 +105,5 @@ public class StoreController {
     public ApiResponse<StoreResponseDTO.RecommandDTO> getRecommendStoresByLikes(@PathVariable("category") Long categoryId) {
         return ApiResponse.onSuccess(storeService.getRecommendStoresByLikes(categoryId));
     }
+
 }

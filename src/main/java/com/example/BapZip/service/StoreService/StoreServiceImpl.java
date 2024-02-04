@@ -394,7 +394,6 @@ public class StoreServiceImpl implements StoreService{
                 .content(topReview.getContent())
                 .build();
 
-
     }
 
 }
