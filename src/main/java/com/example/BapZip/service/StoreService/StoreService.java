@@ -31,4 +31,8 @@ public interface StoreService {
     void zipStore(String userId, Long storeId);
 
     void unzipStore(String userId, Long storeId);
+
+    StoreResponseDTO.RecommandDTO getRecommendStoresByLikes(Long categoryId);
+
+    List<List<StoreResponseDTO.menuDTO>> getMenuList(Long storeId);
 }

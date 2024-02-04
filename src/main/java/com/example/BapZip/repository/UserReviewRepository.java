@@ -4,6 +4,8 @@ import com.example.BapZip.domain.Review;
 import com.example.BapZip.domain.User;
 import com.example.BapZip.domain.mapping.UserReview;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,4 +18,13 @@ public interface UserReviewRepository extends JpaRepository<UserReview, Long> {
     Optional<UserReview> findByUserAndReview(User user, Review review);
 
     List<UserReview> findByUser(User user);
+
+    @Query("SELECT ur.review\n" +
+            "FROM UserReview ur\n" +
+            "JOIN ur.review.store s\n" +
+            "JOIN s.category c\n" +
+            "WHERE c.id = :categoryId\n" +
+            "GROUP BY ur.review\n" +
+            "ORDER BY COUNT(ur.review) DESC")
+    Review findTopReviewByLikesPerCategory(@Param("categoryId") Long categoryId);
 }

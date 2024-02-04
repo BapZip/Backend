@@ -100,4 +100,14 @@ public class StoreController {
         return ApiResponse.of(SuccessStatus.STORE_UNZIP_SUCCESS,null);
     }
 
+    @Operation(summary = "업종별 추천 식당 조회", description = "PathVariable 업종 -> 1, 2, 3, 4, 5")
+    @GetMapping("/recommend/{category}")
+    public ApiResponse<StoreResponseDTO.RecommandDTO> getRecommendStoresByLikes(@PathVariable("category") Long categoryId) {
+        return ApiResponse.onSuccess(storeService.getRecommendStoresByLikes(categoryId));
+    }
+
+    @GetMapping("/stores/{storeId}/menu")
+    public ApiResponse<List<List<StoreResponseDTO.menuDTO>>> menuList(@PathVariable("storeId") Long storeId){
+        return ApiResponse.onSuccess(storeService.getMenuList(storeId));
+    }
 }
