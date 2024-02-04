@@ -7,9 +7,12 @@ import com.example.BapZip.service.MypageService.MypageService;
 import com.example.BapZip.web.dto.MypageResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,5 +24,12 @@ public class MypageController {
     @GetMapping("/info")
     public ApiResponse<MypageResponseDTO.MypageInfoDTO> getMypageInfo(Principal principal) {
         return ApiResponse.onSuccess(mypageService.getMypageInfo(Long.parseLong(principal.getName())));
+    }
+
+    @Operation(summary = "마이페이지 이미지 변경 API", description = "")
+    @PostMapping(value = "/api/img/snapshot",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ApiResponse<MypageResponseDTO.MypageInfoDTO> fetchMypageProfile(Principal principal,@RequestPart(value = "images",required = true) MultipartFile images) {
+        return ApiResponse.onSuccess(mypageService.fetchMypageProfile(Long.parseLong(principal.getName()),images));
     }
 }
