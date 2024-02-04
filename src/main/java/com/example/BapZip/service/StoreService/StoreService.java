@@ -21,10 +21,11 @@ public interface StoreService {
     List<StoreResponseDTO.HotPlaceDTO> getHotPlace();
     StoreResponseDTO.StoreInfoDTO getStoreInfo(String userId, Long storeId);
 
+    StoreResponseDTO.RecommandDTO getRecommendStoresByLikes(Long categoryId);
+  
     List<StoreResponseDTO.StoreListReviewCountDTO> getStoreListByReviewCount(Long userId);
-
+  
     List<StoreResponseDTO.StoreListScoreDTO> getStoreListByScore(Long userId);
-
 
     StoreResponseDTO.NoticeDTO getNotice(Long storeId);
 

@@ -68,11 +68,20 @@ public class StoreController {
     public ApiResponse<List<StoreResponseDTO.HotPlaceDTO>> getHotPlace() {
         return ApiResponse.onSuccess(storeService.getHotPlace());
     }
+
+    @Operation(summary = "업종별 추천 식당 조회", description = "PathVariable 업종 - 한식: 1, 일식: 2 ...")
+    @GetMapping("/recommend/{category}")
+    public ApiResponse<StoreResponseDTO.RecommandDTO> getRecommendStoresByLikes(@PathVariable("category") Long categoryId) {
+
+        return ApiResponse.onSuccess(storeService.getRecommendStoresByLikes(categoryId));
+    }
+  
     @Operation(summary = "가게리스트 조회(리뷰많은순)", description = "토큰만 필요함 In/out 공용")
     @GetMapping("/list/reviewcount")
     public ApiResponse<List<StoreResponseDTO.StoreListReviewCountDTO>> getStoreListByReviewCount(Principal principal) {
         return ApiResponse.onSuccess(storeService.getStoreListByReviewCount(Long.parseLong(principal.getName())));
     }
+  
     @Operation(summary = "가게리스트 조회(별점순)", description = "토큰만 필요함 In/out 공용")
     @GetMapping("/list/score")
     public ApiResponse<List<StoreResponseDTO.StoreListScoreDTO>> getStoreListByScore(Principal principal) {
