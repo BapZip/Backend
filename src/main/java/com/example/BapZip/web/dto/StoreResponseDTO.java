@@ -22,6 +22,7 @@ public class StoreResponseDTO {
         String inOrOut;
         Integer waitTime;
         Double score;
+        String category;
         List<String> hashtag;
 
     }
@@ -102,6 +103,19 @@ public class StoreResponseDTO {
         Double score;
 
         String imageUrl;
+
+    }
+
+    //getNotice
+
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class NoticeDTO {
+
+        String notice;
 
     }
 }

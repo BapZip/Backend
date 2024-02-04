@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,12 +47,13 @@ public class StoreServiceImpl implements StoreService{
     private final CongestionRepository congestionRepository;
     private final HashtagRepository hashtagRepository;
     private final PrintedMenuRepository printedMenuRepository;
-
+    private final NoticeRepository noticeRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
     public StoreResponseDTO.StoreInfoDTO getStoreInfo(String userId, Long storeId) {
 
-        Store store = storeRepository.findById(storeId).get();
+        Store store = storeRepository.findById(storeId).orElseThrow(()-> new GeneralException(ErrorStatus.STORE_NOT_EXIST));
         User user = userRepository.findById(Long.valueOf(userId)).get();
 
         // ** 1. 가게 이름, 내외부 ** //
@@ -90,12 +92,48 @@ public class StoreServiceImpl implements StoreService{
         }
 
         // ** 해시태그 ** //
-        List<String> hashtags = calculateHashtag(hashtagRepository.findByStore(store).get());
+        List<String> hashtags = calculateHashtag(hashtagRepository.
+                findByStore(store).orElseThrow(()-> new GeneralException(ErrorStatus.STORE_HASHTAG_TABLE_NOT_EXIST)));
         result.setHashtag(hashtags);
+
+        // **카테고리 ** //
+        Optional<Category> category = categoryRepository.findByStore(store);
+        if(category.isPresent()) result.setCategory(category.get().getName());
         return result;
 
     }
-     //가게 상세 정보 조회
+
+    // 오늘의 공지 가져오기
+    @Override
+    public StoreResponseDTO.NoticeDTO getNotice(Long storeId) {
+        Store store = storeRepository.findById(storeId).orElseThrow(()-> new GeneralException(ErrorStatus.STORE_NOT_EXIST));
+        LocalDateTime startOfDay = LocalDateTime.of(LocalDateTime.now().toLocalDate(), LocalTime.MIN);
+        LocalDateTime endOfDay = LocalDateTime.of(LocalDateTime.now().toLocalDate(), LocalTime.MAX);
+        List<Notice> notices = noticeRepository.findByStoreAndCreatedAtBetween(store,startOfDay,endOfDay);
+        String content;
+        if(notices.isEmpty()) content = null;
+        else content =  notices.get(0).getContent();
+        return StoreResponseDTO.NoticeDTO.builder().notice(content).build();
+    }
+
+    @Override
+    public void zipStore(String userId, Long storeId) {
+        Store store = storeRepository.findById(storeId).orElseThrow(()-> new GeneralException(ErrorStatus.STORE_NOT_EXIST));
+        User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(()-> new GeneralException(ErrorStatus.USER_NOT_FOUND_ERROR));
+        if(userStoreRepository.findByStoreAndUser(store,user).isPresent()) throw new GeneralException(ErrorStatus.STORE_ALREADY_ZIP);
+        userStoreRepository.save(UserStore.builder().user(user).store(store).build());
+    }
+
+    @Override
+    public void unzipStore(String userId, Long storeId) {
+        Store store = storeRepository.findById(storeId).orElseThrow(()-> new GeneralException(ErrorStatus.STORE_NOT_EXIST));
+        User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(()-> new GeneralException(ErrorStatus.USER_NOT_FOUND_ERROR));
+        Optional<UserStore> userStore = userStoreRepository.findByStoreAndUser(store,user);
+        if(userStore.isEmpty()) throw new GeneralException(ErrorStatus.STORE_NOT_ZIP);
+        userStoreRepository.delete(userStore.get());
+    }
+
+    //가게 상세 정보 조회
     @Override
     public StoreResponseDTO.StoreDetailInfoDTO getStoreDetailInfo(Long storeId) {
         Optional<Store> store = storeRepository.findById(storeId);
