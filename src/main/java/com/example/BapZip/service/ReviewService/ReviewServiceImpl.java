@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZoneId;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -114,20 +113,9 @@ public class ReviewServiceImpl implements ReviewService{
         userReviewRepository.delete(userReview);
     }
 
-    // 좋아요한 리뷰 조회
-    @Override
-    @Transactional(readOnly = true)
-    public List<Review> findLikedReviews(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 user가 없습니다. id=" + userId));
-
-        List<UserReview> userReviews = userReviewRepository.findByUser(user);
-        return userReviews.stream()
-                .map(UserReview::getReview)
-                .collect(Collectors.toList());
 
 
-    }
+
 
 
 }

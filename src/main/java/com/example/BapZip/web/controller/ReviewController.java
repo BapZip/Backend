@@ -69,13 +69,11 @@ public class ReviewController {
     }
 
 
-    // 좋아요한 리뷰 조회
-    @GetMapping("/myZipReviews")
-    public ResponseEntity<List<Review>> getMyLikedReviews(@AuthenticationPrincipal String  userId) {
-        List<Review> reviews = reviewService.findLikedReviews(Long.valueOf(userId));
 
-        return ResponseEntity.ok(null);
-    }
+
+
+
+
 
 
 }

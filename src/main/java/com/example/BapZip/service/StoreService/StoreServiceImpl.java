@@ -1,7 +1,6 @@
 package com.example.BapZip.service.StoreService;
 
 import com.example.BapZip.domain.*;
-import com.example.BapZip.domain.enums.StoreListStaus;
 import com.example.BapZip.domain.enums.hashtagName;
 import com.example.BapZip.repository.*;
 import com.example.BapZip.web.dto.CongestionResponseDTO;
@@ -24,12 +23,10 @@ import org.springframework.stereotype.Service;
 
 import java.awt.print.Book;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import java.time.LocalDateTime;
@@ -52,13 +49,12 @@ public class StoreServiceImpl implements StoreService{
     private final HashtagRepository hashtagRepository;
     private final PrintedMenuRepository printedMenuRepository;
     private final UserReviewRepository userReviewRepository;
-    private final NoticeRepository noticeRepository;
-    private final CategoryRepository categoryRepository;
-  
+
+
     @Override
     public StoreResponseDTO.StoreInfoDTO getStoreInfo(String userId, Long storeId) {
 
-        Store store = storeRepository.findById(storeId).orElseThrow(()-> new GeneralException(ErrorStatus.STORE_NOT_EXIST));
+        Store store = storeRepository.findById(storeId).get();
         User user = userRepository.findById(Long.valueOf(userId)).get();
 
         // ** 1. 가게 이름, 내외부 ** //
@@ -97,48 +93,12 @@ public class StoreServiceImpl implements StoreService{
         }
 
         // ** 해시태그 ** //
-        List<String> hashtags = calculateHashtag(hashtagRepository.
-                findByStore(store).orElseThrow(()-> new GeneralException(ErrorStatus.STORE_HASHTAG_TABLE_NOT_EXIST)));
+        List<String> hashtags = calculateHashtag(hashtagRepository.findByStore(store).get());
         result.setHashtag(hashtags);
-
-        // **카테고리 ** //
-        Optional<Category> category = categoryRepository.findByStore(store);
-        if(category.isPresent()) result.setCategory(category.get().getName());
         return result;
 
     }
-
-    // 오늘의 공지 가져오기
-    @Override
-    public StoreResponseDTO.NoticeDTO getNotice(Long storeId) {
-        Store store = storeRepository.findById(storeId).orElseThrow(()-> new GeneralException(ErrorStatus.STORE_NOT_EXIST));
-        LocalDateTime startOfDay = LocalDateTime.of(LocalDateTime.now().toLocalDate(), LocalTime.MIN);
-        LocalDateTime endOfDay = LocalDateTime.of(LocalDateTime.now().toLocalDate(), LocalTime.MAX);
-        List<Notice> notices = noticeRepository.findByStoreAndCreatedAtBetween(store,startOfDay,endOfDay);
-        String content;
-        if(notices.isEmpty()) content = null;
-        else content =  notices.get(0).getContent();
-        return StoreResponseDTO.NoticeDTO.builder().notice(content).build();
-    }
-
-    @Override
-    public void zipStore(String userId, Long storeId) {
-        Store store = storeRepository.findById(storeId).orElseThrow(()-> new GeneralException(ErrorStatus.STORE_NOT_EXIST));
-        User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(()-> new GeneralException(ErrorStatus.USER_NOT_FOUND_ERROR));
-        if(userStoreRepository.findByStoreAndUser(store,user).isPresent()) throw new GeneralException(ErrorStatus.STORE_ALREADY_ZIP);
-        userStoreRepository.save(UserStore.builder().user(user).store(store).build());
-    }
-
-    @Override
-    public void unzipStore(String userId, Long storeId) {
-        Store store = storeRepository.findById(storeId).orElseThrow(()-> new GeneralException(ErrorStatus.STORE_NOT_EXIST));
-        User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(()-> new GeneralException(ErrorStatus.USER_NOT_FOUND_ERROR));
-        Optional<UserStore> userStore = userStoreRepository.findByStoreAndUser(store,user);
-        if(userStore.isEmpty()) throw new GeneralException(ErrorStatus.STORE_NOT_ZIP);
-        userStoreRepository.delete(userStore.get());
-    }
-
-    //가게 상세 정보 조회
+     //가게 상세 정보 조회
     @Override
     public StoreResponseDTO.StoreDetailInfoDTO getStoreDetailInfo(Long storeId) {
         Optional<Store> store = storeRepository.findById(storeId);
@@ -240,92 +200,6 @@ public class StoreServiceImpl implements StoreService{
 
         return new ArrayList<>(resultList.subList(0,10));
     }
-
-    @Override
-    public List<StoreResponseDTO.StoreListReviewCountDTO> getStoreListByReviewCount(Long userId){
-        List<Store> storeList=storeRepository.findAllStoresOrderByReviewCountDesc();
-        List<StoreResponseDTO.StoreListReviewCountDTO> resultList = new ArrayList<>();
-
-
-
-        long i=0;
-        for (Store store : storeList) {
-
-
-            User user = userRepository.findById(userId).get();
-            AtomicBoolean isMyZip = new AtomicBoolean(false);
-
-            userStoreRepository.findByStoreAndUser(store, user).ifPresentOrElse(
-                    bookmark -> isMyZip.set(true),
-                    () -> {}
-            );
-
-            StoreResponseDTO.StoreListReviewCountDTO storeListReviewCountDTO = StoreResponseDTO.StoreListReviewCountDTO.builder()
-                    .ReviewCount((long) store.getReviewList().size())
-                    .storeId(store.getId())
-                    .name(store.getName())
-                    .imageUrl(store.getImages().get(0).getImageURL())
-                    .category(store.getCategory().getName())
-                    .inOut(store.getOutin())
-                    .Ranking(++i)
-                    .isMyZip(isMyZip.get())
-                    .storeListStaus(StoreListStaus.REVIEWCOUNT)
-                    .build();
-
-            resultList.add(storeListReviewCountDTO);
-        }
-        return resultList;
-
-    }
-    public Double calculateStoreAverageScore(Store store){
-
-        List<Review> reviewList= reviewRepository.findAllByStore(store);
-        if(reviewList.isEmpty()) return 0.0;
-
-        double totalScore=reviewList.stream().mapToInt(Review::getScore).sum();
-        return totalScore/reviewList.size();
-    }
-
-    @Override
-    public List<StoreResponseDTO.StoreListScoreDTO> getStoreListByScore(Long userId){
-        List<Store> storeList=storeRepository.findAll();
-        List<StoreResponseDTO.StoreListScoreDTO> resultList=new ArrayList<>();
-        long i=0;
-        for(Store store: storeList){
-            User user = userRepository.findById(userId).get();
-            AtomicBoolean isMyZip = new AtomicBoolean(false);
-
-            userStoreRepository.findByStoreAndUser(store, user).ifPresentOrElse(
-                    bookmark -> isMyZip.set(true),
-                    () -> {}
-            );
-
-            double score = calculateStoreAverageScore(store);
-            score= (double) Math.round(score * 10) /10;
-
-            StoreResponseDTO.StoreListScoreDTO storeListScoreDTO=StoreResponseDTO.StoreListScoreDTO.builder()
-                    .score((score))
-                    .storeId(store.getId())
-                    .name(store.getName())
-                    .imageUrl(store.getImages().get(0).getImageURL())
-                    .category(store.getCategory().getName())
-                    .storeListStaus(StoreListStaus.SCORE)
-                    .inOut(store.getOutin())
-                    .isMyZip(isMyZip.get())
-                    .build();
-            resultList.add(storeListScoreDTO);
-
-        }
-        // 'score'를 기준으로 resultList를 내림차순 정렬
-        resultList.sort((dto1, dto2) -> Double.compare(dto2.getScore(), dto1.getScore()));
-        i=0;
-        for(StoreResponseDTO.StoreListScoreDTO dto : resultList){
-            dto.setRanking(++i);
-        }
-
-        return resultList;
-    }
-
 
 
     // ** 대기 시간 계산 함수 ** //

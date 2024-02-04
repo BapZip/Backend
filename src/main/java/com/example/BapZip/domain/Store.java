@@ -2,7 +2,6 @@ package com.example.BapZip.domain;
 
 import com.example.BapZip.domain.common.BaseEntity;
 import com.example.BapZip.domain.enums.InOrOut;
-import com.example.BapZip.domain.mapping.UserStore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -54,8 +53,5 @@ public class Store extends BaseEntity {
 
     @OneToOne(mappedBy = "store")
     private Category category;
-
-    @OneToMany(mappedBy = "store")
-    private List<UserStore> userLikedList=new ArrayList<>();
 
 }

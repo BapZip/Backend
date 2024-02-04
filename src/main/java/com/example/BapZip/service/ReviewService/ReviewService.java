@@ -27,8 +27,4 @@ public interface ReviewService {
 
     // 리뷰 좋아요 해제
     void deleteLike(Long reviewId, Long userId);
-
-    // 좋아요한 리뷰 조회
-    List<Review> findLikedReviews(Long userId);
-
 }
