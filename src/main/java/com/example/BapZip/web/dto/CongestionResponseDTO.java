@@ -27,7 +27,7 @@ public class CongestionResponseDTO {
         Integer waitingTime;
         Integer congestionAV; // 혼잡도 평균 81점 만점
         boolean bookmark;
-
+        int ranking;
 
     }
     @Builder
@@ -40,5 +40,6 @@ public class CongestionResponseDTO {
         String storeName;
         Integer waitingTime;
         Integer congestionAV; // 혼잡도 평균 81점 만점
+        int ranking;
     }
 }

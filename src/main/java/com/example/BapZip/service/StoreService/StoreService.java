@@ -31,4 +31,6 @@ public interface StoreService {
     void zipStore(String userId, Long storeId);
 
     void unzipStore(String userId, Long storeId);
+
+    List<StoreResponseDTO.searchStore> searchStore(String name);
 }

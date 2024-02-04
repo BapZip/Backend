@@ -100,4 +100,12 @@ public class StoreController {
         return ApiResponse.of(SuccessStatus.STORE_UNZIP_SUCCESS,null);
     }
 
+    @Operation(summary = "가게 검색", description = "스토어 이름을 넣어주세요. RequestParam name")
+    @GetMapping("/search")
+    public ApiResponse<List<StoreResponseDTO.searchStore>> searchStore (@RequestParam("name") String name) {
+        List<StoreResponseDTO.searchStore> result = storeService.searchStore(name);
+        return ApiResponse.onSuccess(result);
+    }
+
+
 }

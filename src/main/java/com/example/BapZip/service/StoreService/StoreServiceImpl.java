@@ -99,8 +99,9 @@ public class StoreServiceImpl implements StoreService{
         result.setHashtag(hashtags);
 
         // **카테고리 ** //
-        Optional<Category> category = categoryRepository.findByStore(store);
-        if(category.isPresent()) result.setCategory(category.get().getName());
+//        Optional<Category> category = categoryRepository.findByStore(store);
+//        if(category.isPresent())
+        result.setCategory(store.getCategory().getName());
         return result;
 
     }
@@ -133,6 +134,18 @@ public class StoreServiceImpl implements StoreService{
         Optional<UserStore> userStore = userStoreRepository.findByStoreAndUser(store,user);
         if(userStore.isEmpty()) throw new GeneralException(ErrorStatus.STORE_NOT_ZIP);
         userStoreRepository.delete(userStore.get());
+    }
+
+    @Override
+    public List<StoreResponseDTO.searchStore> searchStore(String name) {
+        List<Store> stores = storeRepository.findByNameContains(name);
+        List<StoreResponseDTO.searchStore> result = new ArrayList<>();
+        for(Store store:stores){
+            StoreResponseDTO.searchStore dto = StoreResponseDTO.searchStore.builder()
+                    .storeName(store.getName()).position(store.getPosition()).id(store.getId()).build();
+            result.add(dto);
+        }
+        return result;
     }
 
     //가게 상세 정보 조회
