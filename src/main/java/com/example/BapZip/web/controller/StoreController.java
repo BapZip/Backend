@@ -67,6 +67,10 @@ public class StoreController {
     public ApiResponse<List<StoreResponseDTO.HotPlaceDTO>> getHotPlace() {
         return ApiResponse.onSuccess(storeService.getHotPlace());
     }
+    @Operation(summary = "업종별 추천 식당 조회", description = "PathVariable 업종 - 한식, 일식 등")
+    @GetMapping("/recommend/{category}")
+    public ApiResponse<StoreResponseDTO.RecommandDTO> getRecommendStoresByLikes(@PathVariable("category") Long categoryId) {
 
-
+        return ApiResponse.onSuccess(storeService.getRecommendStoresByLikes(categoryId));
+    }
 }

@@ -20,6 +20,8 @@ import com.example.BapZip.web.dto.StoreResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.awt.print.Book;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
@@ -46,6 +48,7 @@ public class StoreServiceImpl implements StoreService{
     private final CongestionRepository congestionRepository;
     private final HashtagRepository hashtagRepository;
     private final PrintedMenuRepository printedMenuRepository;
+    private final UserReviewRepository userReviewRepository;
 
 
     @Override
@@ -238,5 +241,35 @@ public class StoreServiceImpl implements StoreService{
         return result;
     }
 
+    @Override
+    public StoreResponseDTO.RecommandDTO getRecommendStoresByLikes(Long categoryId) {
+        // 탑 리뷰 찾기
+        Review topReview = userReviewRepository.findTopReviewByLikesPerCategory(categoryId);
 
+        // 탑 리뷰에서 스토어 정보 가져오기.
+        Store store = topReview.getStore();
+
+        // 탑 리뷰에서 사용자 정보 가져오기.
+        User user = topReview.getUser();
+
+        // 북마크 있는지 확인
+        UserStore userStore = userStoreRepository.findByUserAndStore(user, store);
+
+        boolean bookmark = false;
+
+        if(userStore != null){
+            bookmark = true;
+        }
+
+        // DTO에 정보를 매핑하여 반환합니다.
+        return StoreResponseDTO.RecommandDTO.builder()
+                .storeId(store.getId())
+                .storeName(store.getName())
+                .userName(user.getNickname())
+                .bookmark(bookmark)
+                .content(topReview.getContent())
+                .build();
+
+
+    }
 }
