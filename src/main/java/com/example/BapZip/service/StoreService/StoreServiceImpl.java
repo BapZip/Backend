@@ -1,6 +1,7 @@
 package com.example.BapZip.service.StoreService;
 
 import com.example.BapZip.domain.*;
+import com.example.BapZip.domain.enums.StoreListStaus;
 import com.example.BapZip.domain.enums.hashtagName;
 import com.example.BapZip.repository.*;
 import com.example.BapZip.web.dto.CongestionResponseDTO;
@@ -25,6 +26,7 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import java.time.LocalDateTime;
@@ -197,6 +199,92 @@ public class StoreServiceImpl implements StoreService{
 
         return new ArrayList<>(resultList.subList(0,10));
     }
+
+    @Override
+    public List<StoreResponseDTO.StoreListReviewCountDTO> getStoreListByReviewCount(Long userId){
+        List<Store> storeList=storeRepository.findAllStoresOrderByReviewCountDesc();
+        List<StoreResponseDTO.StoreListReviewCountDTO> resultList = new ArrayList<>();
+
+
+
+        long i=0;
+        for (Store store : storeList) {
+
+
+            User user = userRepository.findById(userId).get();
+            AtomicBoolean isMyZip = new AtomicBoolean(false);
+
+            userStoreRepository.findByStoreAndUser(store, user).ifPresentOrElse(
+                    bookmark -> isMyZip.set(true),
+                    () -> {}
+            );
+
+            StoreResponseDTO.StoreListReviewCountDTO storeListReviewCountDTO = StoreResponseDTO.StoreListReviewCountDTO.builder()
+                    .ReviewCount((long) store.getReviewList().size())
+                    .storeId(store.getId())
+                    .name(store.getName())
+                    .imageUrl(store.getImages().get(0).getImageURL())
+                    .category(store.getCategory().getName())
+                    .inOut(store.getOutin())
+                    .Ranking(++i)
+                    .isMyZip(isMyZip.get())
+                    .storeListStaus(StoreListStaus.REVIEWCOUNT)
+                    .build();
+
+            resultList.add(storeListReviewCountDTO);
+        }
+        return resultList;
+
+    }
+    public Double calculateStoreAverageScore(Store store){
+
+        List<Review> reviewList= reviewRepository.findAllByStore(store);
+        if(reviewList.isEmpty()) return 0.0;
+
+        double totalScore=reviewList.stream().mapToInt(Review::getScore).sum();
+        return totalScore/reviewList.size();
+    }
+
+    @Override
+    public List<StoreResponseDTO.StoreListScoreDTO> getStoreListByScore(Long userId){
+        List<Store> storeList=storeRepository.findAll();
+        List<StoreResponseDTO.StoreListScoreDTO> resultList=new ArrayList<>();
+        long i=0;
+        for(Store store: storeList){
+            User user = userRepository.findById(userId).get();
+            AtomicBoolean isMyZip = new AtomicBoolean(false);
+
+            userStoreRepository.findByStoreAndUser(store, user).ifPresentOrElse(
+                    bookmark -> isMyZip.set(true),
+                    () -> {}
+            );
+
+            double score = calculateStoreAverageScore(store);
+            score= (double) Math.round(score * 10) /10;
+
+            StoreResponseDTO.StoreListScoreDTO storeListScoreDTO=StoreResponseDTO.StoreListScoreDTO.builder()
+                    .score((score))
+                    .storeId(store.getId())
+                    .name(store.getName())
+                    .imageUrl(store.getImages().get(0).getImageURL())
+                    .category(store.getCategory().getName())
+                    .storeListStaus(StoreListStaus.SCORE)
+                    .inOut(store.getOutin())
+                    .isMyZip(isMyZip.get())
+                    .build();
+            resultList.add(storeListScoreDTO);
+
+        }
+        // 'score'를 기준으로 resultList를 내림차순 정렬
+        resultList.sort((dto1, dto2) -> Double.compare(dto2.getScore(), dto1.getScore()));
+        i=0;
+        for(StoreResponseDTO.StoreListScoreDTO dto : resultList){
+            dto.setRanking(++i);
+        }
+
+        return resultList;
+    }
+
 
 
     // ** 대기 시간 계산 함수 ** //
