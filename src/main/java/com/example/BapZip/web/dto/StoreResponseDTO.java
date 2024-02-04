@@ -3,6 +3,7 @@ package com.example.BapZip.web.dto;
 
 import com.example.BapZip.domain.Store;
 import com.example.BapZip.domain.enums.InOrOut;
+import com.example.BapZip.domain.enums.StoreListStaus;
 import lombok.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class StoreResponseDTO {
         String inOrOut;
         Integer waitTime;
         Double score;
+        String category;
         List<String> hashtag;
 
     }
@@ -105,11 +107,68 @@ public class StoreResponseDTO {
 
     }
 
+
     @Builder
     @Getter
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class StoreListReviewCountDTO{
+
+        Long storeId;
+
+        Long ReviewCount;
+
+        Long Ranking;
+
+        String name;
+
+        String category;
+
+        StoreListStaus storeListStaus;
+
+        InOrOut inOut;
+
+        String imageUrl;
+
+        Boolean isMyZip;
+
+    }
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class StoreListScoreDTO{
+
+        Long storeId;
+
+        Long Ranking;
+
+        Double score;
+
+        String name;
+
+        String category;
+
+        InOrOut inOut;
+
+        String imageUrl;
+
+        Boolean isMyZip;
+
+        StoreListStaus storeListStaus;
+
+    }
+      //getNotice
+
+  
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+  
     public static class RecommandDTO {
 
         Long storeId;
@@ -121,6 +180,34 @@ public class StoreResponseDTO {
         String userName;
 
         boolean bookmark;
+      
+    public static class NoticeDTO {
+
+        String notice;
+    }
+    public static class StoreListRecommendDTO{
+
+        Long storeId;
+
+        Long ReviewCount;
+
+        Long Ranking;
+
+        Double score;
+
+        Double totalScore;
+
+        String name;
+
+        String category;
+
+        InOrOut inOut;
+
+        String imageUrl;
+
+        Boolean isMyZip;
+
+        StoreListStaus storeListStaus;
 
     }
 }

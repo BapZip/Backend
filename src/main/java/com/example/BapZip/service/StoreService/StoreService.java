@@ -22,5 +22,14 @@ public interface StoreService {
     StoreResponseDTO.StoreInfoDTO getStoreInfo(String userId, Long storeId);
 
     StoreResponseDTO.RecommandDTO getRecommendStoresByLikes(Long categoryId);
+  
+    List<StoreResponseDTO.StoreListReviewCountDTO> getStoreListByReviewCount(Long userId);
+  
+    List<StoreResponseDTO.StoreListScoreDTO> getStoreListByScore(Long userId);
 
+    StoreResponseDTO.NoticeDTO getNotice(Long storeId);
+
+    void zipStore(String userId, Long storeId);
+
+    void unzipStore(String userId, Long storeId);
 }

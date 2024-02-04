@@ -1,6 +1,7 @@
 package com.example.BapZip.web.controller;
 
 import com.example.BapZip.apiPayload.ApiResponse;
+import com.example.BapZip.apiPayload.code.status.SuccessStatus;
 import com.example.BapZip.service.StoreService.StoreService;
 import com.example.BapZip.web.dto.CongestionResponseDTO;
 import com.example.BapZip.web.dto.StoreResponseDTO;
@@ -67,10 +68,45 @@ public class StoreController {
     public ApiResponse<List<StoreResponseDTO.HotPlaceDTO>> getHotPlace() {
         return ApiResponse.onSuccess(storeService.getHotPlace());
     }
-    @Operation(summary = "업종별 추천 식당 조회", description = "PathVariable 업종 - 한식, 일식 등")
+
+    @Operation(summary = "업종별 추천 식당 조회", description = "PathVariable 업종 - 한식: 1, 일식: 2 ...")
     @GetMapping("/recommend/{category}")
     public ApiResponse<StoreResponseDTO.RecommandDTO> getRecommendStoresByLikes(@PathVariable("category") Long categoryId) {
 
         return ApiResponse.onSuccess(storeService.getRecommendStoresByLikes(categoryId));
     }
+  
+    @Operation(summary = "가게리스트 조회(리뷰많은순)", description = "토큰만 필요함 In/out 공용")
+    @GetMapping("/list/reviewcount")
+    public ApiResponse<List<StoreResponseDTO.StoreListReviewCountDTO>> getStoreListByReviewCount(Principal principal) {
+        return ApiResponse.onSuccess(storeService.getStoreListByReviewCount(Long.parseLong(principal.getName())));
+    }
+  
+    @Operation(summary = "가게리스트 조회(별점순)", description = "토큰만 필요함 In/out 공용")
+    @GetMapping("/list/score")
+    public ApiResponse<List<StoreResponseDTO.StoreListScoreDTO>> getStoreListByScore(Principal principal) {
+        return ApiResponse.onSuccess(storeService.getStoreListByScore(Long.parseLong(principal.getName())));
+    }
+
+
+    @Operation(summary = "오늘의 공지", description = "스토어 id 넣어주세요. PathVariable storeId")
+    @GetMapping("/{storeId}/notice")
+    public ApiResponse<StoreResponseDTO.NoticeDTO> getNotice(@PathVariable("storeId") Long storeId) {
+        return ApiResponse.onSuccess(storeService.getNotice(storeId));
+    }
+
+    @Operation(summary = "가게 zip 하기", description = "스토어 id 넣어주세요. PathVariable storeId")
+    @PostMapping("/zip")
+    public ApiResponse zipStore(@AuthenticationPrincipal String userId,@RequestParam("storeId") Long storeId) {
+        storeService.zipStore(userId,storeId);
+        return ApiResponse.of(SuccessStatus.STORE_ZIP_SUCCESS,null);
+    }
+
+    @Operation(summary = "가게 zip 해제 하기", description = "스토어 id 넣어주세요. PathVariable storeId")
+    @DeleteMapping("/deleteZip")
+    public ApiResponse unzipStore(@AuthenticationPrincipal String userId,@RequestParam("storeId") Long storeId) {
+        storeService.unzipStore(userId,storeId);
+        return ApiResponse.of(SuccessStatus.STORE_UNZIP_SUCCESS,null);
+    }
+
 }

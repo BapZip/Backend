@@ -4,6 +4,7 @@ import com.example.BapZip.domain.School;
 import com.example.BapZip.domain.Store;
 import com.example.BapZip.domain.enums.InOrOut;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 
@@ -29,5 +30,9 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     Optional<Store> findById(Long storeId);
 
+    @Query("SELECT s FROM Store s JOIN s.reviewList rl GROUP BY s ORDER BY COUNT(rl) DESC")
+    List<Store> findAllStoresOrderByReviewCountDesc();
+
     List<Store> findAll();
+
 }
