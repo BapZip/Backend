@@ -21,7 +21,7 @@ public enum ErrorStatus implements BaseErrorCode {
     USER_JOIN_ERROR(HttpStatus.resolve(400),"USER400","회원가입에 실패하였습니다."),
     USER_LOGIN_ERROR(HttpStatus.resolve(400),"USER400","로그인에 실패하였습니다."),
     USER_TERM_ERROR(HttpStatus.resolve(400),"USER400","필수 이용 약관을 확인해주세요."),
-
+    USER_JOIN_SCHOOL_ERROR(HttpStatus.resolve(400),"USER400","학교와 학과 id값을 확인해주세요."),
 
     // coupon 관련 응답
     INSUFFICIENT_BALANCE_ERROR(HttpStatus.resolve(400), "COUPON400", "잔액이 부족하여 쿠폰발행에 실패했습니다."),
@@ -32,13 +32,16 @@ public enum ErrorStatus implements BaseErrorCode {
     STORE_IMAGE_NOT_EXIST_ERROR(HttpStatus.resolve(401), "STORE401", "해당 가게의 이미지가 존재하지 않습니다."),
     PRINTED_MENU_NOT_FOUND_ERROR(HttpStatus.resolve(402), "STORE402", "해당 가게의 인쇄된 메뉴가 존재하지 않습니다."),
     STORE_NOT_FOUND_FOR_USER_ERROR(HttpStatus.resolve(404), "STORE404", "해당 사용자에게 연결된 가게가 없습니다."),
-
+    STORE_HASHTAG_TABLE_NOT_EXIST(HttpStatus.resolve(404), "STORE404", "해시태그 테이블이 없습니다. 관리자에게 문의해주세요."),
 
 
     // 혼잡도 관련 응답
     CONGESTION_REGISTER_ERROR(HttpStatus.resolve(400),"CONGESTION400","혼잡도 등록에 실패하였습니다."),
     // 가게 관련 응답
-    STORE_NOT_EXIST(HttpStatus.resolve(400),"STORE400","가게 id와 일치하는 가게가 존재하지 않습니다.");
+    STORE_NOT_EXIST(HttpStatus.resolve(400),"STORE400","가게 id와 일치하는 가게가 존재하지 않습니다."),
+    STORE_ALREADY_ZIP(HttpStatus.resolve(400),"STORE400","이미 ZIP 한 가게 입니다."),
+    STORE_NOT_ZIP(HttpStatus.resolve(400),"STORE400","ZIP 하지 않은 가게 입니다.");
+
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;

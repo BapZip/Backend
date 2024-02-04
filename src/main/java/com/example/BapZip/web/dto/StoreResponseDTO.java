@@ -23,6 +23,7 @@ public class StoreResponseDTO {
         String inOrOut;
         Integer waitTime;
         Double score;
+        String category;
         List<String> hashtag;
 
     }
@@ -105,6 +106,8 @@ public class StoreResponseDTO {
         String imageUrl;
 
     }
+
+
     @Builder
     @Getter
     @Setter
@@ -157,11 +160,17 @@ public class StoreResponseDTO {
         StoreListStaus storeListStaus;
 
     }
+      //getNotice
+
     @Builder
     @Getter
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class NoticeDTO {
+
+        String notice;
+    }
     public static class StoreListRecommendDTO{
 
         Long storeId;

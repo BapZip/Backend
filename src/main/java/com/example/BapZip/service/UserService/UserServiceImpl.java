@@ -40,7 +40,7 @@ public class UserServiceImpl implements  UserService{
     public UserResonseDTO.JoinDTO create(final UserRequestDTO.JoinDTO dto)  {
             Optional<School> school = schoolRepository.findById(dto.getSchool());
             Optional<Major> major = majorRepository.findById(dto.getMajor());
-            if(school.isEmpty()) throw new GeneralException(ErrorStatus.USER_JOIN_ERROR);
+            if(school.isEmpty() || major.isEmpty()) throw new GeneralException(ErrorStatus.USER_JOIN_SCHOOL_ERROR);
             User user= User.builder()
                     .userId(dto.getUserId())
                     .nickname(dto.getNickname())
@@ -49,7 +49,7 @@ public class UserServiceImpl implements  UserService{
                     .admin(AdminStatus.USER)
                     .school(school.get())
                     .major(major.get().getName())
-                    // 이미지 url 처리
+                    .imageUrl("https://babzip-bucket.s3.ap-northeast-2.amazonaws.com/default_profile.png")
                     .build();
             User result = userRepository.save(user);
 

@@ -1,6 +1,7 @@
 package com.example.BapZip.web.controller;
 
 import com.example.BapZip.apiPayload.ApiResponse;
+import com.example.BapZip.apiPayload.code.status.SuccessStatus;
 import com.example.BapZip.service.StoreService.StoreService;
 import com.example.BapZip.web.dto.CongestionResponseDTO;
 import com.example.BapZip.web.dto.StoreResponseDTO;
@@ -79,5 +80,24 @@ public class StoreController {
     }
 
 
+    @Operation(summary = "오늘의 공지", description = "스토어 id 넣어주세요. PathVariable storeId")
+    @GetMapping("/{storeId}/notice")
+    public ApiResponse<StoreResponseDTO.NoticeDTO> getNotice(@PathVariable("storeId") Long storeId) {
+        return ApiResponse.onSuccess(storeService.getNotice(storeId));
+    }
+
+    @Operation(summary = "가게 zip 하기", description = "스토어 id 넣어주세요. PathVariable storeId")
+    @PostMapping("/zip")
+    public ApiResponse zipStore(@AuthenticationPrincipal String userId,@RequestParam("storeId") Long storeId) {
+        storeService.zipStore(userId,storeId);
+        return ApiResponse.of(SuccessStatus.STORE_ZIP_SUCCESS,null);
+    }
+
+    @Operation(summary = "가게 zip 해제 하기", description = "스토어 id 넣어주세요. PathVariable storeId")
+    @DeleteMapping("/deleteZip")
+    public ApiResponse unzipStore(@AuthenticationPrincipal String userId,@RequestParam("storeId") Long storeId) {
+        storeService.unzipStore(userId,storeId);
+        return ApiResponse.of(SuccessStatus.STORE_UNZIP_SUCCESS,null);
+    }
 
 }

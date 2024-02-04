@@ -26,4 +26,9 @@ public interface StoreService {
     List<StoreResponseDTO.StoreListScoreDTO> getStoreListByScore(Long userId);
 
 
+    StoreResponseDTO.NoticeDTO getNotice(Long storeId);
+
+    void zipStore(String userId, Long storeId);
+
+    void unzipStore(String userId, Long storeId);
 }
