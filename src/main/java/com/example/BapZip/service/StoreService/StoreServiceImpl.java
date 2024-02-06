@@ -24,17 +24,13 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Period;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -381,9 +377,15 @@ public class StoreServiceImpl implements StoreService{
     }
 
     @Override
-    public StoreResponseDTO.RecommandDTO getRecommendStoresByLikes(Long categoryId) {
+    public StoreResponseDTO.RecommandDTO getRecommendStoresByLikes(String categoryName) {
         // 탑 리뷰 찾기
-        Review topReview = userReviewRepository.findTopReviewByLikesPerCategory(categoryId);
+        Review topReview = userReviewRepository.findTopReviewByLikesPerCategory(categoryName);
+
+        // 리뷰가 없는 경우 예외 처리
+        if(topReview == null) {
+            throw new GeneralException(ErrorStatus.REVIEW_NOT_EXIST);
+        }
+
 
         // 탑 리뷰에서 스토어 정보 가져오기.
         Store store = topReview.getStore();

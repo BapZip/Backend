@@ -40,7 +40,10 @@ public enum ErrorStatus implements BaseErrorCode {
     // 가게 관련 응답
     STORE_NOT_EXIST(HttpStatus.resolve(400),"STORE400","가게 id와 일치하는 가게가 존재하지 않습니다."),
     STORE_ALREADY_ZIP(HttpStatus.resolve(400),"STORE400","이미 ZIP 한 가게 입니다."),
-    STORE_NOT_ZIP(HttpStatus.resolve(400),"STORE400","ZIP 하지 않은 가게 입니다.");
+    STORE_NOT_ZIP(HttpStatus.resolve(400),"STORE400","ZIP 하지 않은 가게 입니다."),
+
+    //리뷰 관련 응답
+    REVIEW_NOT_EXIST(HttpStatus.resolve(400),"REVIEW400","리뷰가 존재하는 가게가 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

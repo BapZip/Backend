@@ -108,12 +108,13 @@ public class StoreController {
     }
 
 
-    @Operation(summary = "업종별 추천 식당 조회", description = "PathVariable 업종 -> 1, 2, 3, 4, 5")
-    @GetMapping("/recommend/{category}")
-    public ApiResponse<StoreResponseDTO.RecommandDTO> getRecommendStoresByLikes(@PathVariable("category") Long categoryId) {
-        return ApiResponse.onSuccess(storeService.getRecommendStoresByLikes(categoryId));
+    @Operation(summary = "업종별 추천 식당 조회", description = "PathVariable 업종 -> KOREA, CHINA, WESTERN, CAFE, JAPAN")
+    @GetMapping("/recommend/{categoryName}")
+    public ApiResponse<StoreResponseDTO.RecommandDTO> getRecommendStoresByLikes(@PathVariable("categoryName") String categoryName) {
+        return ApiResponse.onSuccess(storeService.getRecommendStoresByLikes(categoryName));
     }
 
+    @Operation(summary = "식당 메뉴 조회 API", description = "store Id 입력해주세요.")
     @GetMapping("/stores/{storeId}/menu")
     public ApiResponse<List<List<StoreResponseDTO.menuDTO>>> menuList(@PathVariable("storeId") Long storeId){
         return ApiResponse.onSuccess(storeService.getMenuList(storeId));

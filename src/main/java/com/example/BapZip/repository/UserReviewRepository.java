@@ -19,12 +19,13 @@ public interface UserReviewRepository extends JpaRepository<UserReview, Long> {
 
     List<UserReview> findByUser(User user);
 
-    @Query("SELECT ur.review\n" +
+    @Query("SELECT ur.review, COUNT(ur.review) as likeCount\n" +
             "FROM UserReview ur\n" +
-            "JOIN ur.review.store s\n" +
+            "JOIN ur.review r\n" +
+            "JOIN r.store s\n" +
             "JOIN s.category c\n" +
-            "WHERE c.id = :categoryId\n" +
+            "WHERE c.name = :categoryName\n" +
             "GROUP BY ur.review\n" +
-            "ORDER BY COUNT(ur.review) DESC")
-    Review findTopReviewByLikesPerCategory(@Param("categoryId") Long categoryId);
+            "ORDER BY likeCount DESC")
+    Review findTopReviewByLikesPerCategory(@Param("categoryName") String categoryName);
 }

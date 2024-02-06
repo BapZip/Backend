@@ -55,8 +55,4 @@ public class Review extends BaseEntity {
     private String reply;
 
 
-
-
-
-
 }

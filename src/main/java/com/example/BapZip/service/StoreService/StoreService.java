@@ -33,7 +33,7 @@ public interface StoreService {
     void unzipStore(String userId, Long storeId);
 
     List<StoreResponseDTO.searchStore> searchStore(String name);
-    StoreResponseDTO.RecommandDTO getRecommendStoresByLikes(Long categoryId);
+    StoreResponseDTO.RecommandDTO getRecommendStoresByLikes(String categoryName);
 
     List<List<StoreResponseDTO.menuDTO>> getMenuList(Long storeId);
 }
