@@ -48,7 +48,8 @@ public enum ErrorStatus implements BaseErrorCode {
     REVIEW_NOT_EXIST(HttpStatus.resolve(400),"REVIEW400","리뷰가 존재하는 가게가 없습니다."),
 
     // 지역 관련 응답
-    RIGION_NOT_EXIST(HttpStatus.resolve(400),"REGION400","지역 ID에 해당하는 지역이 없습니다.");
+    RIGION_NOT_EXIST(HttpStatus.resolve(400),"REGION400","지역 ID에 해당하는 지역이 없습니다."),
+    EMAIL_ERROR(HttpStatus.resolve(400),"EMAIL400","이메일이 올바르지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
