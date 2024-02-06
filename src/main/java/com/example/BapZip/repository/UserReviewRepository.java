@@ -26,6 +26,7 @@ public interface UserReviewRepository extends JpaRepository<UserReview, Long> {
             "JOIN s.category c\n" +
             "WHERE c.name = :categoryName\n" +
             "GROUP BY ur.review\n" +
-            "ORDER BY likeCount DESC")
+            "ORDER BY likeCount DESC\n" +
+            "LIMIT 1")
     Review findTopReviewByLikesPerCategory(@Param("categoryName") String categoryName);
 }
