@@ -57,15 +57,17 @@ public class CongestionServiceImpl implements CongestionService{
 
     @Override
     public List<CongestionResponseDTO.getCongestionRanking> getRanking(String userId, String classification, Long schoolId) {
-
+        if(!((classification.equals("ALL")|| (classification.equals("IN")) || (classification.equals("OUT"))))){
+            throw new GeneralException(ErrorStatus.CONGESTION_RANKING_QUERY_ERROR);
+        }
         // 반환할 dto 리스트
         List<CongestionResponseDTO.getCongestionRanking> result=new ArrayList<>();
 
         // 사용자
-        User user = userRepository.findById(Long.valueOf(userId)).get();
+        User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new GeneralException(ErrorStatus._FORBIDDEN));
 
         // 학교
-        School school=schoolRepository.findById(schoolId).get();
+        School school=schoolRepository.findById(schoolId).orElseThrow(()-> new GeneralException(ErrorStatus.SCHOOL_NOT_EXIST));
 
 
 
@@ -107,7 +109,7 @@ public class CongestionServiceImpl implements CongestionService{
 
     @Override
     public List<CongestionResponseDTO.getCongestionRankingTop5> getRankingTop5(String userId, Long schoolId) {
-        School school=schoolRepository.findById(schoolId).get();
+        School school=schoolRepository.findById(schoolId).orElseThrow(()-> new GeneralException(ErrorStatus.SCHOOL_NOT_EXIST));
         List<Store> stores= storeRepository.findBySchool(schoolRepository.findById(schoolId).get());
         List<CongestionResponseDTO.getCongestionRankingTop5> result = new ArrayList<>();
         // 각 가게에 대한 혼잡도 계산
@@ -226,9 +228,9 @@ public class CongestionServiceImpl implements CongestionService{
 
     // 이미지 세팅
     private String storeImageURL(Store store){
-        Optional<StoreImage> image = storeImageRepository.findByStore(store);
-        if(image.isPresent()) return image.get().getImageURL();
-        else return null;
+        List<StoreImage> images = storeImageRepository.findAllByStore(store);
+        if(images.isEmpty()) return null;
+        else return images.get(0).getImageURL();
     }
 
 
