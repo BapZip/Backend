@@ -85,7 +85,8 @@ public class CongestionServiceImpl implements CongestionService{
             Integer levelAv = null;
             List<Congestion> congestionList =
                     congestionRepository.findByStoreAndCreatedAtAfter
-                            (store, LocalDateTime.now(TimeZone.getTimeZone("Asia/Seoul").toZoneId()).minusMinutes(60));
+                            (store, LocalDateTime.now(TimeZone.getTimeZone("Asia/Seoul").toZoneId()).minusMonths(1));
+            // 일단 테스트 위해 한달치 평균으로 (데모데이 이후 변경)
 
 
             // 함수에 넣어서 혼잡도 계산 후 각 변수에 저장
@@ -121,7 +122,8 @@ public class CongestionServiceImpl implements CongestionService{
             Integer levelAv = null;
             List<Congestion> congestionList =
                     congestionRepository.findByStoreAndCreatedAtAfter
-                            (store, LocalDateTime.now(TimeZone.getTimeZone("Asia/Seoul").toZoneId()).minusMinutes(60));
+                            (store, LocalDateTime.now(TimeZone.getTimeZone("Asia/Seoul").toZoneId()).minusMonths(1));
+            // 일단 테스트 위해 한달치 평균으로 (데모데이 이후 변경)
 
 
             // 함수에 넣어서 혼잡도 계산 후 각 변수에 저장
