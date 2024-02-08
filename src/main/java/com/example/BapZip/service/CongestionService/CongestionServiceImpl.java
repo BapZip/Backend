@@ -194,8 +194,9 @@ public class CongestionServiceImpl implements CongestionService{
         dtos.sort(new Comparator<CongestionResponseDTO.getCongestionRanking>() {
             @Override
             public int compare(CongestionResponseDTO.getCongestionRanking o1, CongestionResponseDTO.getCongestionRanking o2) {
-                if(o1.getCongestionAV()==null || o1.getCongestionAV() < o2.getCongestionAV() ) return 1;
-                else if (o1.getCongestionAV() > o2.getCongestionAV()) return -1;
+                if(o1.getCongestionAV() == null ) return 1; if(o2.getCongestionAV()==null) return -1;
+                if(o1.getCongestionAV() < o2.getCongestionAV() ) return 1;
+                else if (o2.getCongestionAV() == null || o1.getCongestionAV() > o2.getCongestionAV()) return -1;
                 else return 0;
             }
         });
@@ -212,7 +213,8 @@ public class CongestionServiceImpl implements CongestionService{
         dtos.sort(new Comparator<CongestionResponseDTO.getCongestionRankingTop5>() {
             @Override
             public int compare(CongestionResponseDTO.getCongestionRankingTop5 o1, CongestionResponseDTO.getCongestionRankingTop5 o2) {
-                if(o1.getCongestionAV()==null || o1.getCongestionAV() < o2.getCongestionAV() ) return 1;
+                if(o1.getCongestionAV() == null ) return 1; if(o2.getCongestionAV()==null) return -1;
+                if(o1.getCongestionAV() < o2.getCongestionAV() ) return 1;
                 else if (o1.getCongestionAV() > o2.getCongestionAV()) return -1;
                 else return 0;
             }
