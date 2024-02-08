@@ -113,7 +113,7 @@ public class StoreServiceImpl implements StoreService{
         LocalDateTime endOfDay = LocalDateTime.of(LocalDateTime.now().toLocalDate(), LocalTime.MAX);
         List<Notice> notices = noticeRepository.findByStoreAndCreatedAtBetween(store,startOfDay,endOfDay);
         String content;
-        if(notices.isEmpty()) content = null;
+        if(notices.isEmpty()) content = "";
         else content =  notices.get(0).getContent();
         return StoreResponseDTO.NoticeDTO.builder().notice(content).build();
     }
