@@ -73,7 +73,7 @@ public class StoreServiceImpl implements StoreService{
         Integer waitingTimeAv = null;
         List<Congestion> congestionList =
                 congestionRepository.findByStoreAndCreatedAtAfter
-                        (store, LocalDateTime.now(TimeZone.getTimeZone("Asia/Seoul").toZoneId()).minusMinutes(60));
+                        (store, LocalDateTime.now(TimeZone.getTimeZone("Asia/Seoul").toZoneId()).minusMonths(1));
         if(!congestionList.isEmpty()) waitingTimeAv = calculateTime(congestionList);
         result.setWaitTime(waitingTimeAv);
 
