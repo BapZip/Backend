@@ -22,6 +22,7 @@ public enum ErrorStatus implements BaseErrorCode {
     USER_LOGIN_ERROR(HttpStatus.resolve(400),"USER400","로그인에 실패하였습니다."),
     USER_TERM_ERROR(HttpStatus.resolve(400),"USER400","필수 이용 약관을 확인해주세요."),
     USER_JOIN_SCHOOL_ERROR(HttpStatus.resolve(400),"USER400","학교와 학과 id값을 확인해주세요."),
+    SCHOOL_NOT_EXIST(HttpStatus.resolve(400),"SCHOOL400","학교 id값을 확인해주세요."),
 
     // coupon 관련 응답
     INSUFFICIENT_BALANCE_ERROR(HttpStatus.resolve(400), "COUPON400", "잔액이 부족하여 쿠폰발행에 실패했습니다."),
@@ -37,6 +38,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 혼잡도 관련 응답
     CONGESTION_REGISTER_ERROR(HttpStatus.resolve(400),"CONGESTION400","혼잡도 등록에 실패하였습니다."),
+    CONGESTION_RANKING_QUERY_ERROR(HttpStatus.resolve(400),"CONGESTION400","ALL,IN,OUT로 보내주세요."),
     // 가게 관련 응답
     STORE_NOT_EXIST(HttpStatus.resolve(400),"STORE400","가게 id와 일치하는 가게가 존재하지 않습니다."),
     STORE_ALREADY_ZIP(HttpStatus.resolve(400),"STORE400","이미 ZIP 한 가게 입니다."),
@@ -44,7 +46,12 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 리뷰 관련 응답
     NO_DATA_FOUND_ERROR(HttpStatus.resolve(404),"REVIEW404","한 주간 리뷰가 없습니다."),
-    REVIEW_NOT_FOUND_ERROR(HttpStatus.resolve(404),"REVIEW404","리뷰를 찾을 수 없습니다.");
+    REVIEW_NOT_FOUND_ERROR(HttpStatus.resolve(404),"REVIEW404","리뷰를 찾을 수 없습니다."),
+    REVIEW_NOT_EXIST(HttpStatus.resolve(400),"REVIEW400","리뷰가 존재하는 가게가 없습니다."),
+
+    // 지역 관련 응답
+    RIGION_NOT_EXIST(HttpStatus.resolve(400),"REGION400","지역 ID에 해당하는 지역이 없습니다."),
+    EMAIL_ERROR(HttpStatus.resolve(400),"EMAIL400","이메일이 올바르지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

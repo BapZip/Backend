@@ -24,17 +24,13 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Period;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -51,6 +47,9 @@ public class StoreServiceImpl implements StoreService{
     private final PrintedMenuRepository printedMenuRepository;
     private final NoticeRepository noticeRepository;
     private final CategoryRepository categoryRepository;
+    private final UserReviewRepository userReviewRepository;
+    private final MenuGroupRepository menuGroupRepository;
+    private final MenuRepository menuRepository;
 
     @Override
     public StoreResponseDTO.StoreInfoDTO getStoreInfo(String userId, Long storeId) {
@@ -99,8 +98,9 @@ public class StoreServiceImpl implements StoreService{
         result.setHashtag(hashtags);
 
         // **카테고리 ** //
-        Optional<Category> category = categoryRepository.findByStore(store);
-        if(category.isPresent()) result.setCategory(category.get().getName());
+//        Optional<Category> category = categoryRepository.findByStore(store);
+//        if(category.isPresent())
+        result.setCategory(store.getCategory().getName());
         return result;
 
     }
@@ -133,6 +133,18 @@ public class StoreServiceImpl implements StoreService{
         Optional<UserStore> userStore = userStoreRepository.findByStoreAndUser(store,user);
         if(userStore.isEmpty()) throw new GeneralException(ErrorStatus.STORE_NOT_ZIP);
         userStoreRepository.delete(userStore.get());
+    }
+
+    @Override
+    public List<StoreResponseDTO.searchStore> searchStore(String name) {
+        List<Store> stores = storeRepository.findByNameContains(name);
+        List<StoreResponseDTO.searchStore> result = new ArrayList<>();
+        for(Store store:stores){
+            StoreResponseDTO.searchStore dto = StoreResponseDTO.searchStore.builder()
+                    .storeName(store.getName()).position(store.getPosition()).id(store.getId()).build();
+            result.add(dto);
+        }
+        return result;
     }
 
     //가게 상세 정보 조회
@@ -364,5 +376,65 @@ public class StoreServiceImpl implements StoreService{
         return result;
     }
 
+    @Override
+    public StoreResponseDTO.RecommandDTO getRecommendStoresByLikes(String categoryName) {
+        // 탑 리뷰 찾기
+        Review topReview = userReviewRepository.findTopReviewByLikesPerCategory(categoryName);
 
+        // 리뷰가 없는 경우 예외 처리
+        if(topReview == null) {
+            throw new GeneralException(ErrorStatus.REVIEW_NOT_EXIST);
+        }
+
+
+        // 탑 리뷰에서 스토어 정보 가져오기.
+        Store store = topReview.getStore();
+
+        // 탑 리뷰에서 사용자 정보 가져오기.
+        User user = topReview.getUser();
+
+        // 북마크 있는지 확인
+        UserStore userStore = userStoreRepository.findByUserAndStore(user, store);
+
+        boolean bookmark = false;
+
+        if(userStore != null){
+            bookmark = true;
+        }
+
+        // DTO에 정보를 매핑하여 반환합니다.
+        return StoreResponseDTO.RecommandDTO.builder()
+                .storeId(store.getId())
+                .storeName(store.getName())
+                .userName(user.getNickname())
+                .bookmark(bookmark)
+                .content(topReview.getContent())
+                .build();
+
+    }
+
+    @Override
+    public List<List<StoreResponseDTO.menuDTO>> getMenuList(Long storeId) {
+        storeRepository.findById(storeId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.STORE_NOT_EXIST_ERROR));
+
+        List<Menu_Group> menuGroups = menuGroupRepository.findByStoreId(storeId);
+
+        List<List<StoreResponseDTO.menuDTO>> menuList = new ArrayList<>();
+        for (Menu_Group menuGroup : menuGroups) {
+            List<Menu> menus = menuRepository.findByMenuGroupId(menuGroup.getId());
+            List<StoreResponseDTO.menuDTO> menuDTOs = menus.stream()
+                    .map(menu -> StoreResponseDTO.menuDTO.builder()
+                            .groupName(menuGroup.getName())
+                            .menuName(menu.getMenuName())
+                            .price(menu.getPrice())
+                            .explanation(menu.getExplanation())
+                            .imageURL(menu.getImageURL())
+                            .build())
+                    .collect(Collectors.toList());
+            menuList.add(menuDTOs);
+        }
+
+        return menuList;
+    }
 }

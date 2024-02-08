@@ -33,6 +33,6 @@ public class UserReview extends BaseEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "review_id")
-    private Review review;
+    @JoinColumn(name = "review_id") // <- 조인하는 대상 지정
+    private Review review; // <- 이거는 단순히 객체임
 }

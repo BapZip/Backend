@@ -1,5 +1,7 @@
 package com.example.BapZip.service.SchoolService;
 
+import com.example.BapZip.apiPayload.code.status.ErrorStatus;
+import com.example.BapZip.apiPayload.exception.GeneralException;
 import com.example.BapZip.domain.Major;
 import com.example.BapZip.domain.Region;
 import com.example.BapZip.domain.School;
@@ -28,7 +30,7 @@ public class SchoolServiceImpl implements  SchoolService{
 
     @Override
     public List<SchoolResponseDTO.SearchSchool> getSchoolList(Long regionId) {
-        Region region = regionRepository.findById(regionId).get();
+        Region region = regionRepository.findById(regionId).orElseThrow(()->new GeneralException(ErrorStatus.RIGION_NOT_EXIST));
         List<School> schoolList = schoolRepository.findByRegion(region);
         return convertToSearchSchoolDTOList(schoolList);
     }
@@ -41,7 +43,7 @@ public class SchoolServiceImpl implements  SchoolService{
 
     @Override
     public List<SchoolResponseDTO.getSchoolMajor> getSchoolMajor(Long schoolId, String majorName) {
-        School school = schoolRepository.findById(schoolId).get();
+        School school = schoolRepository.findById(schoolId).orElseThrow(()->new GeneralException(ErrorStatus.SCHOOL_NOT_EXIST));
         List<Major> majorList = majorRepository.findBySchoolAndNameContains(school,majorName);
         return convertToMajorDTOList(majorList);
 

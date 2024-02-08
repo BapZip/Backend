@@ -5,6 +5,7 @@ import com.example.BapZip.domain.User;
 import com.example.BapZip.domain.mapping.UserReview;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -26,4 +27,16 @@ public interface UserReviewRepository extends JpaRepository<UserReview, Long> {
 
     // 리뷰 타임라인
     UserReview findByUserIdAndReviewId(Long userId, Long id);
+    List<UserReview> findByUser(User user);
+
+    @Query("SELECT ur.review, COUNT(ur.review) as likeCount\n" +
+            "FROM UserReview ur\n" +
+            "JOIN ur.review r\n" +
+            "JOIN r.store s\n" +
+            "JOIN s.category c\n" +
+            "WHERE c.name = :categoryName\n" +
+            "GROUP BY ur.review\n" +
+            "ORDER BY likeCount DESC\n" +
+            "LIMIT 1")
+    Review findTopReviewByLikesPerCategory(@Param("categoryName") String categoryName);
 }

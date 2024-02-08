@@ -31,4 +31,9 @@ public interface StoreService {
     void zipStore(String userId, Long storeId);
 
     void unzipStore(String userId, Long storeId);
+
+    List<StoreResponseDTO.searchStore> searchStore(String name);
+    StoreResponseDTO.RecommandDTO getRecommendStoresByLikes(String categoryName);
+
+    List<List<StoreResponseDTO.menuDTO>> getMenuList(Long storeId);
 }
