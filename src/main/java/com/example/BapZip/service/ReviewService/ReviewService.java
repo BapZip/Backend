@@ -1,9 +1,7 @@
 package com.example.BapZip.service.ReviewService;
 
-import com.example.BapZip.domain.Review;
-import com.example.BapZip.repository.ReviewRepository;
 import com.example.BapZip.web.dto.ReviewRequestDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.BapZip.web.dto.ReviewResponseDTO;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -12,11 +10,11 @@ public interface ReviewService {
 
     // 리뷰 작성
     @Transactional
-    Long save(Long userId, ReviewRequestDTO.RegisterReviewDTO registerReviewDTO);
+    Long save(Long userId, ReviewRequestDTO.RegisterReviewDTO registerReviewDTO, List<String> urls);
+
 
     // 나의 리뷰 조회
-    @Transactional
-    List<Review> findByUserId(Long userId);
+    List<ReviewResponseDTO.MyReviewsDTO> getMyReview(Long userId);
 
     // 리뷰 삭제
     @Transactional
@@ -29,6 +27,15 @@ public interface ReviewService {
     void deleteLike(Long reviewId, Long userId);
 
     // 좋아요한 리뷰 조회
-    List<Review> findLikedReviews(Long userId);
+    List<ReviewResponseDTO.ZipReviewDTO> findLikedReviews(Long userId);
 
+
+    // 리뷰 랭킹 조회
+    List<ReviewResponseDTO.ReviewRankingDTO> reviewRanking (Long userId);
+
+    // 리뷰 타임라인 조회
+    /*
+    List<ReviewResponseDTO.TimelineDTO> reviewTimeline(Long userId);
+
+     */
 }

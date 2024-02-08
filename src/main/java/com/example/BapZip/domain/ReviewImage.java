@@ -9,6 +9,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
