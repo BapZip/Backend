@@ -1,6 +1,8 @@
 package com.example.BapZip.domain;
 
 
+import com.example.BapZip.domain.mapping.UserReview;
+import com.example.BapZip.domain.mapping.UserStore;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -9,10 +11,13 @@ import com.example.BapZip.domain.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -51,8 +56,20 @@ public class Review extends BaseEntity {
 
     private String menuName;
 
+    // 좋아요 한 리뷰 조회때 = new ArrayList<>();; 추가함
+    @OneToMany(mappedBy = "review")
+    private List<ReviewImage> images=new ArrayList<>();;
+
+
+
     @Column(nullable = true, length = 300)
     private String reply;
+
+
+    // 좋아요 한 리뷰 조회 (위해 더해봄)
+    @OneToMany(mappedBy = "review")
+    private List<UserReview> reviewLikedList=new ArrayList<>();
+
 
 
 }

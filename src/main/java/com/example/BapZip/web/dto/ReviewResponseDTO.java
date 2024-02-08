@@ -1,10 +1,9 @@
 package com.example.BapZip.web.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,33 +11,69 @@ import java.util.List;
 public class ReviewResponseDTO {
     @Builder
     @Getter
+    @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class ReviewResponseDTO2 {
-        private Integer point;
+    public static class MyReviewsDTO {
+        Long storeId;
+        String storeName;
+        String nickname;
+        Integer rating;
+        String reviewText;
+        String imageUrl;
+        LocalDate paymentTime;
     }
 
     @Builder
     @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ZipReviewDTO {
+        Long storeId;
+        String storeName;
+        String nickname;
+        Integer rating;
+        String reviewText;
+        String imageUrl;
+        LocalDate paymentTime;
+    }
+
+
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ReviewRankingDTO {
+        private String nickname;
+        private String imageUrl;
+        private Long likesCount; // 좋아요 수
+    }
+
+
+
+    /*
+    @Builder
+    @Getter
+    @Setter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class TimelineDTO{
-        private Integer storeId;
-        private String storeName;
-        private String reviewText;
-        private String nickname;
-        private Date ReviewCreateDate;
-        private Integer categoryId;
-        private Boolean like;
+        Long storeId;
+        String storeName;
+        String imageUrl;
+        String reviewText;
+        String nickname;
+        LocalDateTime ReviewCreateDate;
+        Integer categoryId;
+        Boolean like;
+
+
     }
 
-    @Builder
-    @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class TimelineListDTO{
-        private List<TimelineDTO> timelineList = new ArrayList<>();
-    }
+     */
+
+
+
 
 
 }
