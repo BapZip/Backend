@@ -1,6 +1,7 @@
 package com.example.BapZip.service.StoreService;
 
 import com.example.BapZip.domain.*;
+import com.example.BapZip.domain.enums.CategoryName;
 import com.example.BapZip.domain.enums.StoreListStaus;
 import com.example.BapZip.domain.enums.hashtagName;
 import com.example.BapZip.repository.*;
@@ -59,7 +60,7 @@ public class StoreServiceImpl implements StoreService{
 
         // ** 1. 가게 이름, 내외부 ** //
         StoreResponseDTO.StoreInfoDTO result = StoreResponseDTO.StoreInfoDTO.builder()
-                .name(store.getName()).inOrOut(store.getOutin().toString()).build();
+                .name(store.getName()).inOrOut(store.getOutin().getName()).build();
 
 
         // ** 2. 가게 이미지 ** //
@@ -100,7 +101,9 @@ public class StoreServiceImpl implements StoreService{
         // **카테고리 ** //
 //        Optional<Category> category = categoryRepository.findByStore(store);
 //        if(category.isPresent())
-        result.setCategory(store.getCategory().getName());
+        //result.setCategory(store.getCategory().getName());
+        //String categoryName= store.getCategory().getName();
+        result.setCategory(CategoryName.valueOf(store.getCategory().getName()).getName());
         return result;
 
     }
