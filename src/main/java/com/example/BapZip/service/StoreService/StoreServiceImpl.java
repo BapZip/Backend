@@ -405,6 +405,10 @@ public class StoreServiceImpl implements StoreService{
             bookmark = true;
         }
 
+        Optional<StoreImage> storeImage = storeImageRepository.findByStore(store);
+
+
+
         // DTO에 정보를 매핑하여 반환합니다.
         return StoreResponseDTO.RecommandDTO.builder()
                 .storeId(store.getId())
@@ -412,6 +416,7 @@ public class StoreServiceImpl implements StoreService{
                 .userName(user.getNickname())
                 .bookmark(bookmark)
                 .content(topReview.getContent())
+                .imageURL(storeImage.get().getImageURL())
                 .build();
 
     }

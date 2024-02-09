@@ -225,6 +225,8 @@ public class StoreResponseDTO {
 
         boolean bookmark;
 
+        String imageURL;
+
     }
 
     @Builder
