@@ -227,9 +227,14 @@ public class ReviewServiceImpl implements ReviewService{
 
 
         // 카테고리 이름에 맞는 Store를 찾는다.
-        List<Store> filteredStores = stores.stream()
-                .filter(store -> store.getCategory().getName().equals(categoryName))
-                .toList();
+        List<Store> filteredStores;
+        if (categoryName.equals("ALL")) {
+            filteredStores = stores; // 모든 가게를 선택
+        } else {
+            filteredStores = stores.stream()
+                    .filter(store -> store.getCategory().getName().equals(categoryName))
+                    .toList();
+        }
 
         List<ReviewResponseDTO.TimelineDTO> result = new ArrayList<>();
 
@@ -250,7 +255,16 @@ public class ReviewServiceImpl implements ReviewService{
                 }
                 dto.setReviewText(review.getContent());
                 dto.setNickname(review.getUser().getNickname());
-                dto.setReviewCreateDate(review.getCreatedAt());
+
+                // 리뷰의 생성 날짜가 null인 경우를 처리
+                if (review.getCreatedAt() != null) {
+                    dto.setReviewCreateDate(review.getCreatedAt());
+                } else {
+                    // created_at이 null인 경우 기본값 혹은 적절한 값을 설정. 일단 현재시간으로 설정 <- 변동 가능성 O
+                    dto.setReviewCreateDate(LocalDateTime.now());
+                }
+
+                //dto.setReviewCreateDate(review.getCreatedAt());
                 dto.setCategoryId(review.getStore().getCategory().getId());
 
                 // UserReview에서 userId, reviewId값으로 조회를 해서 값이 나오면 true로 세팅
