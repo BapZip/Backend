@@ -14,7 +14,7 @@ public class ChatDTO {
     @AllArgsConstructor
     static public class ChatMessageRequestDTO {
         private Long storeId;
-        private Long userId;
+        private String userId;
         private String message;
         private ChatMessageType chatMessageType;
         // getter, setter, constructor 등
@@ -28,7 +28,7 @@ public class ChatDTO {
     static public class ChatMessageResponseDTO {
         private Long messageId;
         private Long storeId;
-        private Long userId;
+        private String userId;
         private String nickname;
         private String message;
         private LocalDateTime timestamp;
