@@ -61,7 +61,8 @@ public class UserServiceImpl implements  UserService{
     public UserResonseDTO.loginDTO login(UserRequestDTO.LoginDTO loginDTO){
         final Optional<User> user=userRepository.findByUserId(loginDTO.getUserId());
         if(user.isPresent() && passwordEncoder.matches(loginDTO.getPassword(),user.get().getPassword())){
-            return UserResonseDTO.loginDTO.builder().token(tokenProvider.create(user.get())).build();
+            return UserResonseDTO.loginDTO.builder().token(tokenProvider.create(user.get()))
+                    .id(user.get().getId()).schoolId(user.get().getSchool().getId()).build();
         }
         else{
             throw new GeneralException(ErrorStatus.USER_LOGIN_ERROR);

@@ -21,6 +21,8 @@ public class UserResonseDTO {
     @AllArgsConstructor
     public static class loginDTO{
         String token;
+        Long id;
+        Long schoolId;
     }
 
     @Builder
