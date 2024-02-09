@@ -34,8 +34,11 @@ public interface ReviewService {
     List<ReviewResponseDTO.ReviewRankingDTO> reviewRanking (Long userId);
 
     // 리뷰 타임라인 조회
-    /*
-    List<ReviewResponseDTO.TimelineDTO> reviewTimeline(Long userId);
+    List<ReviewResponseDTO.TimelineDTO> reviewTimeline(Long userId, Long schoolId, String categoryName);
 
-     */
+    // 가게 리뷰 조회
+    List<ReviewResponseDTO.StoreReviewDTO> findStoreReview(Long userId, Long storeId, Long schoolId);
+
+
+
 }

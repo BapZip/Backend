@@ -37,5 +37,6 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     List<Store> findByNameContains(String storeName);
 
-
+    // storeId, school에 부합하는 store 찾기
+    Optional<Store> findByIdAndSchool(Long storeId, School school);
 }

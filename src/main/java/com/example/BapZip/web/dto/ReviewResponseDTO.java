@@ -51,7 +51,7 @@ public class ReviewResponseDTO {
 
 
 
-    /*
+
     @Builder
     @Getter
     @Setter
@@ -60,17 +60,34 @@ public class ReviewResponseDTO {
     public static class TimelineDTO{
         Long storeId;
         String storeName;
-        String imageUrl;
+        String imageUrl; // Store 이미지
         String reviewText;
         String nickname;
         LocalDateTime ReviewCreateDate;
-        Integer categoryId;
+        Long categoryId;
         Boolean like;
+
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class StoreReviewDTO{
+        Long storeId;
+        String storeName;
+        String nickname;
+        Integer rating;
+        String reviewText;
+        String userImage; // User 프로필 사진
+        String reviewImage; // 리뷰 이미지들
+        LocalDate paymentTime;
 
 
     }
 
-     */
+
+
 
 
 

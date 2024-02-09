@@ -22,7 +22,7 @@ public class ReviewRequestDTO {
         private String reviewText;
 
         // 이미지 리스트 필드 추가
-        private List<String> images;
+        // private List<String> images;
     }
 
 

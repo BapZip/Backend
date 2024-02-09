@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +32,6 @@ public class ReviewServiceImpl implements ReviewService{
     private final PointRepository pointRepository;
     private final ReviewImageRepository reviewImageRepository;
     private final SchoolRepository schoolRepository;
-    private final CategoryRepository categoryRepository;
 
     // 리뷰 작성
     @Override
@@ -182,24 +183,28 @@ public class ReviewServiceImpl implements ReviewService{
 
     }
 
-    // 리뷰 랭킹 조회(좋아요 순)
+    // 리뷰 랭킹 조회(합산 좋아요 순)
+    // userReview(좋아요) 테이블에서 review_id로 데이터 몇개 나오는지 개수 세는게 좋아요 수
+
     @Override
     public List<ReviewResponseDTO.ReviewRankingDTO> reviewRanking(Long userId) {
-        LocalDate oneWeekAgo = LocalDate.now().minusWeeks(1);
-        List<Object[]> reviewRankingData = userReviewRepository.countLikesByReviewId(oneWeekAgo);
 
-        if(reviewRankingData.isEmpty()) {
+        LocalDate oneWeekAgoDate = LocalDate.now().minusWeeks(1);
+        // ↓ 자료형 오류로 LocalDateTime 타입으로 바꿔주기
+        LocalDateTime oneWeekAgoDateTime = oneWeekAgoDate.atStartOfDay();
+        List<Object[]> userRankingData = reviewRepository.countLikesByUserId(oneWeekAgoDateTime);
+
+        if(userRankingData.isEmpty()) {
             throw new GeneralException(ErrorStatus.NO_DATA_FOUND_ERROR);
         }
 
-        return reviewRankingData.stream()
+        return userRankingData.stream()
                 .limit(3)
                 .map(data -> {
-                    Long topReviewId = (Long) data[0];
+                    Long topUserId = (Long) data[0];
                     Long likesCount = (Long) data[1];
-                    Review topReview = reviewRepository.findById(topReviewId)
-                            .orElseThrow(() -> new GeneralException(ErrorStatus.REVIEW_NOT_FOUND_ERROR));
-                    User topUser = topReview.getUser();
+                    User topUser = userRepository.findById(topUserId)
+                            .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND_ERROR));
                     return ReviewResponseDTO.ReviewRankingDTO.builder()
                             .nickname(topUser.getNickname())
                             .imageUrl(topUser.getImageUrl() != null ? topUser.getImageUrl() : "default image URL")
@@ -211,49 +216,94 @@ public class ReviewServiceImpl implements ReviewService{
 
 
 
-    /*
-    // 리뷰 타임라인 조회
+
+    // 리뷰 타임라인 조회 (카테고리별)
     @Override
     public List<ReviewResponseDTO.TimelineDTO> reviewTimeline(Long userId, Long schoolId, String categoryName) {
 
         // 방법 1
-        School school = schoolRepository.findById(schoolId).get();
+        School school = schoolRepository.findById(schoolId).orElseThrow(() -> new GeneralException(ErrorStatus.SCHOOL_NOT_EXIST));
         List<Store> stores = storeRepository.findBySchool(school); // store엔티티에 school school로 들어있기 때문
 
-        // 카테고리이름 받은걸로 스토어즈에서 (for문돌려서 store.getCategory.getName() 이 .equals.CategoryName인걸로 고르자.)
-        // if store 걸러서 찾음. 카테고리네임, 스쿨아이디 찾은 스토어 5개 찾음, 그 스토어아이디값을 가진 리뷰들을 최근 3개 찾는거야.
-        // 리뷰 레포지터리에서 이 스토어아이디값을 가진거 최근 3개값을 찾음
 
-        // 방법 2
-        // List<Category> categories = categoryRepository.findByName(categoryName);
-        //findBySchoolsandCategoryNAme 같은걸로 store걸러내는거 알아서 생각해봐라
+        // 카테고리 이름에 맞는 Store를 찾는다.
+        List<Store> filteredStores = stores.stream()
+                .filter(store -> store.getCategory().getName().equals(categoryName))
+                .toList();
 
+        List<ReviewResponseDTO.TimelineDTO> result = new ArrayList<>();
 
+        for (Store store : filteredStores) {
+            // 각 Store에서 최신 리뷰 3개를 가져온다.
+            List<Review> reviews = reviewRepository.findTop3ByStoreOrderByCreatedAtDesc(store);
 
-        // 카테고리에 맞는 리뷰를 최신순으로 3개 가져온다. // 카테고리 질문 (Store엔티티에 매핑되어 있음)
-        // List<Review> reviews = reviewRepository.findTop3ByCategoryIdOrderByCreatedAtDesc(categoryId);
+            // 가져온 리뷰들을 DTO로 변환하고, 좋아요 여부를 세팅한다.
+            List<ReviewResponseDTO.TimelineDTO> dtos = reviews.stream().map(review -> {
+                ReviewResponseDTO.TimelineDTO dto = new ReviewResponseDTO.TimelineDTO();
+                dto.setStoreId(review.getStore().getId());
+                dto.setStoreName(review.getStore().getName());
 
-        // 가져온 리뷰들을 DTO로 변환하고, 좋아요 여부를 세팅한다.
-        return reviews.stream().map(review -> {
-            ReviewResponseDTO.TimelineDTO dto = new ReviewResponseDTO.TimelineDTO();
-            dto.setStoreId(review.getStore().getId());
-            dto.setStoreName(review.getStore().getName());
-            dto.setImageUrl(review.getStore().getStoreImage().get(0).getUrl());
-            dto.setReviewText(review.getContent());
-            dto.setNickname(review.getUser().getNickname());
-            dto.setReviewCreateDate(review.getCreatedAt());
-            dto.setCategoryId(review.getStore().getCategory().getId());
+                // Store에서 가져온 첫 번째 이미지의 URL을 세팅한다.
+                List<StoreImage> images = review.getStore().getImages();
+                if(!images.isEmpty()) {
+                    dto.setImageUrl(images.get(0).getImageURL()); // (StoreImage 접근)
+                }
+                dto.setReviewText(review.getContent());
+                dto.setNickname(review.getUser().getNickname());
+                dto.setReviewCreateDate(review.getCreatedAt());
+                dto.setCategoryId(review.getStore().getCategory().getId());
 
-            // UserReview에서 userId, reviewId값으로 조회를 해서 값이 나오면 true로 세팅
-            UserReview userReview =  userReviewRepository.findByUserIdAndReviewId(userId, review.getId());
-            dto.setLike(userReview != null);
+                // UserReview에서 userId, reviewId값으로 조회를 해서 값이 나오면 true로 세팅
+                UserReview userReview = userReviewRepository.findByUserIdAndReviewId(userId, review.getId());
+                dto.setLike(userReview != null);
 
-            return dto;
+                return dto;
+            }).toList();
 
-        }).collect(Collectors.toList());
+            result.addAll(dtos);
+
+        }
+
+        // 최신순으로 정렬한다.
+        result.sort(Comparator.comparing(ReviewResponseDTO.TimelineDTO::getReviewCreateDate).reversed());
+
+        // 최신 3개만 반환합니다.
+        return result.stream().limit(3).collect(Collectors.toList());
     }
 
-     */
+
+
+    // 가게 리뷰 조회
+    @Override
+    public List<ReviewResponseDTO.StoreReviewDTO> findStoreReview(Long userId, Long storeId, Long schoolId) {
+        // schoolId 받아서, 학교 선택
+        School school = schoolRepository.findById(schoolId).orElseThrow(() -> new GeneralException(ErrorStatus.SCHOOL_NOT_EXIST));
+        // storeId, school로 store[1개] 선택
+        Store store = storeRepository.findByIdAndSchool(storeId, school).orElseThrow(() -> new GeneralException(ErrorStatus.STORE_NOT_EXIST));
+
+        List<Review> reviews = reviewRepository.findAllByStoreOrderByCreatedAtDesc(store);
+        List<ReviewResponseDTO.StoreReviewDTO> storeReviews = new ArrayList<>();
+
+        for(Review review : reviews){
+            User user = review.getUser();
+
+            ReviewResponseDTO.StoreReviewDTO storeReviewDTO = ReviewResponseDTO.StoreReviewDTO.builder()
+                        .storeId(store.getId())
+                        .storeName(store.getName())
+                        .nickname(user.getNickname())
+                        .rating(review.getScore())
+                        .reviewText(review.getContent())
+                        .userImage(user.getImageUrl())
+                        .build();
+
+                storeReviews.add(storeReviewDTO);
+
+        }
+
+        return storeReviews;
+
+
+    }
 
 
 }

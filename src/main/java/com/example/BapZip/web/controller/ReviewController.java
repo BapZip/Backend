@@ -107,17 +107,23 @@ public class ReviewController {
 
     }
 
-    /*
-    // 리뷰 타임라인
+
+    // 리뷰 타임라인 (카테고리별)
     @GetMapping("/timeline")
     @Operation(summary = "리뷰 타임라인 조회 API", description = "카테고리별 최신 리뷰 3개를 조회합니다. ")
     public ApiResponse<List<ReviewResponseDTO.TimelineDTO>> getReviewTimeline(@AuthenticationPrincipal String userId, Long schoolId, String categoryName) {
 
-        return ApiResponse.onSuccess(reviewService.reviewTimeline(Long.valueOf(userId)));
+        return ApiResponse.onSuccess(reviewService.reviewTimeline(Long.valueOf(userId),schoolId, categoryName));
     }
 
-     */
 
+    // 가게 리뷰 조회
+    @GetMapping("/{storeId}")
+    @Operation(summary = "가게 리뷰 조회 API", description = "가게 리뷰를 조회합니다. ")
+    public ApiResponse<List<ReviewResponseDTO.StoreReviewDTO>> getStoreReview(@AuthenticationPrincipal String userId, @PathVariable("storeId") Long storeId, Long schoolId) {
+
+        return ApiResponse.onSuccess(reviewService.findStoreReview(Long.valueOf(userId), storeId, schoolId));
+    }
 
 
 
