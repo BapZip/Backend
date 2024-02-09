@@ -25,7 +25,7 @@ public class ChatServiceImpl implements ChatService {
     private final ChatRoomRepository chatRoomRepository;
 
     public void saveMessage(ChatDTO.ChatMessageRequestDTO request) {
-        User user = userRepository.findById(request.getUserId())
+        User user = userRepository.findByUserId(request.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         ChatRoom chatRoom = chatRoomRepository.findByStore_Id(request.getStoreId()).get();
 
@@ -42,7 +42,7 @@ public class ChatServiceImpl implements ChatService {
                 .map(msg -> ChatDTO.ChatMessageResponseDTO.builder()
                         .messageId(msg.getId())
                         .storeId(storeId)
-                        .userId(msg.getUser().getId())
+                        .userId(msg.getUser().getUserId())
                         .nickname(msg.getUser().getNickname())
                         .message(msg.getMessage())
                         .timestamp(msg.getTimestamp())

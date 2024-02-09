@@ -89,7 +89,7 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
             }
             ChatDTO.ChatMessageResponseDTO chatMessageResponseDTO= ChatDTO.ChatMessageResponseDTO
                             .builder().message(chatMessageDto.getMessage()).timestamp(LocalDateTime.now())
-                            .nickname(userRepository.findById(chatMessageDto.getUserId()).get().getNickname())
+                            .nickname(userRepository.findByUserId(chatMessageDto.getUserId()).get().getNickname())
                                     .userId(chatMessageDto.getUserId()).storeId(chatMessageDto.getStoreId())
                             .build();
 
