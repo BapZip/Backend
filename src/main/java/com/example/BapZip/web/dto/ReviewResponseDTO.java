@@ -86,6 +86,7 @@ public class ReviewResponseDTO {
         String userImage; // User 프로필 사진
         String reviewImage; // 리뷰 이미지들
         LocalDateTime createdAt;
+        Boolean like;
         Long reviewId;
 
 

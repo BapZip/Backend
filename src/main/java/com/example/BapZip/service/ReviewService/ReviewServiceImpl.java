@@ -309,6 +309,12 @@ public class ReviewServiceImpl implements ReviewService{
                 reviewImageUrl = review.getImages().get(0).getImageUrl();
             }
 
+            // UserReview에서 userId, reviewId값으로 조회를 해서 값이 나오면 true로 세팅
+            UserReview userReview = userReviewRepository.findByUserIdAndReviewId(userId, review.getId());
+            boolean isLiked = (userReview != null); // 좋아요 유무 판단
+
+
+
             ReviewResponseDTO.StoreReviewDTO storeReviewDTO = ReviewResponseDTO.StoreReviewDTO.builder()
                         .storeId(store.getId())
                         .storeName(store.getName())
@@ -318,6 +324,7 @@ public class ReviewServiceImpl implements ReviewService{
                         .userImage(user.getImageUrl())
                         .reviewImage(reviewImageUrl)
                         .createdAt(review.getCreatedAt())
+                        .like(isLiked)
                         .reviewId(review.getId())
                         .build();
 
