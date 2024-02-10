@@ -51,7 +51,7 @@ public class ReviewServiceImpl implements ReviewService{
                 .hashtags(registerReviewDTO.getHashtags()) // 해시태그 필드 관련 수정
                 .content(registerReviewDTO.getReviewText())
                 .paymentTime(registerReviewDTO.getVisitDate())
-                //.images(new ArrayList<>())  // 'images' 필드를 초기화
+                .images(new ArrayList<>())  // 'images' 필드를 초기화
                 .build();
 
         // ReviewImage 엔티티에 이미지 URL 저장

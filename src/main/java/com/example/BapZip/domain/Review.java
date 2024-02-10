@@ -63,7 +63,7 @@ public class Review extends BaseEntity {
     private String menuName;
 
     // 좋아요 한 리뷰 조회때 = new ArrayList<>();; 추가함
-    @OneToMany(mappedBy = "review")
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)  // ↓ 리뷰 삭제할 때, 리뷰 이미지도 지워져야 하므로 수정함
     private List<ReviewImage> images=new ArrayList<>();;
 
 
