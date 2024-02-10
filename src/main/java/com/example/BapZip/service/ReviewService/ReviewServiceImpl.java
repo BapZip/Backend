@@ -51,6 +51,7 @@ public class ReviewServiceImpl implements ReviewService{
                 .hashtags(registerReviewDTO.getHashtags()) // 해시태그 필드 관련 수정
                 .content(registerReviewDTO.getReviewText())
                 .paymentTime(registerReviewDTO.getVisitDate())
+                //.images(new ArrayList<>())  // 'images' 필드를 초기화
                 .build();
 
         // ReviewImage 엔티티에 이미지 URL 저장
@@ -59,7 +60,7 @@ public class ReviewServiceImpl implements ReviewService{
                     .review(review)
                     .imageUrl(imageUrl)
                     .build();
-            reviewImageRepository.save(reviewImage);
+            review.getImages().add(reviewImage);  // ReviewImage 엔티티를 images 필드에 추가한다.
         }
 
         Point point = Point.builder()
@@ -72,7 +73,7 @@ public class ReviewServiceImpl implements ReviewService{
         pointRepository.save(point);
 
 
-        return reviewRepository.save(review).getId();
+        return reviewRepository.save(review).getId(); // Review 엔티티를 저장합니다.
 
     }
 
