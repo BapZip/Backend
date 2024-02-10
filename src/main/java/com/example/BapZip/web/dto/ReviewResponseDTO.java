@@ -15,13 +15,15 @@ public class ReviewResponseDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class MyReviewsDTO {
+        LocalDate visitDate;
         Long storeId;
         String storeName;
-        String nickname;
         Integer rating;
+        String nickname;
+        String UserImage;
         String reviewText;
         String imageUrl;
-        LocalDate paymentTime;
+        LocalDateTime createdAt;
     }
 
     @Builder
@@ -35,7 +37,8 @@ public class ReviewResponseDTO {
         Integer rating;
         String reviewText;
         String imageUrl;
-        LocalDate paymentTime;
+        LocalDateTime createdAt;
+        Long reviewId;
     }
 
 
@@ -66,6 +69,7 @@ public class ReviewResponseDTO {
         LocalDateTime ReviewCreateDate;
         Long categoryId;
         Boolean like;
+        Long reviewId;
 
     }
 
@@ -82,6 +86,8 @@ public class ReviewResponseDTO {
         String userImage; // User 프로필 사진
         String reviewImage; // 리뷰 이미지들
         LocalDateTime createdAt;
+        Long reviewId;
+
 
 
     }

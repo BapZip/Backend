@@ -13,16 +13,13 @@ public class ReviewRequestDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class RegisterReviewDTO{
-        private LocalDate visitDate;
+
         private String storeName;
-        private Integer price;
-        private String menuName;
         private Integer rating;
         private List<String> hashtags;
         private String reviewText;
+        private LocalDate visitDate;
 
-        // 이미지 리스트 필드 추가
-        // private List<String> images;
     }
 
 

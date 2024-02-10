@@ -66,9 +66,8 @@ public class ReviewController {
     // 리뷰 좋아요 하기
     @PostMapping("/zip/{reviewId}")
     @Operation(summary = "리뷰 좋아요 하기 API", description = "리뷰를 좋아요합니다. ")
-    public ResponseEntity<?> addLike(@PathVariable Long reviewId, @RequestBody Map<String, Long> body) {
-        Long userId = body.get("userId");
-        reviewService.addLike(reviewId, userId);
+    public ResponseEntity<?> addLike(@AuthenticationPrincipal String userId, @PathVariable Long reviewId) {
+        reviewService.addLike(Long.valueOf(userId), reviewId);
 
         ApiResponse<Void> response = new ApiResponse<>(true, "COMMON201", "리뷰를 zip했습니다.", null);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -77,9 +76,8 @@ public class ReviewController {
     // 리뷰 좋아요 해제
     @DeleteMapping("/deleteZip/{reviewId}")
     @Operation(summary = "리뷰 좋아요 해제 API", description = "리뷰 좋아요를 해제합니다.")
-    public ResponseEntity<?> deleteLike(@PathVariable Long reviewId, @RequestBody Map<String, Long> body){
-        Long userId = body.get("userId");
-        reviewService.deleteLike(reviewId, userId);
+    public ResponseEntity<?> deleteLike(@AuthenticationPrincipal String userId,@PathVariable Long reviewId){
+        reviewService.deleteLike(Long.valueOf(userId), reviewId);
 
         ApiResponse<Void> response = new ApiResponse<>(true, "COMMON204", "리뷰를 zip해제했습니다.",null);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
