@@ -21,10 +21,10 @@ public interface ReviewService {
     void deleteReview(Long reviewId);
 
     // 리뷰 좋아요 하기
-    void addLike(Long reviewId, Long userId);
+    void addLike( Long userId, Long reviewId);
 
     // 리뷰 좋아요 해제
-    void deleteLike(Long reviewId, Long userId);
+    void deleteLike( Long userId, Long reviewId );
 
     // 좋아요한 리뷰 조회
     List<ReviewResponseDTO.ZipReviewDTO> findLikedReviews(Long userId);

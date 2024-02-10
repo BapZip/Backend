@@ -49,6 +49,9 @@ public class Review extends BaseEntity {
 
     private Integer score;
 
+    @ElementCollection
+    private List<String> hashtags;
+
     @Column(nullable = false, length = 700)
     private String content;
 

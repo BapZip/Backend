@@ -47,11 +47,10 @@ public class ReviewServiceImpl implements ReviewService{
         Review review = Review.builder()
                 .user(user)
                 .store(store)
-                .price(registerReviewDTO.getPrice())
                 .score(registerReviewDTO.getRating())
+                .hashtags(registerReviewDTO.getHashtags()) // 해시태그 필드 관련 수정
                 .content(registerReviewDTO.getReviewText())
                 .paymentTime(registerReviewDTO.getVisitDate())
-                .menuName(registerReviewDTO.getMenuName())
                 .build();
 
         // ReviewImage 엔티티에 이미지 URL 저장
@@ -90,16 +89,18 @@ public class ReviewServiceImpl implements ReviewService{
         List<ReviewResponseDTO.MyReviewsDTO> myReviewsList = new ArrayList<>();
         for (Review review : reviewList) {
             ReviewResponseDTO.MyReviewsDTO myReview = new ReviewResponseDTO.MyReviewsDTO();
+            myReview.setVisitDate(review.getPaymentTime());
             myReview.setStoreId(review.getStore().getId());
             myReview.setStoreName(review.getStore().getName());
-            myReview.setNickname(review.getUser().getNickname());
             myReview.setRating(review.getScore());
+            myReview.setNickname(review.getUser().getNickname());
+            myReview.setUserImage(review.getUser().getImageUrl());
             myReview.setReviewText(review.getContent());
             // 이미지가 있는 경우에만 첫 번째 이미지를 설정
             if (!review.getImages().isEmpty()) {
                 myReview.setImageUrl(review.getImages().get(0).getImageUrl());
             }
-            myReview.setPaymentTime(review.getPaymentTime());
+            myReview.setCreatedAt(review.getCreatedAt());
 
             myReviewsList.add(myReview);
         }
@@ -120,7 +121,7 @@ public class ReviewServiceImpl implements ReviewService{
     // 리뷰 좋아요 하기
     @Override
     @Transactional
-    public void addLike(Long reviewId, Long userId) {
+    public void addLike(Long userId, Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 Review가 없습니다. id=" + reviewId));
         User user = userRepository.findById(userId)
@@ -144,7 +145,7 @@ public class ReviewServiceImpl implements ReviewService{
     // 리뷰 좋아요 해제
     @Override
     @Transactional
-    public void deleteLike(Long reviewId, Long userId) {
+    public void deleteLike(Long userId, Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND_ERROR));
         User user = userRepository.findById(userId)
@@ -177,7 +178,7 @@ public class ReviewServiceImpl implements ReviewService{
         return reviewList.stream()
                 .map(review -> {
                     String imageUrl = review.getImages().isEmpty() ? "default-image-url" : review.getImages().get(0).getImageUrl();
-                    return new ReviewResponseDTO.ZipReviewDTO(review.getStore().getId(), review.getStore().getName(), review.getUser().getNickname(), review.getScore(), review.getContent(), imageUrl, review.getPaymentTime());
+                    return new ReviewResponseDTO.ZipReviewDTO(review.getStore().getId(), review.getStore().getName(), review.getUser().getNickname(), review.getScore(), review.getContent(), imageUrl, review.getCreatedAt(), review.getId());
                 })
                 .collect(Collectors.toList());
 
@@ -271,6 +272,8 @@ public class ReviewServiceImpl implements ReviewService{
                 UserReview userReview = userReviewRepository.findByUserIdAndReviewId(userId, review.getId());
                 dto.setLike(userReview != null);
 
+                dto.setReviewId(review.getId());
+
                 return dto;
             }).toList();
 
@@ -315,6 +318,7 @@ public class ReviewServiceImpl implements ReviewService{
                         .userImage(user.getImageUrl())
                         .reviewImage(reviewImageUrl)
                         .createdAt(review.getCreatedAt())
+                        .reviewId(review.getId())
                         .build();
 
                 storeReviews.add(storeReviewDTO);
