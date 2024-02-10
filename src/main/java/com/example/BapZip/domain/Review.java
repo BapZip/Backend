@@ -10,6 +10,9 @@ import com.example.BapZip.domain.common.BaseEntity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
