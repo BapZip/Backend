@@ -81,7 +81,7 @@ public class ReviewResponseDTO {
         String reviewText;
         String userImage; // User 프로필 사진
         String reviewImage; // 리뷰 이미지들
-        LocalDate paymentTime;
+        LocalDateTime createdAt;
 
 
     }
