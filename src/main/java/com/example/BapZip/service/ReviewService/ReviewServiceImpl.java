@@ -300,6 +300,11 @@ public class ReviewServiceImpl implements ReviewService{
 
         for(Review review : reviews){
             User user = review.getUser();
+            String reviewImageUrl = "";
+
+            if (!review.getImages().isEmpty()) {
+                reviewImageUrl = review.getImages().get(0).getImageUrl();
+            }
 
             ReviewResponseDTO.StoreReviewDTO storeReviewDTO = ReviewResponseDTO.StoreReviewDTO.builder()
                         .storeId(store.getId())
@@ -308,6 +313,8 @@ public class ReviewServiceImpl implements ReviewService{
                         .rating(review.getScore())
                         .reviewText(review.getContent())
                         .userImage(user.getImageUrl())
+                        .reviewImage(reviewImageUrl)
+                        .createdAt(review.getCreatedAt())
                         .build();
 
                 storeReviews.add(storeReviewDTO);
