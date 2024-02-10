@@ -28,19 +28,16 @@ public class ReviewController {
     // 리뷰 작성
     @PostMapping( )
     @Operation(summary = "리뷰 작성 API", description = "form-data로 전송합니다. 리뷰를 작성합니다.")
-    public ResponseEntity<ApiResponse<Long>> create(@AuthenticationPrincipal String  userId, @ModelAttribute ReviewRequestDTO.RegisterReviewDTO registerReviewDTO,  @RequestPart(value = "images1", required = false) List<MultipartFile> images1) {
+    public ApiResponse<Long> create(@AuthenticationPrincipal String  userId, @ModelAttribute ReviewRequestDTO.RegisterReviewDTO registerReviewDTO,  @RequestPart(value = "images1", required = false) List<MultipartFile> images1) {
 
         // 이미지 업로드
         List<String> urls = s3Service.uploadFiles("test", images1); // 이미지 업로드
 
         // 리뷰 작성 및 이미지 URL 추가
-        // registerReviewDTO.setImages(urls); // 업로드된 이미지 URL로 설정
         Long id = reviewService.save(Long.valueOf(userId), registerReviewDTO, urls);
 
         String message = "10포인트 적립 완료";
-        ApiResponse<Long> response = new ApiResponse<>(true, "COMMON200", message, id);
-
-        return ResponseEntity.ok().body(response);
+        return new ApiResponse<>(true, "COMMON200", message, id);
     }
 
     // 나의 리뷰 조회
@@ -58,29 +55,28 @@ public class ReviewController {
     // 리뷰 삭제
     @DeleteMapping("/delete/{reviewId}")
     @Operation(summary = "리뷰 삭제 API", description = "내가 쓴 리뷰를 삭제합니다.")
-    public ResponseEntity<?> deleteReview(@PathVariable Long reviewId) {
+    public ApiResponse<?> deleteReview(@PathVariable Long reviewId) {
         reviewService.deleteReview(reviewId);
-        return ResponseEntity.noContent().build();
+        String message = "리뷰가 삭제되었습니다.";
+        return new ApiResponse<>(true, "COMMON200", message, reviewId);
     }
 
     // 리뷰 좋아요 하기
     @PostMapping("/zip/{reviewId}")
     @Operation(summary = "리뷰 좋아요 하기 API", description = "리뷰를 좋아요합니다. ")
-    public ResponseEntity<?> addLike(@AuthenticationPrincipal String userId, @PathVariable Long reviewId) {
+    public ApiResponse<?> addLike(@AuthenticationPrincipal String userId, @PathVariable Long reviewId) {
         reviewService.addLike(Long.valueOf(userId), reviewId);
 
-        ApiResponse<Void> response = new ApiResponse<>(true, "COMMON201", "리뷰를 zip했습니다.", null);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return new ApiResponse<>(true, "COMMON201", "리뷰를 zip했습니다.", null);
     }
 
     // 리뷰 좋아요 해제
     @DeleteMapping("/deleteZip/{reviewId}")
     @Operation(summary = "리뷰 좋아요 해제 API", description = "리뷰 좋아요를 해제합니다.")
-    public ResponseEntity<?> deleteLike(@AuthenticationPrincipal String userId,@PathVariable Long reviewId){
+    public ApiResponse<?> deleteLike(@AuthenticationPrincipal String userId,@PathVariable Long reviewId){
         reviewService.deleteLike(Long.valueOf(userId), reviewId);
 
-        ApiResponse<Void> response = new ApiResponse<>(true, "COMMON204", "리뷰를 zip해제했습니다.",null);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return  new ApiResponse<>(true, "COMMON204", "리뷰를 zip해제했습니다.",null);
     }
 
 

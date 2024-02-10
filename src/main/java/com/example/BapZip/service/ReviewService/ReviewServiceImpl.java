@@ -41,7 +41,7 @@ public class ReviewServiceImpl implements ReviewService{
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND_ERROR));
         Store store = storeRepository.findByName(registerReviewDTO.getStoreName())
-                .orElseThrow(() -> new IllegalArgumentException("해당 Store가 없습니다. storeName=" + registerReviewDTO.getStoreName()));
+                .orElseThrow(() -> new GeneralException(ErrorStatus.STORE_NOT_EXIST_ERROR));
 
 
         Review review = Review.builder()
@@ -114,7 +114,7 @@ public class ReviewServiceImpl implements ReviewService{
     @Transactional
     public void deleteReview(Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 없습니다. id=" + reviewId));
+                .orElseThrow(() -> new GeneralException(ErrorStatus.REVIEW_NOT_EXIST_ERROR));
         reviewRepository.delete(review);
     }
 
@@ -123,13 +123,13 @@ public class ReviewServiceImpl implements ReviewService{
     @Transactional
     public void addLike(Long userId, Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 Review가 없습니다. id=" + reviewId));
+                .orElseThrow(() -> new GeneralException(ErrorStatus.REVIEW_NOT_EXIST_ERROR));
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND_ERROR));
 
         // 이미 좋아요가 눌러져 있는지 확인
         if (userReviewRepository.findByUserAndReview(user, review).isPresent()) {
-            throw new IllegalStateException("이미 좋아요가 눌러져 있습니다.");
+            throw new GeneralException(ErrorStatus.REVIEW_ZIP_ALREADY_ERROR);
         }
 
         UserReview userReview = UserReview.builder()
@@ -147,12 +147,12 @@ public class ReviewServiceImpl implements ReviewService{
     @Transactional
     public void deleteLike(Long userId, Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND_ERROR));
+                .orElseThrow(() -> new GeneralException(ErrorStatus.REVIEW_NOT_FOUND_ERROR));
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND_ERROR));
 
         UserReview userReview = userReviewRepository.findByUserAndReview(user, review)
-                .orElseThrow(() -> new IllegalArgumentException("해당 UserReview가 없습니다."));
+                .orElseThrow(() -> new GeneralException(ErrorStatus.USERREVIEW_NOT_EXIST_ERROR));
 
         userReviewRepository.delete(userReview);
 

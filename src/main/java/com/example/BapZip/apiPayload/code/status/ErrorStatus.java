@@ -45,9 +45,12 @@ public enum ErrorStatus implements BaseErrorCode {
     STORE_NOT_ZIP(HttpStatus.resolve(400),"STORE400","ZIP 하지 않은 가게 입니다."),
 
     // 리뷰 관련 응답
+    REVIEW_NOT_EXIST_ERROR(HttpStatus.resolve(400),"REVIEW400","존재하지 않는 리뷰입니다."),
     NO_DATA_FOUND_ERROR(HttpStatus.resolve(404),"REVIEW404","한 주간 좋아요를 받은 리뷰가 없습니다."),
     REVIEW_NOT_FOUND_ERROR(HttpStatus.resolve(404),"REVIEW404","리뷰를 찾을 수 없습니다."),
     REVIEW_NOT_EXIST(HttpStatus.resolve(400),"REVIEW400","리뷰가 존재하는 가게가 없습니다."),
+    REVIEW_ZIP_ALREADY_ERROR(HttpStatus.resolve(409),"REVIEW409","이미 좋아요를 누른 리뷰입니다."),
+    USERREVIEW_NOT_EXIST_ERROR(HttpStatus.resolve(400),"USERREVIEW400","좋아요 한 리뷰가 아닙니다."),
 
     // 지역 관련 응답
     RIGION_NOT_EXIST(HttpStatus.resolve(400),"REGION400","지역 ID에 해당하는 지역이 없습니다."),
