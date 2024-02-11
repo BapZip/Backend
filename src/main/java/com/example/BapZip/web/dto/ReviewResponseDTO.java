@@ -69,6 +69,7 @@ public class ReviewResponseDTO {
         LocalDateTime ReviewCreateDate;
         Long categoryId;
         Boolean like;
+        Long likesCount; // 좋아요 수
         Long reviewId;
 
     }

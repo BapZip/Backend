@@ -273,6 +273,11 @@ public class ReviewServiceImpl implements ReviewService{
                 UserReview userReview = userReviewRepository.findByUserIdAndReviewId(userId, review.getId());
                 dto.setLike(userReview != null);
 
+                // UserReview에서 reviewId값으로 조회를 해서 좋아요 수를 세팅
+                Long likesCount = userReviewRepository.countByReviewId(review.getId());
+                dto.setLikesCount(likesCount);
+
+
                 dto.setReviewId(review.getId());
 
                 return dto;
