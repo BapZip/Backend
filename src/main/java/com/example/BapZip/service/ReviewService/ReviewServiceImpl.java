@@ -205,7 +205,7 @@ public class ReviewServiceImpl implements ReviewService{
                     List<String> imageUrls = review.getImages().stream()
                             .map(ReviewImage::getImageUrl)
                             .toList();
-                    return new ReviewResponseDTO.ZipReviewDTO(review.getStore().getId(), review.getStore().getName(), review.getUser().getNickname(), review.getScore(), review.getContent(), imageUrls, review.getCreatedAt(), review.getId());
+                    return new ReviewResponseDTO.ZipReviewDTO(review.getStore().getId(), review.getStore().getName(), review.getUser().getNickname(), review.getScore(), review.getContent(), review.getUser().getImageUrl() ,imageUrls, review.getCreatedAt(), review.getId());
                 })
                 .collect(Collectors.toList());
 
