@@ -102,6 +102,7 @@ public class ReviewServiceImpl implements ReviewService{
                 myReview.setImageUrl(review.getImages().get(0).getImageUrl());
             }
             myReview.setCreatedAt(review.getCreatedAt());
+            myReview.setReviewId(review.getId());
 
             myReviewsList.add(myReview);
         }
