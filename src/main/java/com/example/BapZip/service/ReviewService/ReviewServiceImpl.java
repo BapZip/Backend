@@ -88,8 +88,8 @@ public class ReviewServiceImpl implements ReviewService{
         // 1. 사용자 정보 조회
         userRepository.findById(userId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND_ERROR));
-        // 2. 사용자의 리뷰 목록 조회
-        List<Review> reviewList = reviewRepository.findAllByUserId(userId);
+        // 2. 사용자의 리뷰 목록 조회(최신순 정렬)
+        List<Review> reviewList = reviewRepository.findAllByUserIdOrderByCreatedAtDesc(userId);
 
         // 3. MyReviewsDTO로 변환
         List<ReviewResponseDTO.MyReviewsDTO> myReviewsList = new ArrayList<>();
@@ -175,20 +175,22 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
 
-    // 좋아요한 리뷰 조회
+    // 좋아요 한 리뷰 조회
     @Override
     public List<ReviewResponseDTO.ZipReviewDTO> findLikedReviews(Long userId) {
         // 1. 사용자 정보 조회
         userRepository.findById(userId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND_ERROR));
 
-        // 2. 해당 사용자가 좋아요한 리뷰 목록 조회
+        // 2. 해당 사용자가 좋아요 한 리뷰 목록 조회 (최신순 정렬)
         List<UserReview> userReviewList = userReviewRepository.findByUser_Id(userId);
 
 
-        // 3. 좋아요한 리뷰 목록에서 리뷰 객체 가져오기
+        // 3. 좋아요 한 리뷰 목록에서 리뷰 객체 가져오기
         List<Review> reviewList = userReviewList.stream()
                 .map(UserReview::getReview)
+                .filter(review -> review.getCreatedAt() != null)
+                .sorted(Comparator.comparing(Review::getCreatedAt).reversed()) // 리뷰 최신순 정렬
                 .toList();
 
         return reviewList.stream()

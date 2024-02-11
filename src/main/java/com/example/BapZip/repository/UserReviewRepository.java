@@ -19,6 +19,7 @@ public interface UserReviewRepository extends JpaRepository<UserReview, Long> {
     Optional<UserReview> findByUserAndReview(User user, Review review);
 
 
+    // 좋아요 한 리뷰 조회
     List<UserReview> findByUser_Id(Long userId);
 
     // 리뷰 타임라인
@@ -37,4 +38,7 @@ public interface UserReviewRepository extends JpaRepository<UserReview, Long> {
     Review findTopReviewByLikesPerCategory(@Param("categoryName") String categoryName);
 
     Long countByReviewId(Long id);
+
+
+
 }
