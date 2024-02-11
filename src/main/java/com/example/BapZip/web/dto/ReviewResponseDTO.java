@@ -37,6 +37,7 @@ public class ReviewResponseDTO {
         String nickname;
         Integer rating;
         String reviewText;
+        String userImage;
         List<String> imageUrls; // 단일 이미지 -> 여러 이미지 수정
         LocalDateTime createdAt;
         Long reviewId;
