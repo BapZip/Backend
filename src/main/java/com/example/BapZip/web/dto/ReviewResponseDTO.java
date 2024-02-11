@@ -24,6 +24,7 @@ public class ReviewResponseDTO {
         String reviewText;
         String imageUrl;
         LocalDateTime createdAt;
+        Long reviewId;
     }
 
     @Builder
