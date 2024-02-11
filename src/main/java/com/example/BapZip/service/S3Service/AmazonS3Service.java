@@ -30,33 +30,39 @@ public class AmazonS3Service {
     public List<String> uploadFiles(String folder, List<MultipartFile> multipartFiles) {
         List<String> s3files = new ArrayList<>();
 
-        for (MultipartFile multipartFile : multipartFiles) {
+        // 리뷰 작성시 이미지 첨부가 선택사항이기에 null이 아닌 경우에만 이미지 처리 로직을 수행
+        if (multipartFiles != null ) {
+            for (MultipartFile multipartFile : multipartFiles) {
 
-            String uploadFileUrl = "";
+                String uploadFileUrl = "";
 
-            ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentLength(multipartFile.getSize());
-            objectMetadata.setContentType(multipartFile.getContentType());
+                ObjectMetadata objectMetadata = new ObjectMetadata();
+                objectMetadata.setContentLength(multipartFile.getSize());
+                objectMetadata.setContentType(multipartFile.getContentType());
 
-            try (InputStream inputStream = multipartFile.getInputStream()) {
+                try (InputStream inputStream = multipartFile.getInputStream()) {
 
-                String keyName = folder + "/" + UUID.randomUUID() + "." + multipartFile.getOriginalFilename();
+                    String keyName = folder + "/" + UUID.randomUUID() + "." + multipartFile.getOriginalFilename();
 
-                // S3에 폴더 및 파일 업로드
-                amazonS3Client.putObject(
-                        new PutObjectRequest(bucketName, keyName, inputStream, objectMetadata)
-                                .withCannedAcl(CannedAccessControlList.PublicRead));
+                    // S3에 폴더 및 파일 업로드
+                    amazonS3Client.putObject(
+                            new PutObjectRequest(bucketName, keyName, inputStream, objectMetadata)
+                                    .withCannedAcl(CannedAccessControlList.PublicRead));
 
-                // S3에 업로드한 폴더 및 파일 URL
-                uploadFileUrl = amazonS3Client.getUrl(bucketName, keyName).toString();
+                    // S3에 업로드한 폴더 및 파일 URL
+                    uploadFileUrl = amazonS3Client.getUrl(bucketName, keyName).toString();
 
-            } catch (IOException e) {
-                e.printStackTrace();
-                log.error("Filed upload failed", e);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    log.error("Filed upload failed", e);
+                }
+
+                s3files.add(uploadFileUrl);
             }
 
-            s3files.add(uploadFileUrl);
         }
+
+
 
         return s3files;
     }

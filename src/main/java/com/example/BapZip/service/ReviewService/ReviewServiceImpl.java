@@ -44,7 +44,7 @@ public class ReviewServiceImpl implements ReviewService{
                 .orElseThrow(() -> new GeneralException(ErrorStatus.STORE_NOT_EXIST_ERROR));
 
         // 사진 최대 5개 저장
-        if (urls.size() > 5) {
+        if (urls != null && urls.size() > 5) {
             throw new GeneralException(ErrorStatus.REVIEW_IMAGES_EXCEEDED_ERROR);
         }
 
@@ -60,12 +60,14 @@ public class ReviewServiceImpl implements ReviewService{
                 .build();
 
         // ReviewImage 엔티티에 이미지 URL 저장
-        for (String imageUrl : urls) {
-            ReviewImage reviewImage = ReviewImage.builder()
-                    .review(review)
-                    .imageUrl(imageUrl)
-                    .build();
-            review.getImages().add(reviewImage);  // ReviewImage 엔티티를 images 필드에 추가한다.
+        if (urls != null) {
+            for (String imageUrl : urls) {
+                ReviewImage reviewImage = ReviewImage.builder()
+                        .review(review)
+                        .imageUrl(imageUrl)
+                        .build();
+                review.getImages().add(reviewImage);  // ReviewImage 엔티티를 images 필드에 추가한다.
+            }
         }
 
         Point point = Point.builder()
