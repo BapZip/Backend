@@ -126,6 +126,11 @@ public class ReviewServiceImpl implements ReviewService{
     public void deleteReview(Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.REVIEW_NOT_EXIST_ERROR));
+
+        // 외래키 제약 조건 ERROR -> UserReview에서 해당 리뷰를 참조하는 데이터를 먼저 삭제
+        List<UserReview> userReviews = userReviewRepository.findAllByReviewId(reviewId);
+        userReviewRepository.deleteAll(userReviews);
+        // 그 후 리뷰 삭제
         reviewRepository.delete(review);
     }
 
