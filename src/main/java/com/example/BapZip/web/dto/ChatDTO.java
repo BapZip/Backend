@@ -32,8 +32,8 @@ public class ChatDTO {
         private String nickname;
         private String message;
         private LocalDateTime timestamp;
+        private String imageUrl;
         // getter, setter, constructor 등
     }
-
 
 }
