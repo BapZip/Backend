@@ -22,7 +22,7 @@ public class ReviewResponseDTO {
         String nickname;
         String UserImage;
         String reviewText;
-        String imageUrl;
+        List<String> imageUrls; // 단일 이미지 -> 여러 이미지 수정
         LocalDateTime createdAt;
         Long reviewId;
     }
@@ -37,7 +37,7 @@ public class ReviewResponseDTO {
         String nickname;
         Integer rating;
         String reviewText;
-        String imageUrl;
+        List<String> imageUrls; // 단일 이미지 -> 여러 이미지 수정
         LocalDateTime createdAt;
         Long reviewId;
     }
@@ -86,7 +86,7 @@ public class ReviewResponseDTO {
         Integer rating;
         String reviewText;
         String userImage; // User 프로필 사진
-        String reviewImage; // 리뷰 이미지들
+        List<String> reviewImages; // 리뷰이미지) 단일 이미지 -> 여러 이미지 수정
         LocalDateTime createdAt;
         Boolean like;
         Long reviewId;
