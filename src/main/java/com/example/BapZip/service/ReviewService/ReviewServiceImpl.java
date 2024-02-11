@@ -43,6 +43,11 @@ public class ReviewServiceImpl implements ReviewService{
         Store store = storeRepository.findByName(registerReviewDTO.getStoreName())
                 .orElseThrow(() -> new GeneralException(ErrorStatus.STORE_NOT_EXIST_ERROR));
 
+        // 사진 최대 5개 저장
+        if (urls.size() > 5) {
+            throw new GeneralException(ErrorStatus.REVIEW_IMAGES_EXCEEDED_ERROR);
+        }
+
 
         Review review = Review.builder()
                 .user(user)
@@ -97,10 +102,14 @@ public class ReviewServiceImpl implements ReviewService{
             myReview.setNickname(review.getUser().getNickname());
             myReview.setUserImage(review.getUser().getImageUrl());
             myReview.setReviewText(review.getContent());
-            // 이미지가 있는 경우에만 첫 번째 이미지를 설정
-            if (!review.getImages().isEmpty()) {
-                myReview.setImageUrl(review.getImages().get(0).getImageUrl());
+
+            // 이미지가 있는 경우, """여러 장의 이미지 조회"""를 위해 List<String>으로 설정
+            List<String> imageUrls = new ArrayList<>();
+            for(ReviewImage image : review.getImages()) {
+                imageUrls.add(image.getImageUrl());
             }
+            myReview.setImageUrls(imageUrls);
+
             myReview.setCreatedAt(review.getCreatedAt());
             myReview.setReviewId(review.getId());
 
@@ -128,6 +137,11 @@ public class ReviewServiceImpl implements ReviewService{
                 .orElseThrow(() -> new GeneralException(ErrorStatus.REVIEW_NOT_EXIST_ERROR));
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND_ERROR));
+
+        // 내가 쓴 글에 좋아요 못 누르게
+        if (review.getUser().equals(user)) {
+            throw new GeneralException(ErrorStatus.CANNOT_LIKE_OWN_REVIEW_ERROR);
+        }
 
         // 이미 좋아요가 눌러져 있는지 확인
         if (userReviewRepository.findByUserAndReview(user, review).isPresent()) {
@@ -179,8 +193,10 @@ public class ReviewServiceImpl implements ReviewService{
 
         return reviewList.stream()
                 .map(review -> {
-                    String imageUrl = review.getImages().isEmpty() ? "default-image-url" : review.getImages().get(0).getImageUrl();
-                    return new ReviewResponseDTO.ZipReviewDTO(review.getStore().getId(), review.getStore().getName(), review.getUser().getNickname(), review.getScore(), review.getContent(), imageUrl, review.getCreatedAt(), review.getId());
+                    List<String> imageUrls = review.getImages().stream()
+                            .map(ReviewImage::getImageUrl)
+                            .toList();
+                    return new ReviewResponseDTO.ZipReviewDTO(review.getStore().getId(), review.getStore().getName(), review.getUser().getNickname(), review.getScore(), review.getContent(), imageUrls, review.getCreatedAt(), review.getId());
                 })
                 .collect(Collectors.toList());
 
@@ -310,16 +326,13 @@ public class ReviewServiceImpl implements ReviewService{
 
         for(Review review : reviews){
             User user = review.getUser();
-            String reviewImageUrl = "";
-
-            if (!review.getImages().isEmpty()) {
-                reviewImageUrl = review.getImages().get(0).getImageUrl();
-            }
+            List<String> reviewImageUrls = review.getImages().stream()
+                    .map(ReviewImage::getImageUrl)
+                    .toList();
 
             // UserReview에서 userId, reviewId값으로 조회를 해서 값이 나오면 true로 세팅
             UserReview userReview = userReviewRepository.findByUserIdAndReviewId(userId, review.getId());
             boolean isLiked = (userReview != null); // 좋아요 유무 판단
-
 
 
             ReviewResponseDTO.StoreReviewDTO storeReviewDTO = ReviewResponseDTO.StoreReviewDTO.builder()
@@ -329,7 +342,7 @@ public class ReviewServiceImpl implements ReviewService{
                         .rating(review.getScore())
                         .reviewText(review.getContent())
                         .userImage(user.getImageUrl())
-                        .reviewImage(reviewImageUrl)
+                        .reviewImages(reviewImageUrls)
                         .createdAt(review.getCreatedAt())
                         .like(isLiked)
                         .reviewId(review.getId())
