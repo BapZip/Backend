@@ -1,5 +1,6 @@
 package com.example.BapZip.config;
 
+import com.example.BapZip.domain.User;
 import com.example.BapZip.domain.enums.ChatMessageType;
 import com.example.BapZip.repository.UserRepository;
 import com.example.BapZip.service.ChatService.ChatService;
@@ -87,10 +88,13 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
             if (chatRoomSession.size()>=3) {
                 removeClosedSession(chatRoomSession);
             }
+            User user=userRepository.findByUserId(chatMessageDto.getUserId()).get();
+
             ChatDTO.ChatMessageResponseDTO chatMessageResponseDTO= ChatDTO.ChatMessageResponseDTO
                             .builder().message(chatMessageDto.getMessage()).timestamp(LocalDateTime.now())
-                            .nickname(userRepository.findByUserId(chatMessageDto.getUserId()).get().getNickname())
+                            .nickname(user.getNickname())
                                     .userId(chatMessageDto.getUserId()).storeId(chatMessageDto.getStoreId())
+                    .imageUrl(user.getImageUrl())
                             .build();
 
             sendMessageToChatRoom(chatMessageResponseDTO, chatRoomSession);

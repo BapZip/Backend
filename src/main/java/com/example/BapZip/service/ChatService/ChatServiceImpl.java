@@ -41,6 +41,7 @@ public class ChatServiceImpl implements ChatService {
                 .stream()
                 .map(msg -> ChatDTO.ChatMessageResponseDTO.builder()
                         .messageId(msg.getId())
+                        .imageUrl(msg.getUser().getImageUrl())
                         .storeId(storeId)
                         .userId(msg.getUser().getUserId())
                         .nickname(msg.getUser().getNickname())
