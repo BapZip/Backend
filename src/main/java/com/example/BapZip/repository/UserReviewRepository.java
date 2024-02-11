@@ -18,6 +18,8 @@ public interface UserReviewRepository extends JpaRepository<UserReview, Long> {
     // findByUserAndReview 메서드 (Optional인 이유 = null반환 X(명시적 결과없음 O), null체크 회피, 메서드 시그니처 표현)
     Optional<UserReview> findByUserAndReview(User user, Review review);
 
+    // 리뷰 삭제 시, UserReview 먼저 삭제하기 위한 메서드
+    List<UserReview> findAllByReviewId(Long reviewId);
 
     // 좋아요 한 리뷰 조회
     List<UserReview> findByUser_Id(Long userId);
