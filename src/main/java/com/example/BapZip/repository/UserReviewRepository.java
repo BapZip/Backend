@@ -35,4 +35,6 @@ public interface UserReviewRepository extends JpaRepository<UserReview, Long> {
             "ORDER BY likeCount DESC\n" +
             "LIMIT 1")
     Review findTopReviewByLikesPerCategory(@Param("categoryName") String categoryName);
+
+    Long countByReviewId(Long id);
 }
