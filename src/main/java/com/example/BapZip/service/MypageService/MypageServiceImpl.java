@@ -43,10 +43,8 @@ public class MypageServiceImpl implements MypageService{
     }
 
     @Override
-    public MypageResponseDTO.MypageInfoDTO fetchMypageProfile(Long userId, MultipartFile image) {
+    public MypageResponseDTO.MypageInfoDTO fetchMypageProfile(Long userId, List<MultipartFile> imageList) {
         User tempUser = userRepository.findById(userId).get();
-        List<MultipartFile> imageList=new ArrayList<>();
-        imageList.add(image);
         List<String> urls = s3Service.uploadFiles("test",imageList);
         tempUser.setImageUrl(urls.get(0));
         userRepository.save(tempUser);
