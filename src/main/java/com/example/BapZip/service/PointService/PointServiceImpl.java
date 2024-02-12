@@ -30,6 +30,7 @@ public class PointServiceImpl implements PointService{
                 .point(point.getPoint())
                 .classification(point.getClassification())
                 .note(point.getNote())
+                .date(point.getCreatedAt().toLocalDate().toString())
                 .build();
     }
 
