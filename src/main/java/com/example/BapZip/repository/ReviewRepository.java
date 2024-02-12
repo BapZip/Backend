@@ -29,8 +29,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     List<Review> findByStore_IdAndPaymentTimeBetween(Long storeId,LocalDate startDate,LocalDate endDate);
 
-
-    List<Review> findTop3ByStoreOrderByCreatedAtDesc(Store store);
+    // 리뷰 타임라인 조회 (Review의 createdAt이 null 인 경우 조회X)
+    List<Review> findTop3ByStoreAndCreatedAtIsNotNullOrderByCreatedAtDesc(Store store);
 
     // 가게 리뷰 조회 (최신 리뷰 순으로 정렬)
     List<Review> findAllByStoreOrderByCreatedAtDesc(Store store);
@@ -42,4 +42,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             "GROUP BY r.user.id " +
             "ORDER BY COUNT(ur) DESC")
     List<Object[]> countLikesByUserId(LocalDateTime oneWeekAgo);
+
+
 }
