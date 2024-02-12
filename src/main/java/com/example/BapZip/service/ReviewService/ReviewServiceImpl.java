@@ -30,8 +30,8 @@ public class ReviewServiceImpl implements ReviewService{
     private final StoreRepository storeRepository;
     private final UserReviewRepository userReviewRepository;
     private final PointRepository pointRepository;
-    private final ReviewImageRepository reviewImageRepository;
     private final SchoolRepository schoolRepository;
+    private final HashtagRepository hashtagRepository;
 
     // 리뷰 작성
     @Override
@@ -53,7 +53,7 @@ public class ReviewServiceImpl implements ReviewService{
                 .user(user)
                 .store(store)
                 .score(registerReviewDTO.getRating())
-                .hashtags(registerReviewDTO.getHashtags()) // 해시태그 필드 관련 수정
+                //.hashtags(registerReviewDTO.getHashtags()) // 해시태그 필드 관련 수정
                 .content(registerReviewDTO.getReviewText())
                 .paymentTime(registerReviewDTO.getVisitDate())
                 .images(new ArrayList<>())  // 'images' 필드를 초기화
@@ -78,6 +78,9 @@ public class ReviewServiceImpl implements ReviewService{
                 .build();
 
         pointRepository.save(point);
+
+        // 해시태그 부분
+
 
 
         return reviewRepository.save(review).getId(); // Review 엔티티를 저장합니다.
@@ -264,11 +267,12 @@ public class ReviewServiceImpl implements ReviewService{
                     .toList();
         }
 
+
         List<ReviewResponseDTO.TimelineDTO> result = new ArrayList<>();
 
         for (Store store : filteredStores) {
             // 각 Store에서 최신 리뷰 3개를 가져온다.
-            List<Review> reviews = reviewRepository.findTop3ByStoreOrderByCreatedAtDesc(store);
+            List<Review> reviews = reviewRepository.findTop3ByStoreAndCreatedAtIsNotNullOrderByCreatedAtDesc(store);
 
             // 가져온 리뷰들을 DTO로 변환하고, 좋아요 여부를 세팅한다.
             List<ReviewResponseDTO.TimelineDTO> dtos = reviews.stream().map(review -> {
@@ -283,16 +287,7 @@ public class ReviewServiceImpl implements ReviewService{
                 }
                 dto.setReviewText(review.getContent());
                 dto.setNickname(review.getUser().getNickname());
-
-                // 리뷰의 생성 날짜가 null인 경우를 처리
-                if (review.getCreatedAt() != null) {
-                    dto.setReviewCreateDate(review.getCreatedAt());
-                } else {
-                    // created_at이 null인 경우 기본값 혹은 적절한 값을 설정. 일단 현재시간으로 설정 <- 변동 가능성 O
-                    dto.setReviewCreateDate(LocalDateTime.now());
-                }
-
-                //dto.setReviewCreateDate(review.getCreatedAt());
+                dto.setReviewCreateDate(review.getCreatedAt());
                 dto.setCategoryId(review.getStore().getCategory().getId());
 
                 // UserReview에서 userId, reviewId값으로 조회를 해서 값이 나오면 true로 세팅

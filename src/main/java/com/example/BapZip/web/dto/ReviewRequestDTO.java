@@ -16,7 +16,7 @@ public class ReviewRequestDTO {
 
         private String storeName;
         private Integer rating;
-        private List<String> hashtags;
+        // private List<String> hashtags;
         private String reviewText;
         private LocalDate visitDate;
 
