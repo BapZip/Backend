@@ -1,5 +1,8 @@
 package com.example.BapZip.domain.enums;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public enum hashtagName {
-    혼밥,양많음,빠름,저렴함,깨끗함,단체석,맛있음,친절함, 넓음, 조용함
+    혼밥,양많음,빠름,저렴함,깨끗함,단체석,맛있음,친절함, 넓음, 조용함;
 }
