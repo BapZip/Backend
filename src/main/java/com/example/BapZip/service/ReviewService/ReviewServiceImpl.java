@@ -3,6 +3,7 @@ package com.example.BapZip.service.ReviewService;
 import com.example.BapZip.apiPayload.code.status.ErrorStatus;
 import com.example.BapZip.apiPayload.exception.GeneralException;
 import com.example.BapZip.domain.*;
+import com.example.BapZip.domain.enums.hashtagName;
 import com.example.BapZip.domain.mapping.UserReview;
 import com.example.BapZip.repository.*;
 import com.example.BapZip.web.dto.ReviewRequestDTO;
@@ -18,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.example.BapZip.domain.enums.hashtagName.깨끗함;
 
 @Service
 @RequiredArgsConstructor
@@ -53,7 +56,6 @@ public class ReviewServiceImpl implements ReviewService{
                 .user(user)
                 .store(store)
                 .score(registerReviewDTO.getRating())
-                //.hashtags(registerReviewDTO.getHashtags()) // 해시태그 필드 관련 수정
                 .content(registerReviewDTO.getReviewText())
                 .paymentTime(registerReviewDTO.getVisitDate())
                 .images(new ArrayList<>())  // 'images' 필드를 초기화
@@ -79,7 +81,51 @@ public class ReviewServiceImpl implements ReviewService{
 
         pointRepository.save(point);
 
-        // 해시태그 부분
+        // 해시태그 부분 !!
+        Hashtag hashtag = hashtagRepository.findByStore(store)
+                .orElseGet(() -> Hashtag.builder()
+                        .store(store)
+                        .h1(0) // 생성과 동시에 0 으로 초기화 해줘야 된다고 해서 추가함
+                        .h2(0)
+                        .h3(0)
+                        .h4(0)
+                        .h5(0)
+                        .h6(0)
+                        .h7(0)
+                        .h8(0)
+                        .h9(0)
+                        .h10(0)
+                        .build());
+        List<String> hashtagNames = registerReviewDTO.getHashtags();
+
+        for(String i:hashtagNames){
+
+            switch(i) {
+                case "혼밥":
+                    hashtag.setH1(hashtag.getH1()+1); break;
+                case "양많음":
+                    hashtag.setH2(hashtag.getH2()+1); break;
+                case "빠름":
+                    hashtag.setH3(hashtag.getH3()+1); break;
+                case "저렴함":
+                    hashtag.setH4(hashtag.getH4()+1); break;
+                case "깨끗함":
+                    hashtag.setH5(hashtag.getH5()+1); break;
+                case "단체석":
+                    hashtag.setH6(hashtag.getH6()+1); break;
+                case "맛있음":
+                    hashtag.setH7(hashtag.getH7()+1); break;
+                case "친절함":
+                    hashtag.setH8(hashtag.getH8()+1); break;
+                case "넓음":
+                    hashtag.setH9(hashtag.getH9()+1); break;
+                case "조용함":
+                    hashtag.setH10(hashtag.getH10()+1); break;
+            }
+
+        }
+
+        hashtagRepository.save(hashtag);
 
 
 
