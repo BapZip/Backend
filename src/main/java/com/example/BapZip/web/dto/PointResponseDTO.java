@@ -16,6 +16,7 @@ public class PointResponseDTO {
         private Long point;
         private String classification;
         private String note;
+        private String date;
     }
 
 
