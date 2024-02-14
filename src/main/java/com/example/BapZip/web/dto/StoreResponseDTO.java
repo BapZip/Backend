@@ -119,6 +119,8 @@ public class StoreResponseDTO {
 
         Long ReviewCount;
 
+        String score;
+
         Long Ranking;
 
         String name;
@@ -145,7 +147,9 @@ public class StoreResponseDTO {
 
         Long Ranking;
 
-        Double score;
+        Long ReviewCount;
+
+        String score;
 
         String name;
 
@@ -171,31 +175,7 @@ public class StoreResponseDTO {
 
         String notice;
     }
-    public static class StoreListRecommendDTO{
 
-        Long storeId;
-
-        Long ReviewCount;
-
-        Long Ranking;
-
-        Double score;
-
-        Double totalScore;
-
-        String name;
-
-        String category;
-
-        InOrOut inOut;
-
-        String imageUrl;
-
-        Boolean isMyZip;
-
-        StoreListStaus storeListStaus;
-
-    }
 
     @Getter
     @Setter
