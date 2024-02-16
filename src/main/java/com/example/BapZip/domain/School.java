@@ -32,5 +32,8 @@ public class School extends BaseEntity {
     @JoinColumn(name = "region_id")
     private Region region;
 
+    @Column(nullable = true, length = 500)
+    private String logo;
+
 
 }

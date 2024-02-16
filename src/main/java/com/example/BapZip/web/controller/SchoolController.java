@@ -51,6 +51,15 @@ public class SchoolController {
         return ApiResponse.onSuccess(result);
     }
 
+    // 학교 가져오기
+    @Operation(summary = "학교 이믈&로고 api", description = "학교 로고와 이름을 반환하는 api입니다. id를 입력해주세요.")
+    @GetMapping("/logo")
+    public ApiResponse<SchoolResponseDTO.getSchoolLogo> getSchoolLogo(@RequestParam(name = "schoolId") Long schoolId)
+    {
+        SchoolResponseDTO.getSchoolLogo result = schoolService.getSchoolLogo(schoolId);
+        return ApiResponse.<SchoolResponseDTO.getSchoolLogo>onSuccess(result);
+    }
+
 
 
 }
