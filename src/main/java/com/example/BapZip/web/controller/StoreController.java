@@ -65,18 +65,18 @@ public class StoreController {
 
     @Operation(summary = "핫플레이스 조회", description = "토큰만 필요함")
     @GetMapping("/hotPlace")
-    public ApiResponse<List<StoreResponseDTO.HotPlaceDTO>> getHotPlace() {
-        return ApiResponse.onSuccess(storeService.getHotPlace());
+    public ApiResponse<List<StoreResponseDTO.HotPlaceDTO>> getHotPlace(@RequestParam Long schoolId) {
+        return ApiResponse.onSuccess(storeService.getHotPlace(schoolId));
     }
     @Operation(summary = "가게리스트 조회(리뷰많은순)", description = "토큰만 필요함 In/out 공용")
     @GetMapping("/list/reviewcount")
-    public ApiResponse<List<StoreResponseDTO.StoreListReviewCountDTO>> getStoreListByReviewCount(Principal principal) {
-        return ApiResponse.onSuccess(storeService.getStoreListByReviewCount(Long.parseLong(principal.getName())));
+    public ApiResponse<List<StoreResponseDTO.StoreListReviewCountDTO>> getStoreListByReviewCount(Principal principal,@RequestParam Long schoolId) {
+        return ApiResponse.onSuccess(storeService.getStoreListByReviewCount(Long.parseLong(principal.getName()),schoolId));
     }
     @Operation(summary = "가게리스트 조회(별점순)", description = "토큰만 필요함 In/out 공용")
     @GetMapping("/list/score")
-    public ApiResponse<List<StoreResponseDTO.StoreListScoreDTO>> getStoreListByScore(Principal principal) {
-        return ApiResponse.onSuccess(storeService.getStoreListByScore(Long.parseLong(principal.getName())));
+    public ApiResponse<List<StoreResponseDTO.StoreListScoreDTO>> getStoreListByScore(Principal principal,Long schoolId) {
+        return ApiResponse.onSuccess(storeService.getStoreListByScore(Long.parseLong(principal.getName()),schoolId));
     }
 
 
@@ -110,8 +110,8 @@ public class StoreController {
 
     @Operation(summary = "업종별 추천 식당 조회", description = "PathVariable 업종 -> KOREA, CHINA, WESTERN, CAFE, JAPAN")
     @GetMapping("/recommend/{categoryName}")
-    public ApiResponse<StoreResponseDTO.RecommandDTO> getRecommendStoresByLikes(@PathVariable("categoryName") String categoryName) {
-        return ApiResponse.onSuccess(storeService.getRecommendStoresByLikes(categoryName));
+    public ApiResponse<StoreResponseDTO.RecommandDTO> getRecommendStoresByLikes(@PathVariable("categoryName") String categoryName,Long schoolId) {
+        return ApiResponse.onSuccess(storeService.getRecommendStoresByLikes(categoryName,schoolId));
     }
 
     @Operation(summary = "식당 메뉴 조회 API", description = "store Id 입력해주세요.")

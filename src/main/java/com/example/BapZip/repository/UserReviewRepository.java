@@ -33,11 +33,11 @@ public interface UserReviewRepository extends JpaRepository<UserReview, Long> {
             "JOIN ur.review r\n" +
             "JOIN r.store s\n" +
             "JOIN s.category c\n" +
-            "WHERE c.name = :categoryName\n" +
+            "WHERE c.name = :categoryName AND s.school.id = :schoolId\n" +
             "GROUP BY ur.review\n" +
             "ORDER BY likeCount DESC\n" +
             "LIMIT 1")
-    Review findTopReviewByLikesPerCategory(@Param("categoryName") String categoryName);
+    Review findTopReviewByLikesPerCategory(@Param("categoryName") String categoryName,@Param("schoolId") Long schoolId);
 
     Long countByReviewId(Long id);
 
