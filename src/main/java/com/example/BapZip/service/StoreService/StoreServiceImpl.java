@@ -16,10 +16,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Period;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -214,24 +211,42 @@ public class StoreServiceImpl implements StoreService{
         List<Store> storeList = storeRepository.findAll();
         List<StoreResponseDTO.HotPlaceDTO> resultList = new ArrayList<>();
 
+        // 카테고리 영문-한글 매핑
+        Map<String, String> categoryMap = Map.of(
+                "KOREA", "한식",
+                "WESTERN", "양식",
+                "CHINA", "중식",
+                "CAFE", "카페",
+                "JAPAN", "일식"
+        );
+
         for (Store store : storeList) {
-            double score = calculateWeeklyHotPlaceScore(store.getId());
-            score= (double) Math.round(score * 10) /10;
+            double scoreval = calculateWeeklyHotPlaceScore(store.getId());
+            scoreval= (double) Math.round(scoreval * 10) /10;
+            String score=String.format("%.1f", scoreval); // 소수점 한 자리까지 문자열로 변환
+
+            // 카테고리 영문 이름으로부터 한글 이름 찾기
+            String categoryKorean = categoryMap.getOrDefault(store.getCategory().getName().toUpperCase(), "기타");
+
 
             StoreResponseDTO.HotPlaceDTO hotPlaceDTO = StoreResponseDTO.HotPlaceDTO.builder()
                     .score(score)
                     .storeId(store.getId())
                     .name(store.getName())
                     .imageUrl(store.getImages().get(0).getImageURL())
-                    .category(store.getCategory().getName())
-                    .inOut(store.getOutin())
+                    .category(categoryKorean)
+                    .inOut(store.getOutin().getName())
                     .build();
 
 
             resultList.add(hotPlaceDTO);
         }
         // 'score'를 기준으로 resultList를 내림차순 정렬
-        resultList.sort((dto1, dto2) -> Double.compare(dto2.getScore(), dto1.getScore()));
+        resultList.sort((dto1, dto2) -> {
+            double score1 = Double.parseDouble(dto1.getScore());
+            double score2 = Double.parseDouble(dto2.getScore());
+            return Double.compare(score2, score1);
+        });
         long i=0;
         for(StoreResponseDTO.HotPlaceDTO dto : resultList){
             dto.setRanking(++i);

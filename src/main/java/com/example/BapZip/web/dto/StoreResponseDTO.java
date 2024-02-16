@@ -99,9 +99,9 @@ public class StoreResponseDTO {
 
         String category;
 
-        InOrOut inOut;
+        String inOut;
 
-        Double score;
+        String score;
 
         String imageUrl;
 
