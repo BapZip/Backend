@@ -33,4 +33,15 @@ public class SchoolResponseDTO {
         Long id;
         String name;
     }
+
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class getSchoolLogo {
+        Long id;
+        String name;
+        String logo;
+    }
 }

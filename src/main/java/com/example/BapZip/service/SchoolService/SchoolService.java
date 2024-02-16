@@ -12,4 +12,6 @@ public interface SchoolService {
     List<SchoolResponseDTO.getSchoolRegion> getSchoolRegion();
 
     List<SchoolResponseDTO.getSchoolMajor> getSchoolMajor(Long schoolId, String majorName);
+
+    SchoolResponseDTO.getSchoolLogo getSchoolLogo(Long schoolId);
 }
