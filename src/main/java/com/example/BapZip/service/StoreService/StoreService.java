@@ -18,12 +18,12 @@ public interface StoreService {
 
     List<StoreResponseDTO.MyZipDTO> getStoreMyZip(Long userId);
 
-    List<StoreResponseDTO.HotPlaceDTO> getHotPlace();
+    List<StoreResponseDTO.HotPlaceDTO> getHotPlace(Long SchoolId);
     StoreResponseDTO.StoreInfoDTO getStoreInfo(String userId, Long storeId);
 
-    List<StoreResponseDTO.StoreListReviewCountDTO> getStoreListByReviewCount(Long userId);
+    List<StoreResponseDTO.StoreListReviewCountDTO> getStoreListByReviewCount(Long userId,Long schoolId);
 
-    List<StoreResponseDTO.StoreListScoreDTO> getStoreListByScore(Long userId);
+    List<StoreResponseDTO.StoreListScoreDTO> getStoreListByScore(Long userId,Long schoolId);
 
 
     StoreResponseDTO.NoticeDTO getNotice(Long storeId);
@@ -33,7 +33,7 @@ public interface StoreService {
     void unzipStore(String userId, Long storeId);
 
     List<StoreResponseDTO.searchStore> searchStore(String name);
-    StoreResponseDTO.RecommandDTO getRecommendStoresByLikes(String categoryName);
+    StoreResponseDTO.RecommandDTO getRecommendStoresByLikes(String categoryName,Long schoolId);
 
     List<List<StoreResponseDTO.menuDTO>> getMenuList(Long storeId);
 }

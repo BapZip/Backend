@@ -38,6 +38,7 @@ public class StoreServiceImpl implements StoreService{
     private final UserReviewRepository userReviewRepository;
     private final MenuGroupRepository menuGroupRepository;
     private final MenuRepository menuRepository;
+    private final SchoolRepository schoolRepository;
 
     @Override
     public StoreResponseDTO.StoreInfoDTO getStoreInfo(String userId, Long storeId) {
@@ -207,8 +208,10 @@ public class StoreServiceImpl implements StoreService{
 
     //핫플레이스 API
     @Override
-    public List<StoreResponseDTO.HotPlaceDTO> getHotPlace() {
-        List<Store> storeList = storeRepository.findAll();
+    public List<StoreResponseDTO.HotPlaceDTO> getHotPlace(Long schoolId) {
+        //List<Store> storeList = storeRepository.findAll();
+        School school = schoolRepository.findById(schoolId).orElseThrow(()->new GeneralException(ErrorStatus.SCHOOL_NOT_EXIST));
+        List<Store> storeList = storeRepository.findBySchool(school);
         List<StoreResponseDTO.HotPlaceDTO> resultList = new ArrayList<>();
 
         // 카테고리 영문-한글 매핑
@@ -259,8 +262,9 @@ public class StoreServiceImpl implements StoreService{
     }
 
     @Override
-    public List<StoreResponseDTO.StoreListReviewCountDTO> getStoreListByReviewCount(Long userId){
-        List<Store> storeList=storeRepository.findAllStoresOrderByReviewCountDesc();
+    public List<StoreResponseDTO.StoreListReviewCountDTO> getStoreListByReviewCount(Long userId,Long schoolId){
+        //List<Store> storeList=storeRepository.findAllStoresOrderByReviewCountDesc();
+        List<Store> storeList=storeRepository.findAllStoresBySchoolOrderByReviewCountDesc(schoolId);
         List<StoreResponseDTO.StoreListReviewCountDTO> resultList = new ArrayList<>();
 
         long i=0;
@@ -305,8 +309,10 @@ public class StoreServiceImpl implements StoreService{
     }
 
     @Override
-    public List<StoreResponseDTO.StoreListScoreDTO> getStoreListByScore(Long userId){
-        List<Store> storeList=storeRepository.findAll();
+    public List<StoreResponseDTO.StoreListScoreDTO> getStoreListByScore(Long userId,Long schoolId){
+        //List<Store> storeList=storeRepository.findAll();
+        School school = schoolRepository.findById(schoolId).orElseThrow(()->new GeneralException(ErrorStatus.SCHOOL_NOT_EXIST));
+        List<Store> storeList = storeRepository.findBySchool(school);
         List<StoreResponseDTO.StoreListScoreDTO> resultList=new ArrayList<>();
         long i=0;
         for(Store store: storeList){
@@ -397,9 +403,9 @@ public class StoreServiceImpl implements StoreService{
     }
 
     @Override
-    public StoreResponseDTO.RecommandDTO getRecommendStoresByLikes(String categoryName) {
+    public StoreResponseDTO.RecommandDTO getRecommendStoresByLikes(String categoryName,Long schoolId) {
         // 탑 리뷰 찾기
-        Review topReview = userReviewRepository.findTopReviewByLikesPerCategory(categoryName);
+        Review topReview = userReviewRepository.findTopReviewByLikesPerCategory(categoryName,schoolId);
 
         // 리뷰가 없는 경우 예외 처리
         if(topReview == null) {
