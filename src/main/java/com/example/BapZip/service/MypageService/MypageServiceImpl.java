@@ -2,7 +2,9 @@ package com.example.BapZip.service.MypageService;
 
 import com.example.BapZip.apiPayload.code.status.ErrorStatus;
 import com.example.BapZip.apiPayload.exception.GeneralException;
+import com.example.BapZip.domain.Point;
 import com.example.BapZip.domain.User;
+import com.example.BapZip.repository.PointRepository;
 import com.example.BapZip.repository.SchoolRepository;
 import com.example.BapZip.repository.UserRepository;
 import com.example.BapZip.security.TokenProvider;
@@ -22,10 +24,20 @@ public class MypageServiceImpl implements MypageService{
 
     private final UserRepository userRepository;
     private final AmazonS3Service s3Service;
+    private final PointRepository pointRepository;
 
     @Override
     public MypageResponseDTO.MypageInfoDTO getMypageInfo(Long userId) {
         Optional<User> tempUser = userRepository.findById(userId);
+
+        List<Point> points = pointRepository.findByUserId(userId);
+
+        int totalPoints = 0;
+        for (Point point : points) {
+            totalPoints += point.getPoint();
+        }
+
+
         if (tempUser.isPresent()) {
             String nickname = tempUser.get().getNickname();
             String major = tempUser.get().getMajor();
@@ -36,6 +48,7 @@ public class MypageServiceImpl implements MypageService{
                     .major(major)
                     .schoolName(schoolName)
                     .imageUrl(imageUrl)
+                    .totalPoint(totalPoints)
                     .build();
         } else {
             throw new GeneralException(ErrorStatus._BAD_REQUEST);//추후 존재하지 않는 유저라고 수정필요
