@@ -18,5 +18,6 @@ public class MypageResponseDTO {
         private String schoolName;
         private String major;
         private String imageUrl;
+        private Integer totalPoint;
     }
 }
