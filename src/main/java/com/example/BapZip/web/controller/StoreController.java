@@ -110,8 +110,8 @@ public class StoreController {
 
     @Operation(summary = "업종별 추천 식당 조회", description = "PathVariable 업종 -> KOREA, CHINA, WESTERN, CAFE, JAPAN")
     @GetMapping("/recommend/{categoryName}")
-    public ApiResponse<StoreResponseDTO.RecommandDTO> getRecommendStoresByLikes(@PathVariable("categoryName") String categoryName,Long schoolId) {
-        return ApiResponse.onSuccess(storeService.getRecommendStoresByLikes(categoryName,schoolId));
+    public ApiResponse<StoreResponseDTO.RecommandDTO> getRecommendStoresByLikes(@AuthenticationPrincipal String userId,@PathVariable("categoryName") String categoryName,Long schoolId) {
+        return ApiResponse.onSuccess(storeService.getRecommendStoresByLikes(Long.valueOf(userId),categoryName,schoolId));
     }
 
     @Operation(summary = "식당 메뉴 조회 API", description = "store Id 입력해주세요.")

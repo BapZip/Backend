@@ -386,10 +386,10 @@ public class StoreServiceImpl implements StoreService{
     }
 
     @Override
-    public StoreResponseDTO.RecommandDTO getRecommendStoresByLikes(String categoryName,Long schoolId) {
+    public StoreResponseDTO.RecommandDTO getRecommendStoresByLikes(Long userId,String categoryName,Long schoolId) {
         // 탑 리뷰 찾기
         Review topReview = userReviewRepository.findTopReviewByLikesPerCategory(categoryName,schoolId);
-
+        User currentUser = userRepository.findById(userId).get();
         // 리뷰가 없는 경우 예외 처리
         if(topReview == null) {
             throw new GeneralException(ErrorStatus.REVIEW_NOT_EXIST);
@@ -403,7 +403,7 @@ public class StoreServiceImpl implements StoreService{
         User user = topReview.getUser();
 
         // 북마크 있는지 확인
-        UserStore userStore = userStoreRepository.findByUserAndStore(user, store);
+        UserStore userStore = userStoreRepository.findByUserAndStore(currentUser, store);
 
         boolean bookmark = false;
 
