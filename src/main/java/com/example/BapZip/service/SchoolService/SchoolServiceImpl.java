@@ -55,6 +55,17 @@ public class SchoolServiceImpl implements  SchoolService{
         return SchoolResponseDTO.getSchoolLogo.builder().name(school.getName()).logo(school.getLogo()).id(school.getId()).build();
     }
 
+    @Override
+    public List<SchoolResponseDTO.getSchoolLogo> getAllSchool() {
+        List<School> schoolList =schoolRepository.findAll();
+        List<SchoolResponseDTO.getSchoolLogo> results=new ArrayList<>();
+        for(School school:schoolList){
+            results.add(SchoolResponseDTO.getSchoolLogo.builder().
+                    id(school.getId()).name(school.getName()).logo(school.getLogo()).build());
+        }
+        return results;
+    }
+
     private List<SchoolResponseDTO.getSchoolMajor> convertToMajorDTOList(List<Major> majorList) {
         List<SchoolResponseDTO.getSchoolMajor> dtoList = new ArrayList<>();
         for (Major major : majorList) {

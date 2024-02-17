@@ -60,6 +60,15 @@ public class SchoolController {
         return ApiResponse.<SchoolResponseDTO.getSchoolLogo>onSuccess(result);
     }
 
+    // 모든 학교 가져오기
+    @Operation(summary = "모든 학교 api", description = "등록된 모든 학교를 반환하는 api입니다.")
+    @GetMapping("/all")
+    public ApiResponse<List<SchoolResponseDTO.getSchoolLogo>> getAllSchool()
+    {
+        List<SchoolResponseDTO.getSchoolLogo> result = schoolService.getAllSchool();
+        return ApiResponse.onSuccess(result);
+    }
+
 
 
 }
