@@ -181,7 +181,7 @@ public class StoreServiceImpl implements StoreService{
         userRepository.findById(userId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND_ERROR));
 
-        List<UserStore> userStoreList = userStoreRepository.findByUser_Id(userId);
+        List<UserStore> userStoreList = userStoreRepository.findByUser_IdOrderByCreatedAtDesc(userId);
 
 
         List<Store> storeList = userStoreList.stream()

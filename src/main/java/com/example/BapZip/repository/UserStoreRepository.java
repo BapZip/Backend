@@ -12,7 +12,8 @@ import java.util.Optional;
 @Repository
 public interface UserStoreRepository extends JpaRepository<UserStore, Long> {
     Optional<UserStore> findByStoreAndUser(Store store, User user);
-    List<UserStore> findByUser_Id(Long id);
+    // 최신순으로 UserStore 조회
+    List<UserStore> findByUser_IdOrderByCreatedAtDesc(Long id);
 
     UserStore findByUserAndStore(User user, Store store);
 
