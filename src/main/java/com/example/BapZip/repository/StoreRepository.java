@@ -28,7 +28,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     @Query("SELECT s FROM Store s LEFT JOIN s.reviewList rl GROUP BY s ORDER BY COUNT(rl) DESC")
     List<Store> findAllStoresOrderByReviewCountDesc();
 
-    @Query("SELECT s FROM Store s JOIN s.reviewList rl WHERE s.school.id = :schoolId GROUP BY s ORDER BY COUNT(rl) DESC")
+    @Query("SELECT s FROM Store s LEFT JOIN s.reviewList rl WHERE s.school.id = :schoolId GROUP BY s ORDER BY COUNT(rl) DESC")
     List<Store> findAllStoresBySchoolOrderByReviewCountDesc(@Param("schoolId") Long schoolId);
 
     List<Store> findAll();
