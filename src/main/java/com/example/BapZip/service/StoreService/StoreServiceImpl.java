@@ -1,40 +1,26 @@
 package com.example.BapZip.service.StoreService;
 
+import com.example.BapZip.apiPayload.code.status.ErrorStatus;
+import com.example.BapZip.apiPayload.exception.GeneralException;
 import com.example.BapZip.domain.*;
 import com.example.BapZip.domain.enums.CategoryName;
 import com.example.BapZip.domain.enums.StoreListStaus;
 import com.example.BapZip.domain.enums.hashtagName;
-import com.example.BapZip.repository.*;
-import com.example.BapZip.web.dto.CongestionResponseDTO;
-import com.example.BapZip.web.dto.StoreResponseDTO;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import com.example.BapZip.apiPayload.code.status.ErrorStatus;
-import com.example.BapZip.apiPayload.exception.GeneralException;
-import com.example.BapZip.domain.PrintedMenu;
-import com.example.BapZip.domain.Review;
-import com.example.BapZip.domain.Store;
-import com.example.BapZip.domain.User;
 import com.example.BapZip.domain.mapping.UserStore;
 import com.example.BapZip.repository.*;
-import com.example.BapZip.security.TokenProvider;
-import com.example.BapZip.web.dto.MypageResponseDTO;
 import com.example.BapZip.web.dto.StoreResponseDTO;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Period;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -190,7 +176,7 @@ public class StoreServiceImpl implements StoreService{
         userRepository.findById(userId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND_ERROR));
 
-        List<UserStore> userStoreList = userStoreRepository.findByUser_Id(userId);
+        List<UserStore> userStoreList = userStoreRepository.findByUser_IdOrderByCreatedAtDesc(userId);
 
 
         List<Store> storeList = userStoreList.stream()
@@ -223,24 +209,42 @@ public class StoreServiceImpl implements StoreService{
         List<Store> storeList = storeRepository.findBySchool(school);
         List<StoreResponseDTO.HotPlaceDTO> resultList = new ArrayList<>();
 
+        // 카테고리 영문-한글 매핑
+        Map<String, String> categoryMap = Map.of(
+                "KOREA", "한식",
+                "WESTERN", "양식",
+                "CHINA", "중식",
+                "CAFE", "카페",
+                "JAPAN", "일식"
+        );
+
         for (Store store : storeList) {
-            double score = calculateWeeklyHotPlaceScore(store.getId());
-            score= (double) Math.round(score * 10) /10;
+            double scoreval = calculateWeeklyHotPlaceScore(store.getId());
+            scoreval= (double) Math.round(scoreval * 10) /10;
+            String score=String.format("%.1f", scoreval); // 소수점 한 자리까지 문자열로 변환
+
+            // 카테고리 영문 이름으로부터 한글 이름 찾기
+            String categoryKorean = categoryMap.getOrDefault(store.getCategory().getName().toUpperCase(), "기타");
+
 
             StoreResponseDTO.HotPlaceDTO hotPlaceDTO = StoreResponseDTO.HotPlaceDTO.builder()
                     .score(score)
                     .storeId(store.getId())
                     .name(store.getName())
                     .imageUrl(store.getImages().get(0).getImageURL())
-                    .category(store.getCategory().getName())
-                    .inOut(store.getOutin())
+                    .category(categoryKorean)
+                    .inOut(store.getOutin().getName())
                     .build();
 
 
             resultList.add(hotPlaceDTO);
         }
         // 'score'를 기준으로 resultList를 내림차순 정렬
-        resultList.sort((dto1, dto2) -> Double.compare(dto2.getScore(), dto1.getScore()));
+        resultList.sort((dto1, dto2) -> {
+            double score1 = Double.parseDouble(dto1.getScore());
+            double score2 = Double.parseDouble(dto2.getScore());
+            return Double.compare(score2, score1);
+        });
         long i=0;
         for(StoreResponseDTO.HotPlaceDTO dto : resultList){
             dto.setRanking(++i);
@@ -258,12 +262,8 @@ public class StoreServiceImpl implements StoreService{
         List<Store> storeList=storeRepository.findAllStoresBySchoolOrderByReviewCountDesc(schoolId);
         List<StoreResponseDTO.StoreListReviewCountDTO> resultList = new ArrayList<>();
 
-
-
         long i=0;
         for (Store store : storeList) {
-
-
             User user = userRepository.findById(userId).get();
             AtomicBoolean isMyZip = new AtomicBoolean(false);
 
@@ -272,8 +272,13 @@ public class StoreServiceImpl implements StoreService{
                     () -> {}
             );
 
+            double scoreval = calculateStoreAverageScore(store);
+            scoreval= (double) Math.round(scoreval * 10) /10;
+            String score=String.format("%.1f", scoreval); // 소수점 한 자리까지 문자열로 변환
+
             StoreResponseDTO.StoreListReviewCountDTO storeListReviewCountDTO = StoreResponseDTO.StoreListReviewCountDTO.builder()
                     .ReviewCount((long) store.getReviewList().size())
+                    .score(score)
                     .storeId(store.getId())
                     .name(store.getName())
                     .imageUrl(store.getImages().get(0).getImageURL())
@@ -290,12 +295,12 @@ public class StoreServiceImpl implements StoreService{
 
     }
     public Double calculateStoreAverageScore(Store store){
-
         List<Review> reviewList= reviewRepository.findAllByStore(store);
-        if(reviewList.isEmpty()) return 0.0;
+        if(reviewList.isEmpty()) return 0.0; // 리뷰가 없는 경우 0.0 반환
 
         double totalScore=reviewList.stream().mapToInt(Review::getScore).sum();
-        return totalScore/reviewList.size();
+        double averageScore = totalScore/reviewList.size();
+        return averageScore == 0 ? 0.0 : (double) Math.round(averageScore * 10) / 10; // 평균 점수가 0이면 0.0 반환, 아니면 반올림
     }
 
     @Override
@@ -314,10 +319,16 @@ public class StoreServiceImpl implements StoreService{
                     () -> {}
             );
 
-            double score = calculateStoreAverageScore(store);
-            score= (double) Math.round(score * 10) /10;
+            double scoreval = calculateStoreAverageScore(store);
+            scoreval= (double) Math.round(scoreval * 10) /10;
+            String score=String.format("%.1f", scoreval); // 소수점 한 자리까지 문자열로 변환
+
+            // 여기에서 score 값을 콘솔에 출력
+            System.out.println("Store ID: " + store.getId() + " - Score: " + score);
+
 
             StoreResponseDTO.StoreListScoreDTO storeListScoreDTO=StoreResponseDTO.StoreListScoreDTO.builder()
+                    .ReviewCount((long) store.getReviewList().size())
                     .score((score))
                     .storeId(store.getId())
                     .name(store.getName())
@@ -331,7 +342,12 @@ public class StoreServiceImpl implements StoreService{
 
         }
         // 'score'를 기준으로 resultList를 내림차순 정렬
-        resultList.sort((dto1, dto2) -> Double.compare(dto2.getScore(), dto1.getScore()));
+        // 'score'를 기준으로 resultList를 내림차순 정렬
+        resultList.sort((dto1, dto2) -> {
+            double score1 = Double.parseDouble(dto1.getScore());
+            double score2 = Double.parseDouble(dto2.getScore());
+            return Double.compare(score2, score1);
+        });
         i=0;
         for(StoreResponseDTO.StoreListScoreDTO dto : resultList){
             dto.setRanking(++i);
