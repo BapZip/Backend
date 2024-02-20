@@ -88,16 +88,10 @@ public class StoreServiceImpl implements StoreService{
 
 
         // ** 5. 리뷰 평점 ** //
-        List<Review> reviewList = reviewRepository.findAllByStore(store);
-        if (reviewList.isEmpty()){result.setScore(null);} // 리뷰없으면 null
-        else{
-            double sum=0.0;
-            for(Review review : reviewList){
-                sum+=review.getScore();
-            }
-            DecimalFormat df = new DecimalFormat("#.#"); // 소수점 두 자리까지 표시
-            result.setScore(Double.parseDouble(df.format(sum/(double)reviewList.size())));
-        }
+        double score = calculateStoreAverageScore(store);
+        score= (double) Math.round(score * 10) /10;
+        result.setScore(score);
+
 
         // ** 해시태그 ** //
         List<String> hashtags = calculateHashtag(hashtagRepository.
@@ -105,14 +99,11 @@ public class StoreServiceImpl implements StoreService{
         result.setHashtag(hashtags);
 
         // **카테고리 ** //
-//        Optional<Category> category = categoryRepository.findByStore(store);
-//        if(category.isPresent())
-        //result.setCategory(store.getCategory().getName());
-        //String categoryName= store.getCategory().getName();
         result.setCategory(CategoryName.valueOf(store.getCategory().getName()).getName());
         return result;
 
     }
+
 
     // 오늘의 공지 가져오기
     @Override
