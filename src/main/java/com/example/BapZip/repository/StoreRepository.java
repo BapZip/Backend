@@ -8,12 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-
-import com.example.BapZip.domain.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
-
 import java.util.List;
 import java.util.Optional;
 
@@ -31,10 +25,10 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     Optional<Store> findById(Long storeId);
 
-    @Query("SELECT s FROM Store s JOIN s.reviewList rl GROUP BY s ORDER BY COUNT(rl) DESC")
+    @Query("SELECT s FROM Store s LEFT JOIN s.reviewList rl GROUP BY s ORDER BY COUNT(rl) DESC")
     List<Store> findAllStoresOrderByReviewCountDesc();
 
-    @Query("SELECT s FROM Store s JOIN s.reviewList rl WHERE s.school.id = :schoolId GROUP BY s ORDER BY COUNT(rl) DESC")
+    @Query("SELECT s FROM Store s LEFT JOIN s.reviewList rl WHERE s.school.id = :schoolId GROUP BY s ORDER BY COUNT(rl) DESC")
     List<Store> findAllStoresBySchoolOrderByReviewCountDesc(@Param("schoolId") Long schoolId);
 
     List<Store> findAll();
