@@ -367,9 +367,9 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public List<ReviewResponseDTO.StoreReviewDTO> findStoreReview(Long userId, Long storeId, Long schoolId) {
         // schoolId 받아서, 학교 선택
-        School school = schoolRepository.findById(schoolId).orElseThrow(() -> new GeneralException(ErrorStatus.SCHOOL_NOT_EXIST));
+        //School school = schoolRepository.findById(schoolId).orElseThrow(() -> new GeneralException(ErrorStatus.SCHOOL_NOT_EXIST));
         // storeId, school로 store[1개] 선택
-        Store store = storeRepository.findByIdAndSchool(storeId, school).orElseThrow(() -> new GeneralException(ErrorStatus.STORE_NOT_EXIST));
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new GeneralException(ErrorStatus.STORE_NOT_EXIST));
 
         List<Review> reviews = reviewRepository.findAllByStoreOrderByCreatedAtDesc(store);
         List<ReviewResponseDTO.StoreReviewDTO> storeReviews = new ArrayList<>();
