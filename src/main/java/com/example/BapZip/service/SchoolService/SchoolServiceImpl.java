@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,7 +32,11 @@ public class SchoolServiceImpl implements  SchoolService{
     @Override
     public List<SchoolResponseDTO.SearchSchool> getSchoolList(Long regionId) {
         Region region = regionRepository.findById(regionId).orElseThrow(()->new GeneralException(ErrorStatus.RIGION_NOT_EXIST));
-        List<School> schoolList = schoolRepository.findByRegion(region);
+        //List<School> schoolList = schoolRepository.findByRegion(region);
+        List<School> schoolList = schoolRepository.findByRegion(region)
+                .stream()
+                .sorted(Comparator.comparing(School::getName))
+                .collect(Collectors.toList());
         return convertToSearchSchoolDTOList(schoolList);
     }
 
@@ -57,7 +62,8 @@ public class SchoolServiceImpl implements  SchoolService{
 
     @Override
     public List<SchoolResponseDTO.getSchoolLogo> getAllSchool() {
-        List<School> schoolList =schoolRepository.findAll();
+        //List<School> schoolList =schoolRepository.findAll();
+        List<School> schoolList = schoolRepository.findAllByOrderByName();
         List<SchoolResponseDTO.getSchoolLogo> results=new ArrayList<>();
         for(School school:schoolList){
             results.add(SchoolResponseDTO.getSchoolLogo.builder().

@@ -13,4 +13,6 @@ public interface SchoolRepository extends JpaRepository<School, Long> {
     List<School> findByNameContains(String schoolName);
 
     List<School> findByRegion(Region region);
+
+    List<School> findAllByOrderByName();
 }
