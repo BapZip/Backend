@@ -12,14 +12,12 @@ import com.example.BapZip.web.dto.StoreResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Period;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -192,7 +190,7 @@ public class StoreServiceImpl implements StoreService{
     //가게별 주간 평균 평점 계산
     public Double calculateWeeklyHotPlaceScore(Long storeId){
         LocalDate endDate=LocalDate.now();
-        LocalDate startDate=endDate.minus(Period.ofDays(7));
+        LocalDate startDate=endDate.minus(Period.ofDays(90));
 
         List<Review> reviewList= reviewRepository.findByStore_IdAndPaymentTimeBetween(storeId,startDate,endDate);
         if(reviewList.isEmpty()) return 0.0;
