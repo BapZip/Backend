@@ -12,6 +12,7 @@ import com.example.BapZip.web.dto.StoreResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -80,7 +81,8 @@ public class StoreServiceImpl implements StoreService{
             for(Review review : reviewList){
                 sum+=review.getScore();
             }
-            result.setScore(sum/(double)reviewList.size());
+            DecimalFormat df = new DecimalFormat("#.#"); // 소수점 두 자리까지 표시
+            result.setScore(Double.parseDouble(df.format(sum/(double)reviewList.size())));
         }
 
         // ** 해시태그 ** //
