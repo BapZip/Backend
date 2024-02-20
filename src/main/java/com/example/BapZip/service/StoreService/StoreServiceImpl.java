@@ -76,9 +76,11 @@ public class StoreServiceImpl implements StoreService{
         List<Review> reviewList = reviewRepository.findAllByStore(store);
         if (reviewList.isEmpty()){result.setScore(null);} // 리뷰없으면 null
         else{
-            AtomicInteger reviewAv = new AtomicInteger(0);
-            reviewList.stream().forEach((review) -> reviewAv.addAndGet(review.getScore()));
-            result.setScore((double)(reviewAv.get() / reviewList.size()));
+            double sum=0.0;
+            for(Review review : reviewList){
+                sum+=review.getScore();
+            }
+            result.setScore(sum/(double)reviewList.size());
         }
 
         // ** 해시태그 ** //
