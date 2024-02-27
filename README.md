@@ -14,7 +14,7 @@
   <tr>
     <td align="center"><a href="https://github.com/RhoSeungA"><br /><p><b>노승아</b></p></a><small>🐸 Back-End Developer</small></td>
     <td align="center"><a href=""><br /><p><b>우성원</b></p></a><small>🐻 Back-End Developer</small></td>
-    <td align="center"><a href=""><br /><p><b>박성훈</b></p></a><small>🐶 Back-End Developer</small></td>
+    <td align="center"><a href=""><br /><p><b>전성훈</b></p></a><small>🐶 Back-End Developer</small></td>
     <td align="center"><a href=""><br /><p><b>최현지</b></p></a><small>🐰 Back-End Developer</small></td>
   </tr> 
 </table>
