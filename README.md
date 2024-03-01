@@ -1,8 +1,8 @@
-### 0. 🍚 실시간 캠퍼스 식당 정보 서비스 - "밥zip"
+### 🍚 실시간 캠퍼스 식당 정보 서비스 - "밥ZIP"
 
 
-<br>
-<img width=700 src="https://github.com/BapZip/Backend/assets/101572960/b1fa599a-09ac-4f90-94df-854793c4d3f1">
+</br>
+<img width=800 src="https://github.com/BapZip/Backend/assets/101572960/b1fa599a-09ac-4f90-94df-854793c4d3f1">
 
 <br>
 <br>
@@ -12,10 +12,11 @@
 <div align="center">
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/RhoSeungA"><br /><p><b>노승아</b></p></a><small>🐸 Back-End Developer</small></td>
-    <td align="center"><a href=""><br /><p><b>우성원</b></p></a><small>🐻 Back-End Developer</small></td>
-    <td align="center"><a href=""><br /><p><b>전성훈</b></p></a><small>🐶 Back-End Developer</small></td>
-    <td align="center"><a href=""><br /><p><b>최현지</b></p></a><small>🐰 Back-End Developer</small></td>
+<!--     <td align="center"><a href="https://github.com/RhoSeungA"><br /><p><b>노승아</b></p></a><small>🐸 Back-End Developer</small></td> 링크있는거 -->
+    <td align="center"><p><b>노승아</b></p></a><small>🐸 Back-End Developer</small></td>
+    <td align="center"><p><b>우성원</b></p></a><small>🐻 Back-End Developer</small></td>
+    <td align="center"><p><b>전성훈</b></p></a><small>🐶 Back-End Developer</small></td>
+    <td align="center"><p><b>최현지</b></p></a><small>🐰 Back-End Developer</small></td>
   </tr> 
 </table>
 </div>
